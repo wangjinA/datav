@@ -1,0 +1,116 @@
+:root {
+  --background: #22242b;
+  --background-hover: #2d2f38;
+  --icon-color: #4352d4;
+  --primary-color: #2491f7;
+}
+
+// 动画集
+.leftSide-enter-active,
+.leftSide-leave-active,
+.bottomSide-enter-active,
+.bottomSide-leave-active,
+.rightSide-enter-active,
+.rightSide-leave-active,
+.showScaleDelay-enter-active,
+.showScaleDelay-leave-active,
+.leftSide-move,
+.bottomSide-move,
+.rightSide-move {
+  transition: 0.5s;
+  will-change: transform;
+}
+
+.leftSide-leave-active,
+.bottomSide-leave-active,
+.rightSide-leave-active {
+  position: absolute;
+  width: 100%;
+}
+
+.leftSide-leave-to,
+.leftSide-enter {
+  transform: translate3d(-150%, 0, 0);
+}
+.rightSide-enter-to,
+.leftSide-leave,
+.leftSide-enter-to {
+  transform: translate3d(0%, 0, 0);
+}
+.rightSide-leave-to,
+.rightSide-enter {
+  transform: translate3d(150%, 0, 0);
+}
+
+.bottomSide-leave-to,
+.bottomSide-enter {
+  transform: translate3d(0, 150%, 0);
+}
+.bottomSide-enter-to,
+.bottomSide-leave {
+  transform: translate3d(0, 0%, 0);
+}
+.showScaleDelay-enter-active {
+  transition-delay: 0.5s;
+}
+.showScaleDelay-leave-to,
+.showScaleDelay-enter {
+  transform: scale(0);
+}
+.showScaleDelay-leave,
+.showScaleDelay-enter-to {
+  transform: scale(1);
+}
+
+.showScale-enter-active,
+.showScale-leave-active {
+  transition: 0.3s;
+}
+.showScale-leave-to,
+.showScale-enter {
+  transform: scale(0);
+}
+.showScale-leave,
+.showScale-enter-to {
+  transform: scale(1);
+}
+
+// 高度Y 和宽度X 拉伸 需
+// Y,要在容器上设置  : transform-origin: top;
+// X,要在容器上设置  : transform-origin: left;
+.scaleX-enter-active,
+.scaleX-leave-active,
+.scaleY-enter-active,
+.scaleY-leave-active {
+  transition: 0.3s;
+  position: absolute;
+}
+.scaleY-leave-to,
+.scaleY-enter {
+  transform: scaleY(0);
+  opacity: 0;
+}
+.scaleY-leave,
+.scaleY-enter-to {
+  transform: scaleY(1);
+  opacity: 1;
+}
+.scaleY-move {
+  position: absolute;
+}
+
+.scaleX-leave-to,
+.scaleX-enter {
+  transform: scaleX(0);
+  opacity: 0;
+}
+.scaleX-leave,
+.scaleX-enter-to {
+  transform: scaleX(1);
+  opacity: 1;
+}
+
+.not-enter-active,
+.not-leave-active {
+  transition: 0s;
+}

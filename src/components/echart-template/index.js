@@ -1,0 +1,1 @@
+export default require('./echart-template.vue').default
