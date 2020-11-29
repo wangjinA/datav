@@ -47,16 +47,21 @@ function $get(url, params, showInfo) {
     method: 'GET'
   }, showInfo)
 }
-function $post(url, params, showInfo) {
+function bodyFactory(method, url, params, showInfo) {
   return requestAPI(url, {
     body: JSON.stringify(params),
-    method: 'POST',
+    method: method,
   }, showInfo)
 }
-
 export default {
   install(Vue) {
     Vue.prototype.$get = $get
-    Vue.prototype.$post = $post
+    // url, params, showInfo
+    Vue.prototype.$post = function () {
+      return bodyFactory('POST', ...arguments)
+    }
+    Vue.prototype.$put = function () {
+      return bodyFactory('PUT', ...arguments)
+    }
   }
 }

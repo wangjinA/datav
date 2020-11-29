@@ -12,7 +12,8 @@
       v-bind="getBaseOption(item.editOption)"
       @activated="onActivated(item)"
       @deactivated="onDeactivated(item)"
-      @resizing="onResize(item)"
+      @resizing="onResize(item, ...arguments)"
+      @dragging="onDragging(item, ...arguments)"
       @refLineParams="getRefLineParams"
     >
       <component
@@ -27,7 +28,11 @@
       v-for="(item, i) in vLine"
       :key="i"
       v-show="item.display"
-      :style="{ left: item.position, top: item.origin, height: item.lineLength }"
+      :style="{
+        left: item.position,
+        top: item.origin,
+        height: item.lineLength,
+      }"
     />
     <span
       class="ref-line h-line"
@@ -45,6 +50,8 @@ import HeaderV1 from "@/components/header";
 import EchartTemplate from "@/components/echart-template";
 import ThreedTags from "@/components/threed-tags";
 import ScrollText from "@/components/ScrollText";
+import { stringify } from "@/lib/utils";
+import html2canvas from "html2canvas";
 export default {
   name: "DatavCanvas",
   props: {
@@ -71,8 +78,26 @@ export default {
       };
     },
   },
+  watch: {
+    resourceLayers: {
+      deep: true,
+      handler(resourceLayers) {
+        clearTimeout(this.watch_timer);
+        this.watch_timer = setTimeout(() => {
+          this.$put("/api/datav/1", {
+            name: "test_new",
+            preview_img: "text_img_new",
+            option: stringify(resourceLayers),
+          });
+        }, 200);
+      },
+    },
+  },
   methods: {
     ...mapMutations(["addLayer", "setActiveLayer"]),
+    onDrag(...a) {
+      console.log(a);
+    },
     // 激活焦点
     onActivated(item) {
       this.setActiveLayer(item);
@@ -81,9 +106,23 @@ export default {
     onDeactivated() {
       this.setActiveLayer(null);
     },
+    // 调整位置
+    onDragging(item, ...position) {
+      const x = position[0];
+      const y = position[1];
+      item.editOption.x = x;
+      item.editOption.y = y;
+    },
     // 调整大小 echarts
-    onResize(item) {
-      if (item.componentName === "echart-template" || item.componentName === "echart") {
+    onResize(item, ...size) {
+      const w = size[2];
+      const h = size[3];
+      item.editOption.w = w;
+      item.editOption.h = h;
+      if (
+        item.componentName === "echart-template" ||
+        item.componentName === "echart"
+      ) {
         this.$refs[item.name][0].resize();
       }
     },
@@ -100,7 +139,20 @@ export default {
       this.hLine = hLine;
     },
   },
-  created() {},
+  created() {
+    this.$bus.$on("screenshot", () => {
+      html2canvas(this.$refs.DatavCanvas).then((canvas) => {
+        canvas.toBlob((blob) => {
+          let filename = `${new Date().getTime()}.jpg`;
+          let file = new File([blob], filename, { type: "image/jpg" });
+          const url = window.URL.createObjectURL(file)
+          console.log(file);
+          console.log(url);
+          window.open(url)
+        });
+      });
+    });
+  },
 };
 </script>
 
