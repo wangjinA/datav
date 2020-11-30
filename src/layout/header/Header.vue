@@ -63,12 +63,12 @@ export default {
     },
     // 截图
     screenshot() {
-      this.$bus.$emit('screenshot')
+      this.$bus.$emit("screenshot");
     },
     // 预览
     goToPreview() {
-      console.log(this.$route.params);
-    }
+      window.open(this.$router.resolve("/preview").href);
+    },
   },
 };
 </script>
@@ -143,14 +143,14 @@ header {
       }
     }
   }
-  .right-handler{
+  .right-handler {
     margin-left: auto;
     margin-right: 40px;
     display: flex;
-    >li{
+    > li {
       padding: 0 20px;
-      &:hover{
-      cursor: pointer;
+      &:hover {
+        cursor: pointer;
         color: var(--primary-color);
       }
     }

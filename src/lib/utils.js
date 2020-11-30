@@ -22,15 +22,13 @@ export const deepClone = (obj, hash = new WeakMap()) => {
 export const stringify = json => {
   return JSON.stringify(json, (key, val) => {
     if (typeof val === 'function') {
-      console.log(val);
-      return `${val}`;
+      return val.toString();
     }
     return val;
   });
 }
 
 export const parse = str => {
-  console.log(str);
   return JSON.parse(str, function (k, v) {
     if (v.indexOf && (v.indexOf('function') > -1 || v.indexOf('=>') > -1)) {
       return eval("(function(){return " + v + " })()")

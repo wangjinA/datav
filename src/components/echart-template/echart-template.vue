@@ -53,9 +53,11 @@ export default {
       });
     },
   },
-  destroyed() {},
   mounted() {
     this.$nextTick(this.init);
+  },
+  destroyed() {
+    this.myChart.dispose();
   },
 };
 </script>

@@ -3,8 +3,6 @@
     <vue-draggable-resizable
       class-name="screen-box"
       class-name-draggable="screen-box-draggable"
-      :draggable="true"
-      :resizable="true"
       :key="item.name"
       :active.sync="item.active"
       snap
@@ -55,7 +53,10 @@ import html2canvas from "html2canvas";
 export default {
   name: "DatavCanvas",
   props: {
-    msg: String,
+    readonly: {
+      type: Boolean,
+      default: false,
+    },
   },
   components: {
     HeaderV1,
@@ -68,6 +69,7 @@ export default {
       scale: 1,
       vLine: [],
       hLine: [],
+      id: this.$route.params.id,
     };
   },
   computed: {
@@ -82,14 +84,16 @@ export default {
     resourceLayers: {
       deep: true,
       handler(resourceLayers) {
-        clearTimeout(this.watch_timer);
-        this.watch_timer = setTimeout(() => {
-          this.$put("/api/datav/1", {
-            name: "test_new",
-            preview_img: "text_img_new",
-            option: stringify(resourceLayers),
-          });
-        }, 200);
+        if (!this.readonly) {
+          clearTimeout(this.watch_timer);
+          this.watch_timer = setTimeout(() => {
+            this.$put(`/api/datav/${this.id}`, {
+              name: "test_new",
+              preview_img: "text_img_new",
+              option: stringify(resourceLayers),
+            });
+          }, 200);
+        }
       },
     },
   },
@@ -119,18 +123,20 @@ export default {
       const h = size[3];
       item.editOption.w = w;
       item.editOption.h = h;
-      if (
-        item.componentName === "echart-template" ||
-        item.componentName === "echart"
-      ) {
+      if (item.componentName === "echart-template" || item.componentName === "echart") {
         this.$refs[item.name][0].resize();
       }
     },
     getBaseOption(item) {
+      let readonlyProps = {
+        resizable: !this.readonly,
+        draggable: !this.readonly,
+      };
       return {
         ...item,
         w: item.w === "100%" ? this.$refs.DatavCanvas.offsetWidth : item.w,
         h: item.h === "100%" ? this.$refs.DatavCanvas.offsetHeight : item.h,
+        ...readonlyProps,
       };
     },
     getRefLineParams(params) {
@@ -138,20 +144,33 @@ export default {
       this.vLine = vLine;
       this.hLine = hLine;
     },
-  },
-  created() {
-    this.$bus.$on("screenshot", () => {
+    screenshot() {
       html2canvas(this.$refs.DatavCanvas).then((canvas) => {
         canvas.toBlob((blob) => {
-          let filename = `${new Date().getTime()}.jpg`;
+          let filename = `datav_${this.id}.jpg`;
           let file = new File([blob], filename, { type: "image/jpg" });
-          const url = window.URL.createObjectURL(file)
+          const url = window.URL.createObjectURL(file);
           console.log(file);
           console.log(url);
-          window.open(url)
+          // window.open(url);
+          const formData = new FormData();
+          formData.append("file", file);
+          this.$post("/api/upload", formData).then((res) => {
+            this.$put(
+              `/api/datav/${this.id}`,
+              {
+                id: this.id,
+                preview_img: res.img,
+              },
+              true
+            );
+          });
         });
       });
-    });
+    },
+  },
+  created() {
+    this.$bus_$on("screenshot", this.screenshot);
   },
 };
 </script>

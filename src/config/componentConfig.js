@@ -101,10 +101,7 @@ export const echart = [
             barWidth: '15px',
             itemStyle: {
               normal: {
-                color: function (params) {
-                  let colorList = ['#0ED6F4', '#FFB56C', '#02A1FD', '#5AE7AE', '#0ED6F4', '#FFB56C', '#02A1FD', '#5AE7AE']
-                  return colorList[params.dataIndex]
-                },
+                color: (params) => { let colorList = ['#0ED6F4', '#FFB56C', '#02A1FD', '#5AE7AE', '#0ED6F4', '#FFB56C', '#02A1FD', '#5AE7AE']; return colorList[params.dataIndex] },
                 barBorderRadius: [30, 30, 0, 0],
                 // shadowBlur: 4
               }

@@ -16,7 +16,7 @@ import DataCanvas from "./DataCanvas.vue";
 import DatavHeader from "@/layout/header";
 import Layer from "@/layout/layer";
 import { mapMutations } from "vuex";
-import {  parse } from '@/lib/utils'
+import { parse } from "@/lib/utils";
 
 export default {
   name: "App",
@@ -25,11 +25,16 @@ export default {
     Layer,
     DatavHeader,
   },
+  data() {
+    return {
+      id: this.$route.params.id,
+    };
+  },
   methods: {
     ...mapMutations(["initLayer"]),
   },
   created() {
-    this.$get("/api/datav/1").then((res) => {
+    this.$get(`/api/datav/${this.id}`).then((res) => {
       this.initLayer(parse(res.data[0].option));
     });
   },
