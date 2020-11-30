@@ -17,6 +17,11 @@
         </div>
       </li>
     </ul>
+    <ul class="right-handler">
+      <li @click="screenshot">截图</li>
+      <li @click="goToPreview">预览</li>
+    </ul>
+    <div></div>
   </header>
 </template>
 
@@ -56,6 +61,14 @@ export default {
       cloneCom.active = true;
       this.addLayer(cloneCom);
     },
+    // 截图
+    screenshot() {
+      this.$bus.$emit('screenshot')
+    },
+    // 预览
+    goToPreview() {
+      console.log(this.$route.params);
+    }
   },
 };
 </script>
@@ -127,6 +140,18 @@ header {
             }
           }
         }
+      }
+    }
+  }
+  .right-handler{
+    margin-left: auto;
+    margin-right: 40px;
+    display: flex;
+    >li{
+      padding: 0 20px;
+      &:hover{
+      cursor: pointer;
+        color: var(--primary-color);
       }
     }
   }

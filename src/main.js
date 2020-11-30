@@ -4,6 +4,8 @@ import App from './App.vue'
 import './style/reset.less'
 import './style/variable.less'
 
+import '@/lib/bus'
+
 import axios from './myAxios'
 Vue.use(axios)
 

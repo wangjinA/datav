@@ -16,6 +16,8 @@ import DataCanvas from "./DataCanvas.vue";
 import DatavHeader from "@/layout/header";
 import Layer from "@/layout/layer";
 import { mapMutations } from "vuex";
+import {  parse } from '@/lib/utils'
+
 export default {
   name: "App",
   components: {
@@ -28,7 +30,7 @@ export default {
   },
   created() {
     this.$get("/api/datav/1").then((res) => {
-      this.initLayer(JSON.parse(res.data[0].option));
+      this.initLayer(parse(res.data[0].option));
     });
   },
 };
