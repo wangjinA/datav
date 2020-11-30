@@ -8,8 +8,6 @@
 import { Message } from 'view-design'
 const qs = require('qs')
 const requestAPI = (url, options, showInfo = false) => {
-  // const headers = {
-  // }
   if (!(options.body instanceof FormData)) {
     options.headers = {
       'content-type': 'application/json',

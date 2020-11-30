@@ -4,7 +4,7 @@
       <li v-for="item in list" :key="item.id">
         <div
           class="img-box"
-          :style="`background-image:url(${item.preview})`"
+          :style="`background-image:url(/api/public/${item.preview_img})`"
           @click="toDetail(item)"
         ></div>
         <div class="info-box">
@@ -54,7 +54,7 @@ export default {
         return;
       }
       this.$put(
-        `/api/datav/${item.id}`,
+        `/api/api/datav/${item.id}`,
         {
           id: item.id,
           name: this.nameValue,
@@ -75,7 +75,7 @@ export default {
       window.open(this.$router.resolve("/preview").href);
     },
     getList() {
-      this.$get("/api/datav").then((res) => {
+      this.$get("/api/api/datav").then((res) => {
         this.list = res.data;
       });
     },

@@ -36,3 +36,37 @@ export const parse = str => {
     return v;
   });
 }
+
+export const checkName = (list, value, key = 'name') => {
+  const _list = list.filter(item => item[key] === value[key])
+  if(_list.length){
+    value[key] = value + 
+    checkName(list, value, key)
+  }
+}
+
+/**
+ * @description 指定范围随机数字
+ * @param {Number} min 最小数  
+ * @param {Number} max 最大数  
+ * @return {Number} 返回数字
+ */
+export const randomNumber = (min = 0, max = 10) => {
+  return Math.floor(Math.random() * (max - min + 1) + min)
+}
+
+/**
+* @description 指定长度随机字符串
+* @param {Number} length 随机字符串长度  
+* @param {Number} chats 可自定义字符串列表  
+* @return {String} 英文和数字的随机字符串
+*/
+export const randomString = (length = 10, chats) => {
+  if (!chats) chats = '1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM';
+  let str = ''
+  for (let i = 0; i < length; i++) {
+    let num = randomNumber(0, chats.length - 1)
+    str += chats[num]
+  }
+  return str
+}

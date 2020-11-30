@@ -1,6 +1,8 @@
 <template>
   <header>
-    <div class="project-name"></div>
+    <div class="project-name">
+      {{ projectName }}
+    </div>
     <ul class="component-ul">
       <li v-for="item in comList" :key="item.name">
         <IconBase :icon-name="item.iconName" />
@@ -33,6 +35,12 @@ import { mapMutations } from "vuex";
 export default {
   components: {
     IconBase,
+  },
+  props: {
+    projectName: {
+      type: String,
+      default: "",
+    },
   },
   data() {
     return {
@@ -67,7 +75,14 @@ export default {
     },
     // 预览
     goToPreview() {
-      window.open(this.$router.resolve("/preview").href);
+      window.open(
+        this.$router.resolve({
+          name: "preview",
+          params: {
+            id: this.$route.params.id,
+          },
+        }).href
+      );
     },
   },
 };

@@ -1,7 +1,7 @@
 import Vuex from 'vuex'
 import Vue from 'vue'
 Vue.use(Vuex)
-
+import { randomString } from '@/lib/utils'
 const store = new Vuex.Store({
   state: {
     resourceLayers: [],
@@ -15,10 +15,12 @@ const store = new Vuex.Store({
     // 添加图层
     addLayer(state, value) {
       const { resourceLayers } = state
-      const resource_filter = resourceLayers.filter(item => item.id === value.id)
-      if (resource_filter.length > 0) {
-        value.name += resource_filter.length
-      }
+      // const resource_filter = resourceLayers.filter(item => item.id === value.id)
+      // if (resource_filter.length > 0) {
+      //   value.name += resource_filter.length
+      // }
+      // checkName(resourceLayers, value, 'name')
+      value.$vueKey = randomString()
       resourceLayers.push(value)
       this.commit('setLayerHistoryList')
     },

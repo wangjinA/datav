@@ -3,7 +3,7 @@
     <vue-draggable-resizable
       class-name="screen-box"
       class-name-draggable="screen-box-draggable"
-      :key="item.name"
+      :key="item.$vueKey"
       :active.sync="item.active"
       snap
       v-for="item in resourceLayers"
@@ -87,9 +87,7 @@ export default {
         if (!this.readonly) {
           clearTimeout(this.watch_timer);
           this.watch_timer = setTimeout(() => {
-            this.$put(`/api/datav/${this.id}`, {
-              name: "test_new",
-              preview_img: "text_img_new",
+            this.$put(`/api/api/datav/${this.id}`, {
               option: stringify(resourceLayers),
             });
           }, 200);
@@ -155,9 +153,9 @@ export default {
           // window.open(url);
           const formData = new FormData();
           formData.append("file", file);
-          this.$post("/api/upload", formData).then((res) => {
+          this.$post("/api/api/upload", formData).then((res) => {
             this.$put(
-              `/api/datav/${this.id}`,
+              `/api/api/datav/${this.id}`,
               {
                 id: this.id,
                 preview_img: res.img,

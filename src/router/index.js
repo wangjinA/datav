@@ -10,7 +10,7 @@ const routes = [
     component: () => import(/* webpackChunkName: "datav" */ '../views/datav/Datav')
   },
   {
-    path: '/preview',
+    path: '/preview/:id',
     name: 'preview',
     component: () => import(/* webpackChunkName: "preview" */ '../views/preview/Preview')
   }, {

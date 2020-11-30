@@ -1,7 +1,7 @@
 <template>
   <div id="datav">
     <!-- <Datav-header style="position: absolute; z-index: 99;" /> -->
-    <Datav-header />
+    <Datav-header :projectName="projectName"/>
     <section>
       <Layer />
       <main>
@@ -28,14 +28,16 @@ export default {
   data() {
     return {
       id: this.$route.params.id,
+      projectName: ''
     };
   },
   methods: {
     ...mapMutations(["initLayer"]),
   },
   created() {
-    this.$get(`/api/datav/${this.id}`).then((res) => {
+    this.$get(`/api/api/datav/${this.id}`).then((res) => {
       this.initLayer(parse(res.data[0].option));
+      this.projectName = res.data[0].name
     });
   },
 };
