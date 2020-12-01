@@ -5,7 +5,7 @@ import './style/reset.less'
 import './style/variable.less'
 
 import '@/lib/bus'
-import '@/lib/iview'
+import '@/lib/iview/index.js'
 
 import axios from './myAxios'
 Vue.use(axios)

@@ -1,10 +1,11 @@
 <template>
-  <div class="DatavCanvas" ref="DatavCanvas" :style="wrapStyle">
+  <div class="DatavCanvas" ref="DatavCanvas" :style="wrapStyle" @click.self="canavsHandle">
     <vue-draggable-resizable
       class-name="screen-box"
       class-name-draggable="screen-box-draggable"
       :key="item.$vueKey"
-      :active.sync="item.active"
+      :active="item.active"
+      :prevent-deactivation="true"
       snap
       v-for="item in resourceLayers"
       v-bind="getBaseOption(item.editOption)"
@@ -48,7 +49,7 @@ import HeaderV1 from "@/components/header";
 import EchartTemplate from "@/components/echart-template";
 import ThreedTags from "@/components/threed-tags";
 import ScrollText from "@/components/ScrollText";
-import { stringify } from "@/lib/utils";
+import { getInt, getBfb } from "@/lib/utils";
 import html2canvas from "html2canvas";
 export default {
   name: "DatavCanvas",
@@ -80,23 +81,13 @@ export default {
       };
     },
   },
-  watch: {
-    resourceLayers: {
-      deep: true,
-      handler(resourceLayers) {
-        if (!this.readonly) {
-          clearTimeout(this.watch_timer);
-          this.watch_timer = setTimeout(() => {
-            this.$put(`/api/api/datav/${this.id}`, {
-              option: stringify(resourceLayers),
-            });
-          }, 200);
-        }
-      },
-    },
-  },
   methods: {
     ...mapMutations(["addLayer", "setActiveLayer"]),
+
+    canavsHandle() {
+      this.setActiveLayer(null);
+    },
+
     onDrag(...a) {
       console.log(a);
     },
@@ -106,7 +97,7 @@ export default {
     },
     // 失去焦点
     onDeactivated() {
-      this.setActiveLayer(null);
+      // this.setActiveLayer(null);
     },
     // 调整位置
     onDragging(item, ...position) {
@@ -130,18 +121,24 @@ export default {
         resizable: !this.readonly,
         draggable: !this.readonly,
       };
+      const DatavCanvasDom = this.$refs.DatavCanvas;
       return {
         ...item,
-        w: item.w === "100%" ? this.$refs.DatavCanvas.offsetWidth : item.w,
-        h: item.h === "100%" ? this.$refs.DatavCanvas.offsetHeight : item.h,
+        w: getBfb(item.w, DatavCanvasDom.offsetWidth),
+        h: getBfb(item.h, DatavCanvasDom.offsetHeight),
+        // h: item.h === "100%" ? DatavCanvasDom.offsetHeight * getBfb(item.h) : item.h,
+        x: getInt(item.x),
+        y: getInt(item.y),
         ...readonlyProps,
       };
     },
+    // 对基线
     getRefLineParams(params) {
       const { vLine, hLine } = params;
       this.vLine = vLine;
       this.hLine = hLine;
     },
+    // 截屏上传
     screenshot() {
       html2canvas(this.$refs.DatavCanvas).then((canvas) => {
         canvas.toBlob((blob) => {
@@ -154,14 +151,10 @@ export default {
           const formData = new FormData();
           formData.append("file", file);
           this.$post("/api/api/upload", formData).then((res) => {
-            this.$put(
-              `/api/api/datav/${this.id}`,
-              {
-                id: this.id,
-                preview_img: res.img,
-              },
-              true
-            );
+            this.$put(`/api/api/datav/${this.id}`, {
+              id: this.id,
+              preview_img: res.img,
+            });
           });
         });
       });

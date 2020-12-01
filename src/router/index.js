@@ -5,6 +5,10 @@ Vue.use(VueRouter)
 
 const routes = [
   {
+    path: '/',
+    redirect: '/workspace'
+  },
+  {
     path: '/datav/:id',
     name: 'datav',
     component: () => import(/* webpackChunkName: "datav" */ '../views/datav/Datav')

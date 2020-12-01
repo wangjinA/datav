@@ -21,8 +21,6 @@
       :show="contextMenuVisible"
       @update:show="(show) => (contextMenuVisible = show)"
     >
-      <a href="javascript:;">复制</a>
-      <a href="javascript:;">引用</a>
       <a href="javascript:;" @click="del">删除</a>
     </Vue-context-menu>
   </div>
@@ -38,28 +36,27 @@ export default {
   },
   data() {
     return {
-      contextMenuVisible: false
-    }
+      contextMenuVisible: false,
+    };
   },
   computed: {
-    ...mapState(["resourceLayers"]),
+    ...mapState(["resourceLayers", "activeLayer"]),
   },
   methods: {
-    ...mapMutations(['removeLayer']),
+    ...mapMutations(["removeLayer", "setActiveLayer"]),
 
     del() {
-      this.$delAPI('确认删除')
-      .then(() => {
-        this.removeLayer(this.$selectItem)
-      })
+      this.$delAPI("确认删除").then(() => {
+        this.removeLayer(this.activeLayer);
+      });
     },
 
-    onContextmenu(item){
-      this.$selectItem = item
+    onContextmenu(item) {
+      this.setActiveLayer(item);
     },
 
     selectHandle(item) {
-      item.active = true;
+      this.setActiveLayer(item);
     },
   },
 };
@@ -121,7 +118,7 @@ export default {
 .right-menu {
   position: fixed;
   background: #fff;
-  border: solid 1px rgba(0, 0, 0, .2);
+  border: solid 1px rgba(0, 0, 0, 0.2);
   border-radius: 3px;
   z-index: 999;
   display: none;
@@ -140,20 +137,20 @@ export default {
 }
 html,
 body {
-    height: 100%;
+  height: 100%;
 }
 .right-menu {
-    border: 1px solid #eee;
-    box-shadow: 0 0.5em 1em 0 rgba(0,0,0,.1);
-    border-radius: 1px;
+  border: 1px solid #eee;
+  box-shadow: 0 0.5em 1em 0 rgba(0, 0, 0, 0.1);
+  border-radius: 1px;
 }
 a {
-    text-decoration: none;
+  text-decoration: none;
 }
 .right-menu a {
-    padding: 2px;
+  padding: 2px;
 }
 .right-menu a:hover {
-    background: #42b983;
+  background: #42b983;
 }
 </style>

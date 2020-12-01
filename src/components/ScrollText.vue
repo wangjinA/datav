@@ -2,7 +2,7 @@
  * @Author: 汪锦
  * @Date: 2020-10-20 17:56:47
  * @LastEditors: 汪锦
- * @LastEditTime: 2020-11-27 11:44:18
+ * @LastEditTime: 2020-12-01 16:24:35
  * @Description: 滚动文字 - 文字跑马灯
 -->
 <template>
@@ -27,13 +27,11 @@ export default {
       disArr: [], //每一个内容的宽度
     };
   },
-  mounted() {
-    this.disArr = [this.$refs.content.clientWidth];
-    this.moveLeft();
-  },
-  beforeDestroy() {
-    clearInterval(this.nowTime); //页面关闭清除定时器
-    this.nowTime = null; //清除定时器标识
+  watch: {
+    text() {
+      this.destroy();
+      this.init();
+    },
   },
   methods: {
     //获取margin属性
@@ -57,6 +55,20 @@ export default {
         outbox.style = "transform: translateX(" + startDis + "px)"; //每次都让盒子移动指定的距离
       }, 1000 / 60);
     },
+    destroy() {
+      clearInterval(this.nowTime); //页面关闭清除定时器
+      this.nowTime = null; //清除定时器标识
+    },
+    init() {
+      this.disArr = [this.$refs.content.clientWidth];
+      this.moveLeft();
+    },
+  },
+  mounted() {
+    this.init();
+  },
+  beforeDestroy() {
+    this.destroy();
   },
 };
 </script>

@@ -39,9 +39,9 @@ export const parse = str => {
 
 export const checkName = (list, value, key = 'name') => {
   const _list = list.filter(item => item[key] === value[key])
-  if(_list.length){
-    value[key] = value + 
-    checkName(list, value, key)
+  if (_list.length) {
+    value[key] = value +
+      checkName(list, value, key)
   }
 }
 
@@ -69,4 +69,34 @@ export const randomString = (length = 10, chats) => {
     str += chats[num]
   }
   return str
+}
+
+/**
+* @description 获取数字，字符串转数字，失败返回0
+* @param {Number} value 字符串  
+* @return {Number} 返回数字
+*/
+export const getInt = (value) => {
+  let _v = parseInt(value)
+  if (isNaN(_v)) {
+    return 0
+  }
+  return _v
+}
+
+
+/**
+* @description 默认获取百分比，如果传了target，会乘以target
+* @param {Number} value 字符串  
+* @param {Number} target 数字
+*/
+export const getBfb = (value, target) => {
+  if (typeof value === 'string' && value.indexOf('%') != -1) {
+    let _v = value.replace('%', '')
+    _v = getInt(_v) / 100
+    target && (_v = _v * target)
+    return _v
+  } else {
+    return value
+  }
 }

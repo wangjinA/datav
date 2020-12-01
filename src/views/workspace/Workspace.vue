@@ -24,7 +24,7 @@
               @on-enter="setName(item)"
             />
           </div>
-          <span class="preview-btn" @click="preview">预览</span>
+          <span class="preview-btn" @click="preview(item)">预览</span>
         </div>
       </li>
     </ul>
@@ -71,8 +71,15 @@ export default {
         },
       });
     },
-    preview() {
-      window.open(this.$router.resolve("/preview").href);
+    preview(item) {
+      window.open(
+        this.$router.resolve({
+          name: "preview",
+          params: {
+            id: item.id,
+          },
+        }).href
+      );
     },
     getList() {
       this.$get("/api/api/datav").then((res) => {

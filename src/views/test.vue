@@ -1,6 +1,13 @@
 <template>
   <div>
     <Loading />
+    <img width="500" src="@/assets/lizi.png" alt="" />
+    <div>测试柜</div>
+    <small>
+      测试柜
+      <small>测试柜</small>
+      <small>测试柜</small>
+    </small>
   </div>
 </template>
 
