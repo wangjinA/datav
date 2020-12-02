@@ -74,9 +74,17 @@ export default {
     };
   },
   computed: {
-    ...mapState(["resourceLayers", "activeLayer"]),
+    ...mapState(["resourceLayers", "activeLayer", "datavInfo"]),
     wrapStyle() {
+      let bgi;
+      let style;
+      if (this.datavInfo && this.datavInfo.style) {
+        bgi = `/api/public/${this.datavInfo.style.backgroundImage}`;
+        style = this.datavInfo.style;
+      }
       return {
+        ...style,
+        backgroundImage: `url(${bgi})`,
         transform: `scale(${this.scale})`,
       };
     },
@@ -86,10 +94,6 @@ export default {
 
     canavsHandle() {
       this.setActiveLayer(null);
-    },
-
-    onDrag(...a) {
-      console.log(a);
     },
     // 激活焦点
     onActivated(item) {
@@ -142,7 +146,7 @@ export default {
     screenshot() {
       html2canvas(this.$refs.DatavCanvas).then((canvas) => {
         canvas.toBlob((blob) => {
-          let filename = `datav_${this.id}.jpg`;
+          let filename = `datav_${this.id + Date.now()}.jpg`;
           let file = new File([blob], filename, { type: "image/jpg" });
           const url = window.URL.createObjectURL(file);
           console.log(file);
@@ -150,11 +154,8 @@ export default {
           // window.open(url);
           const formData = new FormData();
           formData.append("file", file);
-          this.$post("/api/api/upload", formData).then((res) => {
-            this.$put(`/api/api/datav/${this.id}`, {
-              id: this.id,
-              preview_img: res.img,
-            });
+          this.$post("/api/api/upload", formData).then(() => {
+            this.datavInfo.preview_img = filename;
           });
         });
       });
@@ -174,6 +175,7 @@ export default {
   width: 100%;
   position: relative;
   overflow: hidden;
+  background-size: 100% 100%;
 }
 .screen-box {
   position: relative;

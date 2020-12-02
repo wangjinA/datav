@@ -15,13 +15,18 @@
       </li>
     </ul>
     <ul class="Setup-ul" v-if="activeLayer">
-      <li v-for="(item, index) in baseSetup" :key="index">
+      <li v-for="(item, index) in componentBaseSetup" :key="index">
         <SetupForm :target="activeLayer.editOption" :item="item" />
       </li>
     </ul>
     <ul class="Setup-ul" v-if="!activeLayer">
-      <li v-for="(item, index) in pageSetup" :key="index">
+      <li v-for="(item, index) in pageBaseSetup" :key="index">
         <SetupForm :target="datavInfo" :item="item" />
+      </li>
+    </ul>
+    <ul class="Setup-ul" v-if="!activeLayer">
+      <li v-for="(item, index) in pageStyleSetup" :key="index">
+        <SetupForm :target="datavInfo && datavInfo.style" :item="item" />
       </li>
     </ul>
   </div>
@@ -31,7 +36,7 @@
 import { mapState, mapMutations } from "vuex";
 import componentConfig from "@/config/componentConfig";
 import SetupForm from "./SetupForm.vue";
-const baseSetup = [
+const componentBaseSetup = [
   {
     name: "x",
     key: "x",
@@ -53,7 +58,7 @@ const baseSetup = [
     type: "input",
   },
 ];
-const pageSetup = [
+const pageBaseSetup = [
   {
     name: "项目名称",
     key: "name",
@@ -64,14 +69,22 @@ const pageSetup = [
     type: "img",
   },
 ];
+const pageStyleSetup = [
+  {
+    name: "背景图",
+    key: "backgroundImage",
+    type: "img",
+  },
+];
 export default {
   name: "Setup",
   components: { SetupForm },
   data() {
     return {
       contextMenuVisible: false,
-      baseSetup,
-      pageSetup,
+      componentBaseSetup,
+      pageBaseSetup,
+      pageStyleSetup,
     };
   },
   computed: {

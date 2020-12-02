@@ -1,7 +1,7 @@
 <template>
   <header>
     <div class="project-name">
-      {{ projectName }}
+      {{ datavInfo && datavInfo.name }}
     </div>
     <ul class="component-ul">
       <li v-for="item in comList" :key="item.name">
@@ -31,16 +31,10 @@
 import IconBase from "@/layout/icons/IconBase";
 import { echart, text } from "@/config/componentConfig";
 import { deepClone } from "@/lib/utils";
-import { mapMutations } from "vuex";
+import { mapMutations, mapState } from "vuex";
 export default {
   components: {
     IconBase,
-  },
-  props: {
-    projectName: {
-      type: String,
-      default: "",
-    },
   },
   data() {
     return {
@@ -61,6 +55,9 @@ export default {
         },
       ],
     };
+  },
+  computed: {
+    ...mapState(["datavInfo"]),
   },
   methods: {
     ...mapMutations(["addLayer"]),

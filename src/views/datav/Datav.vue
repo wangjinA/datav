@@ -1,7 +1,7 @@
 <template>
   <div id="datav">
     <!-- <Datav-header style="position: absolute; z-index: 99;" /> -->
-    <Datav-header :projectName="projectName" />
+    <Datav-header />
     <section>
       <Layer />
       <main>
@@ -22,7 +22,7 @@ import { parse } from "@/lib/utils";
 import { stringify } from "@/lib/utils";
 
 export default {
-  name: "App",
+  name: "Datav",
   components: {
     DataCanvas,
     Layer,
@@ -32,7 +32,6 @@ export default {
   data() {
     return {
       id: this.$route.params.id,
-      projectName: "",
     };
   },
   watch: {
@@ -59,7 +58,8 @@ export default {
             id: datavInfo.id,
             name: datavInfo.name,
             preview_img: datavInfo.preview_img,
-          });
+            style: JSON.stringify(datavInfo.style),
+          }).then(() => {});
         }, 200);
       },
     },
@@ -69,13 +69,16 @@ export default {
   },
   methods: {
     ...mapMutations(["initLayer", "setDatavInfo"]),
+    f5(isInit) {
+      this.$get(`/api/api/datav/${this.id}`).then((res) => {
+        isInit && this.initLayer(parse(res.data.option));
+        delete res.data.option;
+        this.setDatavInfo(res.data);
+      });
+    },
   },
   created() {
-    this.$get(`/api/api/datav/${this.id}`).then((res) => {
-      this.initLayer(parse(res.data.option));
-      this.projectName = res.data.name;
-      this.setDatavInfo(res.data);
-    });
+    this.f5(true);
   },
 };
 </script>

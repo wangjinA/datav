@@ -9,7 +9,10 @@
         :before-upload="beforeUpload"
         accept="image/*"
       >
-        <div class="upload-text">点击上传</div>
+        <div class="upload-preview" v-if="target[item.key]">
+          <img :src="`/api/public/${target[item.key]}`" />
+        </div>
+        <div class="upload-text" v-else>点击上传</div>
       </Upload>
       <Input v-else size="small" v-model="target[item.key]" :type="item.inputType" />
     </section>
@@ -33,7 +36,7 @@ export default {
       const formData = new FormData();
       formData.append("file", file);
       this.$post("/api/api/upload", formData).then((res) => {
-        this.target[this.item.key] = res.img;
+        this.$set(this.target, this.item.key, res.img);
       });
       return false;
     },
@@ -51,6 +54,17 @@ section {
       justify-content: center;
       display: flex;
       align-items: center;
+    }
+    .upload-preview {
+      height: 100%;
+      width: 100%;
+      position: relative;
+      > img {
+        height: 100%;
+        width: 100%;
+        left: 0;
+        position: absolute;
+      }
     }
   }
 }
