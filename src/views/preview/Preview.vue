@@ -2,7 +2,7 @@
  * @Author: 汪锦
  * @Date: 2020-11-30 09:55:57
  * @LastEditors: 汪锦
- * @LastEditTime: 2020-11-30 10:11:39
+ * @LastEditTime: 2020-12-10 16:16:27
  * @Description: 预览
 -->
 <template>
@@ -28,7 +28,7 @@ export default {
   },
   created() {
     this.$get(`/api/api/datav/${this.id}`).then((res) => {
-      this.initLayer(parse(res.data[0].option));
+      this.initLayer(parse(res.data.option));
     });
   },
 };

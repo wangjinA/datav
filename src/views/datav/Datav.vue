@@ -18,7 +18,6 @@ import DatavHeader from "@/layout/header";
 import Layer from "@/layout/layer";
 import Setup from "@/layout/setup";
 import { mapMutations, mapState } from "vuex";
-import { parse } from "@/lib/utils";
 import { stringify } from "@/lib/utils";
 
 export default {
@@ -68,18 +67,9 @@ export default {
     ...mapState(["datavInfo", "resourceLayers"]),
   },
   methods: {
-    ...mapMutations(["initLayer", "setDatavInfo"]),
-    f5(isInit) {
-      this.$get(`/api/api/datav/${this.id}`).then((res) => {
-        isInit && this.initLayer(parse(res.data.option));
-        delete res.data.option;
-        this.setDatavInfo(res.data);
-      });
-    },
+    ...mapMutations(["setDatavInfo"]),
   },
-  created() {
-    this.f5(true);
-  },
+  created() {},
 };
 </script>
 

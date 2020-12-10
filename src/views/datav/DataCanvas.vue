@@ -49,7 +49,7 @@ import HeaderV1 from "@/components/header";
 import EchartTemplate from "@/components/echart-template";
 import ThreedTags from "@/components/threed-tags";
 import ScrollText from "@/components/ScrollText";
-import { getInt, getBfb } from "@/lib/utils";
+import { getInt, getBfb, parse } from "@/lib/utils";
 import html2canvas from "html2canvas";
 export default {
   name: "DatavCanvas",
@@ -90,7 +90,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(["addLayer", "setActiveLayer"]),
+    ...mapMutations(["addLayer", "setActiveLayer", "setDatavInfo", "initLayer"]),
 
     canavsHandle() {
       this.setActiveLayer(null);
@@ -160,8 +160,17 @@ export default {
         });
       });
     },
+
+    initDataInfo(isInit) {
+      this.$get(`/api/api/datav/${this.id}`).then((res) => {
+        isInit && this.initLayer(parse(res.data.option));
+        delete res.data.option;
+        this.setDatavInfo(res.data);
+      });
+    },
   },
   created() {
+    this.initDataInfo(true);
     this.$bus_$on("screenshot", this.screenshot);
   },
 };
