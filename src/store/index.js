@@ -40,7 +40,7 @@ const store = new Vuex.Store({
       }
     },
 
-    // 删除图层
+    // 删除单个图层
     removeLayer(state, value) {
       const { resourceLayers, activeLayer } = state
       // 删除的如果是选中的
@@ -54,6 +54,10 @@ const store = new Vuex.Store({
       }
     },
 
+    // 清空图层 设置为空数组
+    clearLayer(state) {
+      state['resourceLayers'] = []
+    },
 
     // 设置选中图层
     setActiveLayer(state, item) {

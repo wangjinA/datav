@@ -67,9 +67,12 @@ export default {
     ...mapState(["datavInfo", "resourceLayers"]),
   },
   methods: {
-    ...mapMutations(["setDatavInfo"]),
+    ...mapMutations(["setDatavInfo", "clearLayer"]),
   },
   created() {},
+  destroyed() {
+    this.clearLayer();
+  },
 };
 </script>
 

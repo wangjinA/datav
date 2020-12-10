@@ -125,7 +125,7 @@ export default {
         resizable: !this.readonly,
         draggable: !this.readonly,
       };
-      const DatavCanvasDom = this.$refs.DatavCanvas;
+      const DatavCanvasDom = this.$refs.DatavCanvas || {};
       return {
         ...item,
         w: getBfb(item.w, DatavCanvasDom.offsetWidth),
