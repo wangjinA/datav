@@ -59,7 +59,7 @@ export default {
             preview_img: datavInfo.preview_img,
             style: JSON.stringify(datavInfo.style),
           }).then(() => {});
-        }, 200);
+        }, 201);
       },
     },
   },
