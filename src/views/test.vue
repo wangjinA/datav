@@ -17,7 +17,14 @@ import LineModule from "@/components/lineModule";
 export default {
   components: {
     Loading,
-    LineModule
+    LineModule,
+  },
+  data() {
+    return {
+    };
   },
 };
 </script>
+
+<style lang="less" scoped>
+</style>

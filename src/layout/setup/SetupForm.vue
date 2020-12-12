@@ -2,24 +2,51 @@
   <div v-if="target && item" class="SetupForm">
     <label>{{ item.name }}</label>
     <section>
-      <Upload
-        action="/"
-        v-if="item.type === 'img'"
-        type="drag"
-        :before-upload="beforeUpload"
-        accept="image/*"
-      >
-        <div class="upload-preview" v-if="target[item.key]">
-          <img :src="`/api/public/${target[item.key]}`" />
-        </div>
-        <div class="upload-text" v-else>点击上传</div>
-      </Upload>
-      <Input v-else size="small" v-model="target[item.key]" :type="item.inputType" />
+      <!-- 图片上传 -->
+      <template v-if="item.type === 'img'">
+        <Upload
+          action="/"
+          type="drag"
+          :before-upload="beforeUpload"
+          accept="image/*"
+        >
+          <div class="upload-preview" v-if="target[item.key]">
+            <img :src="`/api/public/${target[item.key]}`" />
+          </div>
+          <div class="upload-text" v-else>点击上传</div>
+        </Upload>
+      </template>
+
+      <!-- 下拉选择器 -->
+      <template v-else-if="item.type === 'select'">
+        <Select size="small" v-model="target[item.key]">
+          <Option
+            v-for="select in item.data"
+            :value="select.value"
+            :key="select.value"
+            :label="select.name"
+          ></Option>
+        </Select>
+      </template>
+
+      <!-- 代码编辑器 -->
+      <template v-else-if="item.type === 'code' || item.codeType">
+        <CodeEditor v-model="target[item.key]" :type="item.codeType"/>
+      </template>
+
+      <!-- 输入框 -->
+      <Input
+        v-else
+        size="small"
+        v-model="target[item.key]"
+        :type="item.inputType"
+      />
     </section>
   </div>
 </template>
 
 <script>
+import CodeEditor from "./CodeEditor";
 export default {
   props: {
     target: {
@@ -30,6 +57,9 @@ export default {
       type: Object,
       default: () => ({}),
     },
+  },
+  components: {
+    CodeEditor,
   },
   methods: {
     beforeUpload(file) {
@@ -47,6 +77,7 @@ export default {
 <style lang="less" scoped>
 section {
   flex: 1;
+  width: 0;
   > .ivu-upload {
     margin: 10px 0;
     .upload-text {

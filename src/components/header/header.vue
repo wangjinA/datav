@@ -1,5 +1,5 @@
 <template>
-  <div class="st-header" :style="{ color }">
+  <div class="st-header" :style="{ ...styles, color }">
     <div class="st-header-menu">
       <img src="./images/menu-icon.png" />
       <ul class="st-header-menuList">
@@ -27,6 +27,10 @@ export default {
       type: String,
       default: "汕头市应急管理综合应用平台",
     },
+    type: {
+      type: [Number, String],
+      default: 1
+    }
   },
   data() {
     return {
@@ -48,8 +52,19 @@ export default {
         //   path: '/portal'
         // }
       ],
-      currentDate: "",
     };
+  },
+  computed: {
+    styles() {
+      let styles = [{
+        backgroundImage: `url(${require('./images/header.png')})`,
+        '--height': '77px',
+      }, {
+        backgroundImage: `url(${require('./images/header-1.png')})`,
+        '--height': '77px',
+      }]
+      return styles[this.type]
+    }
   },
   methods: {
     navHandler(item) {
@@ -76,11 +91,13 @@ export default {
   }
 }
 .st-header {
-  height: 100%;
+  height: var(--height);
   padding: 0 30px;
   display: flex;
   justify-content: center;
-  .bg-style("./images/header.png");
+  background-size: 100% 100%;
+  background-position: center center;
+  background-repeat: no-repeat;
   // background-color: #070d1c;
   display: flex;
   // position: fixed;
@@ -139,7 +156,8 @@ export default {
   }
   &-title {
     font-size: 38px;
-    padding-top: 10px;
+    height: var(--height);
+    line-height: var(--height);
     font-family: "ShiShangZhongHeiJianTi";
     width: 704px;
     display: flex;

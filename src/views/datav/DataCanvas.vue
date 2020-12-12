@@ -47,7 +47,7 @@
 import { mapState, mapMutations } from "vuex";
 import HeaderV1 from "@/components/header";
 import EchartTemplate from "@/components/echart-template";
-import ThreedTags from "@/components/threed-tags";
+import ThreedTags from "@/components/ThreedTags";
 import ScrollText from "@/components/ScrollText";
 import { getInt, getBfb, parse } from "@/lib/utils";
 import html2canvas from "html2canvas";
@@ -116,9 +116,11 @@ export default {
       const h = size[3];
       item.editOption.w = w;
       item.editOption.h = h;
-      if (item.componentName === "echart-template" || item.componentName === "echart") {
-        this.$refs[item.name][0].resize();
-      }
+      let target = this.$refs[item.name][0]
+      target.resize && target.resize()
+      // if (item.componentName === "echart-template" || item.componentName === "echart") {
+      //   this.$refs[item.name][0].resize();
+      // }
     },
     getBaseOption(item) {
       let readonlyProps = {

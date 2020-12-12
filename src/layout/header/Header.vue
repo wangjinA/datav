@@ -96,7 +96,7 @@ header {
   align-items: center;
   color: #fff;
   background: var(--background);
-  transition: all linear 500ms;
+  transition: all linear 0.3s;
   flex-shrink: 0;
   .component-ul {
     display: flex;

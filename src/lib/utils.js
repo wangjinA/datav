@@ -1,4 +1,5 @@
 /* eslint-disable */
+// 深克隆
 export const deepClone = (obj, hash = new WeakMap()) => {
   if (obj === null) return obj; // 如果是null或者undefined我就不进行拷贝操作
   if (obj instanceof Date) return new Date(obj);
@@ -19,6 +20,7 @@ export const deepClone = (obj, hash = new WeakMap()) => {
   return cloneObj;
 }
 
+// 对象转字符串，包括字符串
 export const stringify = json => {
   return JSON.stringify(json, (key, val) => {
     if (typeof val === 'function') {
@@ -28,6 +30,8 @@ export const stringify = json => {
   });
 }
 
+
+// 字符串转对象，包括函数
 export const parse = str => {
   return JSON.parse(str, function (k, v) {
     if (v.indexOf && (v.indexOf('function') > -1 || v.indexOf('=>') > -1)) {
@@ -35,14 +39,6 @@ export const parse = str => {
     }
     return v;
   });
-}
-
-export const checkName = (list, value, key = 'name') => {
-  const _list = list.filter(item => item[key] === value[key])
-  if (_list.length) {
-    value[key] = value +
-      checkName(list, value, key)
-  }
 }
 
 /**
@@ -84,7 +80,6 @@ export const getInt = (value) => {
   return _v
 }
 
-
 /**
 * @description 默认获取百分比，如果传了target，会乘以target
 * @param {Number} value 字符串  
@@ -98,5 +93,22 @@ export const getBfb = (value, target) => {
     return _v
   } else {
     return value
+  }
+}
+
+// 防抖函数
+export const debounce = (fn, delay = 200) =>{
+  // 维护一个 timer
+  let timer = null;
+  
+  return function() {
+      // 获取函数的作用域和变量
+      let context = this;
+      let args = arguments;
+      
+      clearTimeout(timer);
+      timer = setTimeout(function(){
+          fn.apply(context, args);
+      }, delay)
   }
 }

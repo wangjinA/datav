@@ -16,11 +16,6 @@ const store = new Vuex.Store({
     // 添加图层
     addLayer(state, value) {
       const { resourceLayers } = state
-      // const resource_filter = resourceLayers.filter(item => item.id === value.id)
-      // if (resource_filter.length > 0) {
-      //   value.name += resource_filter.length
-      // }
-      // checkName(resourceLayers, value, 'name')
       value.$vueKey = randomString()
       resourceLayers.push(value)
       this.commit('setActiveLayer', value)

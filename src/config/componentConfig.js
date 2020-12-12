@@ -12,6 +12,18 @@ export const echart = [
     },
     componentSetup: [
       {
+        name: '风格',
+        key: 'type',
+        type: 'select',
+        data: [{
+          name: '默认',
+          value: 0,
+        }, {
+          name: '风格2',
+          value: 1
+        }]
+      },
+      {
         name: '颜色',
         type: 'input',
         key: 'color'
@@ -132,6 +144,7 @@ export const echart = [
     componentName: 'threed-tags',
     previewImage: require('@/config/images/3d云标签.png'),
     componentOption: {
+      speed: 1,
       color: '#fff',
       list: [
         '新冠病毒',
@@ -147,10 +160,18 @@ export const echart = [
         'webpack'
       ]
     },
-    componentSetup: [],
+    componentSetup: [{
+      name: '速度',
+      key: 'speed',
+      inputType: 'number',
+    }, {
+      name: '数据',
+      key: 'list',
+      codeType: 'JSON',
+    }],
     editOption: {
-      w: 400,
-      h: 400,
+      w: 200,
+      h: 200,
       y: 0,
       x: 520
     }

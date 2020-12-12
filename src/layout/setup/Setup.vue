@@ -36,6 +36,7 @@
 import { mapState, mapMutations } from "vuex";
 import componentConfig from "@/config/componentConfig";
 import SetupForm from "./SetupForm.vue";
+// 组件基本设置 - 定位
 const componentBaseSetup = [
   {
     name: "x",
@@ -58,6 +59,7 @@ const componentBaseSetup = [
     type: "input",
   },
 ];
+// 页面基本设置
 const pageBaseSetup = [
   {
     name: "项目名称",
@@ -69,12 +71,13 @@ const pageBaseSetup = [
     type: "img",
   },
 ];
+// 
 const pageStyleSetup = [
   {
     name: "背景图",
     key: "backgroundImage",
     type: "img",
-  },
+  }
 ];
 export default {
   name: "Setup",
@@ -138,7 +141,6 @@ export default {
       /deep/ .SetupForm {
         padding: 0 20px;
         position: relative;
-        cursor: pointer;
         color: var(--text-base);
         align-items: center;
         min-height: 45px;

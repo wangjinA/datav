@@ -7,7 +7,9 @@
  -->
 <template>
   <div class="tagBall" ref="tagBall" @mouseover="onmousemove">
-    <span class="tagItem" v-for="(item, i) in list" :key="i" ref="tagItem">{{ item }}</span>
+    <span class="tagItem" v-for="(item, i) in list" :key="i" ref="tagItem">{{
+      item
+    }}</span>
   </div>
 </template>
 
@@ -17,7 +19,7 @@ export default {
   props: {
     speed: {
       // 数值越大，速度慢
-      type: Number,
+      type: [Number, String],
       default: 1,
     },
     list: {
@@ -32,6 +34,14 @@ export default {
   },
   data() {
     return {};
+  },
+  watch: {
+    list() {
+      this.f5()
+    },
+    speed() {
+      this.f5()
+    },
   },
   computed: {
     privatSpeed() {
@@ -52,19 +62,20 @@ export default {
     },
     init() {
       let _this = this;
-      let tag = function(ele, x, y, z) {
+      let tag = function (ele, x, y, z) {
         this.ele = ele;
         this.x = x;
         this.y = y;
         this.z = z;
       };
       tag.prototype = {
-        move: function() {
+        move: function () {
           let scale = _this.fallLength / (_this.fallLength - this.z);
           let alpha = (this.z + _this.RADIUS) / (2 * _this.RADIUS);
           let left = this.x + _this.CX - this.ele.offsetWidth / 2 + "px";
           let top = this.y + _this.CY - this.ele.offsetHeight / 2 + "px";
-          let transform = "translate(" + left + ", " + top + ") scale(" + scale + ")";
+          let transform =
+            "translate(" + left + ", " + top + ") scale(" + scale + ")";
           this.ele.style.opacity = alpha + 0.5;
           this.ele.style.zIndex = parseInt(scale * 100);
           this.ele.style.transform = transform;
@@ -82,7 +93,7 @@ export default {
         (this.angleY = Math.PI / this.paperHeight / 1 / this.privatSpeed),
         (this.CX = this.paperWidth / 2),
         (this.CY = this.paperHeight / 2),
-        (Array.prototype.$forEach = function(callback) {
+        (Array.prototype.$forEach = function (callback) {
           for (let i = 0; i < this.length; i++) {
             callback.call(this[i]);
           }
@@ -95,7 +106,9 @@ export default {
         let y = this.RADIUS * Math.sin(a) * Math.sin(b);
         let z = this.RADIUS * Math.cos(a);
         let t = new tag(this.tagEle[i], x, y, z);
-        this.tagEle[i].style.color = this.colorRange[this.getRandom(0, this.colorRange.length)];
+        this.tagEle[i].style.color = this.colorRange[
+          this.getRandom(0, this.colorRange.length)
+        ];
         this.tags.push(t);
         t.move();
       }
@@ -103,7 +116,7 @@ export default {
     rotateX() {
       let cos = Math.cos(this.angleX);
       let sin = Math.sin(this.angleX);
-      this.tags.$forEach(function() {
+      this.tags.$forEach(function () {
         let y1 = this.y * cos - this.z * sin;
         let z1 = this.z * cos + this.y * sin;
         this.y = y1;
@@ -113,7 +126,7 @@ export default {
     rotateY() {
       let cos = Math.cos(this.angleY);
       let sin = Math.sin(this.angleY);
-      this.tags.$forEach(function() {
+      this.tags.$forEach(function () {
         let x1 = this.x * cos - this.z * sin;
         let z1 = this.z * cos + this.x * sin;
         this.x = x1;
@@ -121,31 +134,41 @@ export default {
       });
     },
     onmousemove() {
-      let EX =
-        this.paper.offsetLeft + document.body.scrollLeft + document.documentElement.scrollLeft;
-      let EY = this.paper.offsetTop + document.body.scrollTop + document.documentElement.scrollTop;
-      let x = event.clientX - EX - this.CX;
-      let y = event.clientY - EY - this.CY;
-      this.angleY = x * 0.00005;
-      this.angleX = y * 0.00005;
+      // let EX =
+      //   this.paper.offsetLeft + document.body.scrollLeft + document.documentElement.scrollLeft;
+      // let EY = this.paper.offsetTop + document.body.scrollTop + document.documentElement.scrollTop;
+      // let x = event.clientX - EX - this.CX;
+      // let y = event.clientY - EY - this.CY;
+      // this.angleY = x * 0.00005;
+      // this.angleX = y * 0.00005;
     },
     animate() {
       this.rotateX();
       this.rotateY();
-      this.tags.$forEach(function() {
+      this.tags.$forEach(function () {
         this.move();
       });
       this.requestId = requestAnimationFrame(this.animate);
     },
+    resize() {
+      this.f5();
+    },
+    f5() {
+      this.$nextTick(() => {
+        this.destroy()
+        this.init();
+        this.animate();
+      });
+    },
+    destroy() {
+      cancelAnimationFrame(this.requestId);
+    },
   },
   mounted() {
-    this.$nextTick(() => {
-      this.init();
-      this.animate();
-    });
+    this.f5();
   },
   destroyed() {
-    cancelAnimationFrame(this.requestId);
+    this.destroy();
   },
 };
 </script>
