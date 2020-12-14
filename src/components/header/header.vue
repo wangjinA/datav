@@ -29,8 +29,8 @@ export default {
     },
     type: {
       type: [Number, String],
-      default: 1
-    }
+      default: 1,
+    },
   },
   data() {
     return {
@@ -56,15 +56,18 @@ export default {
   },
   computed: {
     styles() {
-      let styles = [{
-        backgroundImage: `url(${require('./images/header.png')})`,
-        '--height': '77px',
-      }, {
-        backgroundImage: `url(${require('./images/header-1.png')})`,
-        '--height': '77px',
-      }]
-      return styles[this.type]
-    }
+      let styles = [
+        {
+          backgroundImage: `url(${require("./images/header.png")})`,
+          "--height": "77px",
+        },
+        {
+          backgroundImage: `url(${require("./images/header-1.png")})`,
+          "--height": "77px",
+        },
+      ];
+      return styles[this.type];
+    },
   },
   methods: {
     navHandler(item) {
