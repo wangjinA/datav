@@ -47,8 +47,9 @@
 import { mapState, mapMutations } from "vuex";
 import HeaderV1 from "@/components/header";
 import EchartTemplate from "@/components/echart-template";
-import ThreedTags from "@/components/ThreedTags";
+import ThreedTags from "@/components/threedTags";
 import ScrollText from "@/components/ScrollText";
+import BlockList from "@/components/blockList";
 import { getInt, getBfb, parse } from "@/lib/utils";
 import html2canvas from "html2canvas";
 export default {
@@ -64,6 +65,7 @@ export default {
     EchartTemplate,
     ThreedTags,
     ScrollText,
+    BlockList,
   },
   data() {
     return {
@@ -79,7 +81,7 @@ export default {
       let bgi;
       let style;
       if (this.datavInfo && this.datavInfo.style) {
-        bgi = `/api/public/${this.datavInfo.style.backgroundImage}`;
+        bgi = this.$getImgUrl(this.datavInfo.style.backgroundImage);
         style = this.datavInfo.style;
       }
       return {
@@ -112,12 +114,16 @@ export default {
     },
     // 调整大小 echarts
     onResize(item, ...size) {
+      const x = size[0];
+      const y = size[1];
       const w = size[2];
       const h = size[3];
+      item.editOption.x = x;
+      item.editOption.y = y;
       item.editOption.w = w;
       item.editOption.h = h;
-      let target = this.$refs[item.name][0]
-      target.resize && target.resize()
+      let target = this.$refs[item.name][0];
+      target.resize && target.resize();
       // if (item.componentName === "echart-template" || item.componentName === "echart") {
       //   this.$refs[item.name][0].resize();
       // }
@@ -156,7 +162,7 @@ export default {
           // window.open(url);
           const formData = new FormData();
           formData.append("file", file);
-          this.$post("/api/api/upload", formData).then(() => {
+          this.$post("/api/upload", formData).then(() => {
             this.datavInfo.preview_img = filename;
           });
         });
@@ -164,7 +170,7 @@ export default {
     },
 
     initDataInfo(isInit) {
-      this.$get(`/api/api/datav/${this.id}`).then((res) => {
+      this.$get(`/api/datav/${this.id}`).then((res) => {
         isInit && this.initLayer(parse(res.data.option));
         delete res.data.option;
         this.setDatavInfo(res.data);
@@ -189,6 +195,6 @@ export default {
   background-size: 100% 100%;
 }
 .screen-box {
-  position: relative;
+  position: absolute;
 }
 </style>

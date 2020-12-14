@@ -200,6 +200,45 @@ export const text = [
       y: 0,
       x: 0
     }
+  }, {
+    id: 5,
+    name: '文字模块',
+    componentName: 'BlockList',
+    previewImage: require('@/config/images/文字模块.png'),
+    componentOption: {
+      gap: 5,
+      list: [
+        {
+          name: "人口流入",
+          value: 200,
+        },
+        {
+          name: "人口流出",
+          value: 200,
+        },
+        {
+          name: "人口总数",
+          value: 200,
+        },
+      ],
+    },
+    componentSetup: [
+      {
+        name: '间距',
+        key: 'gap',
+        inputType: 'number',
+      }, {
+        name: '数据',
+        key: 'list',
+        codeType: 'JSON',
+      }
+    ],
+    editOption: {
+      w: 330,
+      h: 100,
+      y: 0,
+      x: 0
+    }
   }
 ]
 

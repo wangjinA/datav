@@ -86,29 +86,34 @@ export const getInt = (value) => {
 * @param {Number} target 数字
 */
 export const getBfb = (value, target) => {
-  if (typeof value === 'string' && value.indexOf('%') != -1) {
-    let _v = value.replace('%', '')
-    _v = getInt(_v) / 100
-    target && (_v = _v * target)
-    return _v
-  } else {
-    return value
+  if (typeof value === 'string') {
+    if (value.indexOf('%') != -1) {
+      let _v = value.replace('%', '')
+      _v = getInt(_v) / 100
+      target && (_v = _v * target)
+      return _v
+    } else if (isNaN(parseInt(value))) {
+      return value.replace(/[^0-9]/ig, "");
+    } else {
+      return parseInt(value)
+    }
   }
+  return value
 }
 
 // 防抖函数
-export const debounce = (fn, delay = 200) =>{
+export const debounce = (fn, delay = 200) => {
   // 维护一个 timer
   let timer = null;
-  
-  return function() {
-      // 获取函数的作用域和变量
-      let context = this;
-      let args = arguments;
-      
-      clearTimeout(timer);
-      timer = setTimeout(function(){
-          fn.apply(context, args);
-      }, delay)
+
+  return function () {
+    // 获取函数的作用域和变量
+    let context = this;
+    let args = arguments;
+
+    clearTimeout(timer);
+    timer = setTimeout(function () {
+      fn.apply(context, args);
+    }, delay)
   }
 }

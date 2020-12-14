@@ -27,7 +27,7 @@ export default {
     ...mapMutations(["initLayer"]),
   },
   created() {
-    this.$get(`/api/api/datav/${this.id}`).then((res) => {
+    this.$get(`/api/datav/${this.id}`).then((res) => {
       this.initLayer(parse(res.data.option));
     });
   },

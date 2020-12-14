@@ -4,14 +4,9 @@
     <section>
       <!-- 图片上传 -->
       <template v-if="item.type === 'img'">
-        <Upload
-          action="/"
-          type="drag"
-          :before-upload="beforeUpload"
-          accept="image/*"
-        >
+        <Upload action="/" type="drag" :before-upload="beforeUpload" accept="image/*">
           <div class="upload-preview" v-if="target[item.key]">
-            <img :src="`/api/public/${target[item.key]}`" />
+            <img :src="$getImgUrl(target[item.key])" />
           </div>
           <div class="upload-text" v-else>点击上传</div>
         </Upload>
@@ -31,16 +26,11 @@
 
       <!-- 代码编辑器 -->
       <template v-else-if="item.type === 'code' || item.codeType">
-        <CodeEditor v-model="target[item.key]" :type="item.codeType"/>
+        <CodeEditor v-model="target[item.key]" :type="item.codeType" />
       </template>
 
       <!-- 输入框 -->
-      <Input
-        v-else
-        size="small"
-        v-model="target[item.key]"
-        :type="item.inputType"
-      />
+      <Input v-else size="small" v-model="target[item.key]" :type="item.inputType" />
     </section>
   </div>
 </template>
@@ -65,7 +55,7 @@ export default {
     beforeUpload(file) {
       const formData = new FormData();
       formData.append("file", file);
-      this.$post("/api/api/upload", formData).then((res) => {
+      this.$post("/api/upload", formData).then((res) => {
         this.$set(this.target, this.item.key, res.img);
       });
       return false;

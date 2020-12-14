@@ -41,7 +41,7 @@ export default {
         if (!this.readonly) {
           clearTimeout(this.watch_resourceLayers_timer);
           this.watch_resourceLayers_timer = setTimeout(() => {
-            this.$put(`/api/api/datav/${this.id}`, {
+            this.$put(`/api/datav/${this.id}`, {
               option: stringify(resourceLayers),
             });
           }, 200);
@@ -53,7 +53,7 @@ export default {
       handler(datavInfo) {
         clearTimeout(this.watch_datavInfo_timer);
         this.watch_datavInfo_timer = setTimeout(() => {
-          this.$put(`/api/api/datav/${this.id}`, {
+          this.$put(`/api/datav/${this.id}`, {
             id: datavInfo.id,
             name: datavInfo.name,
             preview_img: datavInfo.preview_img,

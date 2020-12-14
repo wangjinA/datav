@@ -27,6 +27,11 @@ window.$echarts = echarts
 import store from './store'
 import router from './router'
 
+
+Vue.prototype.$getImgUrl = (imgName) => {
+  return process.env.NODE_ENV === "development" ? `/api/public/${imgName}` : `/public/${imgName}`
+}
+
 new Vue({
   store,
   router,
