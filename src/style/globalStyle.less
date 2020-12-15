@@ -1,0 +1,150 @@
+/*
+ * @Author: 汪锦
+ * @Date: 2020-07-13 09:27:50
+ * @LastEditors: 汪锦
+ * @LastEditTime: 2020-10-28 11:21:08
+ * @Description: 全局less
+ */
+// 文本溢出
+.text-overflow {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// 多行省略
+.text-overflow1(@line: 2) {
+  text-overflow: -o-ellipsis-lastline;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: @line;
+  line-clamp: @line;
+  -webkit-box-orient: vertical;
+}
+
+// 多行省略
+.text-overflow1 {
+  text-overflow: -o-ellipsis-lastline;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+// 滚动条
+::-webkit-scrollbar-thumb {
+  background-color: #a4f8ff;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-thumb,
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px rgba(0, 0, 5, 0.2);
+}
+
+// 圆形
+.round(@size) {
+  width: @size;
+  height: @size;
+  border-radius: 50%;
+}
+
+// 背景图设置
+.bg-style(@url) {
+  background-size: 100% 100%;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-image: url(@url);
+}
+
+// flex居中
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex1 {
+  flex: 1;
+}
+
+.flex0 {
+  flex-shrink: 0;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-warp {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.space-between {
+  display: flex;
+  justify-content: space-between;
+}
+
+// flex主轴为Y
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-baseline {
+  display: flex;
+  align-items: baseline;
+}
+
+// hover效果
+.hover {
+  &:hover {
+    cursor: pointer;
+    opacity: 0.8;
+  }
+}
+
+// 上下左右为0
+.allAroundZero(@position: absolute, @distance: 0) {
+  position: @position;
+  left: @distance;
+  top: @distance;
+  right: @distance;
+  bottom: @distance;
+}
+
+// 重置输入框
+.resetInput {
+  border: none;
+  outline: none;
+  background-color: transparent;
+}
+
+// 暂无数据文字样式
+.not-data {
+  color: #a4f8ff;
+  background-color: transparent;
+  font-size: 16px;
+  height: 35px;
+  line-height: 35px;
+  text-align: center;
+}
+.size100,
+.wh100 {
+  width: 100%;
+  height: 100%;
+}
+.size100-img,
+.wh100-img {
+  .wh100();
+  object-fit: cover;
+}

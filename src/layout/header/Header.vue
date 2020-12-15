@@ -5,7 +5,7 @@
     </div>
     <ul class="component-ul">
       <li v-for="item in comList" :key="item.name">
-        <IconBase :icon-name="item.iconName" />
+        <IconBase :scale="item.iconScale" :icon-name="item.iconName" />
         <p>{{ item.name }}</p>
         <div class="com-list-wrap">
           <ul>
@@ -29,7 +29,7 @@
 
 <script>
 import IconBase from "@/layout/icons/IconBase";
-import { echart, text } from "@/config/componentConfig";
+import { echart, text, base } from "@/config/componentConfig";
 import { deepClone } from "@/lib/utils";
 import { mapMutations, mapState } from "vuex";
 export default {
@@ -51,7 +51,9 @@ export default {
         },
         {
           name: "常规",
-          iconName: "zzt",
+          iconName: "changgui",
+          iconScale: 0.9,
+          list: base,
         },
       ],
     };

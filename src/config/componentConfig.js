@@ -8,7 +8,8 @@ export const echart = [
     componentOption: {
       color: '#fff',
       size: 50,
-      title: '汕头市应急管理综合应用平台'
+      title: '汕头市应急管理综合应用平台',
+      type: 0
     },
     componentSetup: [
       {
@@ -21,6 +22,9 @@ export const echart = [
         }, {
           name: '风格2',
           value: 1
+        }, {
+          name: '风格3',
+          value: 2
         }]
       },
       {
@@ -242,7 +246,45 @@ export const text = [
   }
 ]
 
+export const base = [
+  {
+    id: 6,
+    name: '模块标题',
+    componentName: 'ModuleTitle',
+    previewImage: require('@/config/images/模块标题.png'),
+    componentOption: {
+      title: '今日人口流动',
+      type: 0
+    },
+    componentSetup: [
+      {
+        name: '风格',
+        key: 'type',
+        type: 'select',
+        data: [{
+          name: '默认',
+          value: 0,
+        }, {
+          name: '风格2',
+          value: 1
+        }]
+      }, {
+        name: '标题',
+        key: 'title'
+      }
+    ],
+    editOption: {
+      w: 350,
+      h: 45,
+      y: 0,
+      x: 0
+    }
+  }
+]
+
+
 export default [
   ...echart,
-  ...text
+  ...text,
+  ...base
 ]

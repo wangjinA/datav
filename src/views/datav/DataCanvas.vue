@@ -45,11 +45,14 @@
 
 <script>
 import { mapState, mapMutations } from "vuex";
+
 import HeaderV1 from "@/components/header";
 import EchartTemplate from "@/components/echart-template";
 import ThreedTags from "@/components/threedTags";
 import ScrollText from "@/components/ScrollText";
 import BlockList from "@/components/blockList";
+import ModuleTitle from "@/components/moduleTitle";
+
 import { getInt, getBfb, parse } from "@/lib/utils";
 import html2canvas from "html2canvas";
 export default {
@@ -66,6 +69,7 @@ export default {
     ThreedTags,
     ScrollText,
     BlockList,
+    ModuleTitle,
   },
   data() {
     return {
@@ -185,7 +189,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style lang="less" scoped>
 .DatavCanvas {
   background-color: #313239;
   height: 100%;
@@ -196,5 +200,11 @@ export default {
 }
 .screen-box {
   position: absolute;
+  &.resizable.active {
+    outline: 1px dashed #ccc;
+  }
+  /deep/ .handle {
+    z-index: 99;
+  }
 }
 </style>

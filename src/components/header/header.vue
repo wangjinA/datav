@@ -1,6 +1,6 @@
 <template>
-  <div class="st-header" :style="{ ...styles, color }">
-    <div class="st-header-menu">
+  <div class="st-header" :class="{ flexCenter: showGuang }" :style="{ ...styles, color }">
+    <div class="st-header-menu" v-if="type == 0">
       <img src="./images/menu-icon.png" />
       <ul class="st-header-menuList">
         <li v-for="(item, index) in navList" :key="index" @click="navHandler(item)">
@@ -9,14 +9,28 @@
         </li>
       </ul>
     </div>
-    <div class="st-header-title">
+    <div class="st-header-title" :style="styles.titleStyle">
       {{ title }}
-      <img src="./images/guang.png" />
     </div>
+    <transition appear name="showScale">
+      <ul class="st-header-nav">
+        <li
+          v-for="(item, index) in navList"
+          :key="index"
+          :class="$route.path == item.path && 'active'"
+          @click="navHandler(item)"
+        >
+          {{ item.name }}
+        </li>
+      </ul>
+    </transition>
+    <div class="current-date">{{ currentDate }}</div>
+    <img class="guang" v-if="showGuang" src="./images/guang.png" />
   </div>
 </template>
 
 <script>
+import { getDateTimeFormat } from "@/lib/utils";
 export default {
   props: {
     color: {
@@ -29,7 +43,7 @@ export default {
     },
     type: {
       type: [Number, String],
-      default: 1,
+      default: 0,
     },
   },
   data() {
@@ -52,6 +66,7 @@ export default {
         //   path: '/portal'
         // }
       ],
+      currentDate: "",
     };
   },
   computed: {
@@ -60,21 +75,48 @@ export default {
         {
           backgroundImage: `url(${require("./images/header.png")})`,
           "--height": "77px",
+          titleStyle: {
+            paddingTop: "7px",
+          },
         },
         {
           backgroundImage: `url(${require("./images/header-1.png")})`,
+          "--height": "97px",
+          titleStyle: {
+            paddingTop: "10px",
+          },
+        },
+        {
+          backgroundImage: `url(${require("./images/header-2.png")})`,
           "--height": "77px",
+          titleStyle: {
+            paddingTop: "10px",
+            fontSize: "34px",
+          },
         },
       ];
       return styles[this.type];
+    },
+    showGuang() {
+      return [0, 1].some((type) => this.type == type);
     },
   },
   methods: {
     navHandler(item) {
       this.$router.push(item.path);
     },
+    setCurrentDate() {
+      this.currentDate = getDateTimeFormat(Date.now(), "yyyy.MM.dd hh:mm:ss");
+    },
   },
-  created() {},
+  created() {
+    this.timer = setInterval(() => {
+      this.setCurrentDate();
+    }, 1000);
+  },
+  destroyed() {
+    clearInterval(this.timer);
+  },
 };
 </script>
 
@@ -96,17 +138,14 @@ export default {
 .st-header {
   height: var(--height);
   padding: 0 30px;
-  display: flex;
-  justify-content: center;
   background-size: 100% 100%;
   background-position: center center;
   background-repeat: no-repeat;
-  // background-color: #070d1c;
+  transition: 0.2s;
   display: flex;
-  // position: fixed;
-  // left: 0;
-  // right: 0;
-  // z-index: 1000;
+  &.flexCenter {
+    justify-content: center;
+  }
   &-menuList {
     .bg-style("./images/menu-bg.png");
     width: 137px;
@@ -127,6 +166,29 @@ export default {
       }
       & + li {
         border-top: 1px solid rgba(139, 238, 255, 0.5);
+      }
+    }
+  }
+
+  &-nav {
+    height: 63px;
+    font-size: 22px;
+    margin-left: 150px;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    > li {
+      margin: 0 25px;
+      padding: 5px 0;
+      border-bottom: 2px solid transparent;
+      color: rgba(255, 255, 255, 0.6);
+      &:hover,
+      &.active {
+        cursor: pointer;
+        color: #fff;
+
+        border-color: #8ae9ee;
       }
     }
   }
@@ -159,20 +221,33 @@ export default {
   }
   &-title {
     font-size: 38px;
-    height: var(--height);
-    line-height: var(--height);
     font-family: "ShiShangZhongHeiJianTi";
-    width: 704px;
     display: flex;
     justify-content: center;
     position: relative;
+    transition: 0.2s;
     .hover();
-    & > img {
-      position: absolute;
-      bottom: -72px;
-      user-select: none;
-      pointer-events: none;
-    }
+  }
+  & > img.guang {
+    position: absolute;
+    bottom: -103%;
+    user-select: none;
+    pointer-events: none;
+  }
+
+  .current-date {
+    flex-shrink: 0;
+    font-size: 22px;
+    color: rgba(138, 234, 238, 1);
+    height: var(--header-height-min);
+    line-height: var(--header-height-min);
+    margin-left: auto;
+    margin-right: 32px;
+    letter-spacing: 3px;
+    height: 63px;
+    line-height: 63px;
+    user-select: none;
+    font-family: "DIN-Regular";
   }
 }
 </style>
