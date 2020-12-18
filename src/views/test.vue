@@ -1,11 +1,8 @@
 <template>
   <div id="test">
-    <VideoBg
-      src="http://localhost:8080/api/public/images/datav/_common/%E7%A7%91%E6%8A%80%E8%83%8C%E6%99%AF-%E5%8E%8B%E7%BC%A9.webm"
-    />
     <div style="position: relation;z-index:1;">
       <Loading />
-      <img width="200" src="@/assets/lizi.png" alt="" />
+      <img width="200" src="@/assets/lizi.png" />
       <div>测试柜</div>
       <small>
         测试柜
@@ -23,13 +20,11 @@
 import Loading from "@/components/loading/Loading";
 import LineModule from "@/components/lineModule";
 import ModuleTitle from "@/components/moduleTitle";
-import VideoBg from "@/components/videoBg";
 export default {
   components: {
     Loading,
     LineModule,
     ModuleTitle,
-    VideoBg,
   },
   data() {
     return {
