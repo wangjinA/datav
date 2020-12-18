@@ -1,5 +1,5 @@
 <template>
-  <div class="Layer">
+  <div class="Layer" @click.self="setActiveLayer(null)">
     <div class="Layer-title">图层</div>
     <ul class="Layer-ul" ref="layer-ul" @contextmenu.stop>
       <li

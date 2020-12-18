@@ -141,3 +141,13 @@ export const getDateTimeFormat = (datetime, format = 'yyyy-MM-dd hh:mm:ss') => {
   }
   return format
 }
+
+// 获取单位
+export const getNumberUnit = _value => {
+  let reg = /[a-z]/i;
+  let value = _value;
+  if (!reg.test(value) || typeof value === "number") {
+    value += "px";
+  }
+  return value
+}

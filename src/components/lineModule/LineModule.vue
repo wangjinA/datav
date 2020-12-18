@@ -4,16 +4,12 @@
       <li
         v-for="i in length"
         :key="i"
-        :style="{ opacity: 1 / (length - (i - 1)) * (1.0 + (length - (i - 1))  * 0.2) }"
+        :style="{ opacity: (1 / (length - (i - 1))) * (1.0 + (length - (i - 1)) * 0.2) }"
       ></li>
     </ul>
     <main></main>
     <ul class="line-module-right">
-      <li
-        v-for="i in length"
-        :key="i"
-        :style="{ opacity: (1 / i) * (1.0 + i * 0.2) }"
-      ></li>
+      <li v-for="i in length" :key="i" :style="{ opacity: (1 / i) * (1.0 + i * 0.2) }"></li>
     </ul>
   </div>
 </template>
@@ -21,6 +17,7 @@
 <script>
 // https://www.cnblogs.com/telwanggs/p/10975573.html
 export default {
+  name: "LineModule",
   props: {
     length: {
       type: Number,
@@ -29,7 +26,6 @@ export default {
   },
 };
 </script>
-
 
 <style lang="less" scoped>
 .line-module {

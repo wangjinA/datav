@@ -1,6 +1,14 @@
+<!--
+ * @Author: 汪锦
+ * @Date: 2020-12-14 16:22:51
+ * @LastEditors: 汪锦
+ * @LastEditTime: 2020-12-17 21:17:17
+ * @Description: 设置栏
+-->
 <template>
-  <div class="Setup">
+  <div class="Setup" @click.self="$store.commit('setActiveLayer', null)">
     <div class="Setup-title">{{ activeLayer ? "组件设置" : "页面设置" }}</div>
+    <!-- 多个Setup-ul是因为target不同 -->
     <ul class="Setup-ul" v-if="activeLayer">
       <li v-for="(item, index) in componentSetup" :key="index">
         <SetupForm :target="activeLayer.componentOption" :item="item" />
@@ -36,6 +44,9 @@
 import { mapState, mapMutations } from "vuex";
 import componentConfig from "@/config/componentConfig";
 import SetupForm from "./SetupForm.vue";
+
+const imgList = [];
+
 // 组件基本设置 - 定位
 const componentBaseSetup = [
   {
@@ -71,13 +82,42 @@ const pageBaseSetup = [
     type: "img",
   },
 ];
-// 
+//
 const pageStyleSetup = [
+  {
+    name: "背景类型",
+    key: "bgType",
+    type: "select",
+    data: [
+      {
+        name: "图片背景",
+        value: 0,
+      },
+      {
+        name: "视频背景",
+        value: 1,
+      },
+      {
+        name: "颜色背景",
+        value: 2,
+      },
+    ],
+    relation: {
+      0: [
+        {
+          name: "图片列表",
+          key: "backgroundImage",
+          type: "select",
+          data: imgList,
+        },
+      ],
+    },
+  },
   {
     name: "背景图",
     key: "backgroundImage",
     type: "img",
-  }
+  },
 ];
 export default {
   name: "Setup",
@@ -119,6 +159,23 @@ export default {
     selectHandle(item) {
       item.active = true;
     },
+
+    initImgList() {
+      this.$API.getBgList().then((res) => {
+        imgList.splice(0, imgList.length);
+        res.data
+          .filter((i) => i.type === 0)
+          .map((item) => {
+            imgList.push({
+              name: item.name,
+              value: item.src,
+            });
+          });
+      });
+    },
+  },
+  created() {
+    this.initImgList();
   },
 };
 </script>

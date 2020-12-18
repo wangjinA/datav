@@ -6,7 +6,7 @@
 import echartMixin from "./echartMixins";
 export default {
   mixins: [echartMixin],
-  name: "echartTemplate",
+  name: "EchartTemplate",
   props: {
     options: {
       type: Object,

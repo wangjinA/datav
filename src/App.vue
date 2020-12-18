@@ -1,13 +1,18 @@
 <template>
   <div id="app">
     <router-view></router-view>
+    <Modal-list></Modal-list>
   </div>
 </template>
 
 <script>
+import "@/api";
+import ModalList from "@/layout/modalList";
 export default {
   name: "App",
-  components: {},
+  components: {
+    ModalList,
+  },
 };
 </script>
 

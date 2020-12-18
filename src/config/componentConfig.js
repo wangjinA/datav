@@ -1,48 +1,65 @@
+import { API } from '@/api'
+
+const bgList = [] // 视频列表
+API.getBgList().then(res => {
+  bgList.splice(0, bgList.length)
+  res.data.filter(i => i.type === 1).map(item => {
+    bgList.push({
+      name: item.name,
+      value: item.src
+    })
+  })
+})
+
+import C from '@/components/exportCom'
+console.log(C.BaseText);
+const getBaseOption = (cName, isSetup = false) => {
+  // 最终生成的对象 key = props下的default
+  let option = {
+    // fontSize: '16px',
+    // color: '#fff'
+  }
+  let setup = []
+  let targetC = C[cName]
+  // props是对象则获取默认的default
+  if (targetC) {
+    let props = targetC.props
+    if (props && props instanceof Object) {
+      Object.keys(props).forEach(key => {
+        const item = props[key]
+        if (item instanceof Object) {
+          if (isSetup && item.name) {
+            setup.push({
+              type: item.setupType,
+              name: item.name,
+              key: key
+            })
+          } else {
+            if (Object.prototype.hasOwnProperty.call(item, 'default')) {
+              option[key] = item.default
+            }
+          }
+        }
+      })
+    }
+  }
+  return isSetup ? setup : option
+
+}
+// const baseConfig = {
+//   fontSize: {
+//     name: '字体大小',
+//     key: 'fontSize',
+//   },
+//   color: {
+//     name: '字体颜色',
+//     key: 'color',
+//     type: 'color'
+//   },
+// }
+
 export const echart = [
   {
-    id: 1,
-    background: '#000',
-    name: '头部',
-    componentName: 'HeaderV1',
-    previewImage: require('@/config/images/头部v1.jpg'),
-    componentOption: {
-      color: '#fff',
-      size: 50,
-      title: '汕头市应急管理综合应用平台',
-      type: 0
-    },
-    componentSetup: [
-      {
-        name: '风格',
-        key: 'type',
-        type: 'select',
-        data: [{
-          name: '默认',
-          value: 0,
-        }, {
-          name: '风格2',
-          value: 1
-        }, {
-          name: '风格3',
-          value: 2
-        }]
-      },
-      {
-        name: '颜色',
-        type: 'input',
-        key: 'color'
-      }, {
-        name: '标题',
-        key: 'title'
-      }
-    ],
-    editOption: {
-      w: '100%',
-      h: 77,
-      y: 0,
-      x: 0
-    }
-  }, {
     id: 2,
     width: '100%',
     height: 200,
@@ -50,7 +67,7 @@ export const echart = [
     name: '应急维稳保障',
     previewImage: require('@/config/images/柱状图.jpg'),
 
-    componentName: 'echart-template',
+    componentName: 'EchartTemplate',
     componentOption: {
       options: {
         tooltip: {
@@ -60,7 +77,7 @@ export const echart = [
           }
         },
         grid: {
-          top: '17%',
+          top: '5%',
           right: '3%',
           left: '8%',
           bottom: '10%'
@@ -174,16 +191,75 @@ export const echart = [
       codeType: 'JSON',
     }],
     editOption: {
-      w: 200,
-      h: 200,
+      w: 320,
+      h: 320,
       y: 0,
-      x: 520
+      x: 0
     }
   }
 ]
 
 export const text = [
   {
+    id: 1123,
+    name: '普通文字',
+    componentName: 'BaseText',
+    previewImage: require('@/config/images/头部v1.jpg'),
+    componentOption: getBaseOption('BaseText'),
+    componentSetup: [
+      ...getBaseOption('BaseText', true)
+    ],
+    editOption: {
+      w: 80,
+      h: 25,
+      x: 500,
+      y: 300,
+    }
+  },
+  {
+    id: 1,
+    background: '#000',
+    name: '头部',
+    componentName: 'HyHeader',
+    previewImage: require('@/config/images/头部v1.jpg'),
+    componentOption: {
+      color: '#fff',
+      size: 50,
+      title: '汕头市应急管理综合应用平台',
+      type: 0
+    },
+    componentSetup: [
+      {
+        name: '风格',
+        key: 'type',
+        type: 'select',
+        data: [{
+          name: '默认',
+          value: 0,
+        }, {
+          name: '风格2',
+          value: 1
+        }, {
+          name: '风格3',
+          value: 2
+        }]
+      },
+      {
+        name: '颜色',
+        type: 'input',
+        key: 'color'
+      }, {
+        name: '标题',
+        key: 'title'
+      }
+    ],
+    editOption: {
+      w: '100%',
+      h: 77,
+      y: 0,
+      x: 0
+    }
+  }, {
     id: 4,
     background: '#000',
     name: '滚动文字',
@@ -276,6 +352,30 @@ export const base = [
     editOption: {
       w: 350,
       h: 45,
+      y: 0,
+      x: 0
+    }
+  },
+  {
+    id: 7,
+    name: '视频背景',
+    zIndex: 0,
+    componentName: 'VideoBg',
+    previewImage: require('@/config/images/视频背景.png'),
+    componentOption: {
+      src: '_common/科技背景-压缩.webm',
+    },
+    componentSetup: [
+      {
+        name: '背景',
+        key: 'src',
+        type: 'select',
+        data: bgList
+      }
+    ],
+    editOption: {
+      w: '100%',
+      h: '100%',
       y: 0,
       x: 0
     }

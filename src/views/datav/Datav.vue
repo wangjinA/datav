@@ -1,11 +1,11 @@
 <template>
-  <div id="datav">
+  <div id="datav" class="datav-style">
     <!-- <Datav-header style="position: absolute; z-index: 99;" /> -->
     <Datav-header />
     <section>
       <Layer />
       <main>
-        <DataCanvas />
+        <DatavCanvas />
       </main>
       <Setup @click.prevent.stop />
     </section>
@@ -13,8 +13,8 @@
 </template>
 
 <script>
-import DataCanvas from "./DataCanvas.vue";
-import DatavHeader from "@/layout/header";
+import DatavCanvas from "./DatavCanvas.vue";
+import DatavHeader from "./header";
 import Layer from "@/layout/layer";
 import Setup from "@/layout/setup";
 import { mapMutations, mapState } from "vuex";
@@ -23,7 +23,7 @@ import { stringify } from "@/lib/utils";
 export default {
   name: "Datav",
   components: {
-    DataCanvas,
+    DatavCanvas,
     Layer,
     DatavHeader,
     Setup,

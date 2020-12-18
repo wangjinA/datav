@@ -2,21 +2,21 @@
  * @Author: 汪锦
  * @Date: 2020-11-30 09:55:57
  * @LastEditors: 汪锦
- * @LastEditTime: 2020-12-10 16:16:27
+ * @LastEditTime: 2020-12-17 16:56:48
  * @Description: 预览
 -->
 <template>
-  <DataCanvas readonly />
+  <DatavCanvas readonly />
 </template>
 
 <script>
-import DataCanvas from "@/views/datav/DataCanvas";
+import DatavCanvas from "@/views/datav/DatavCanvas";
 import { mapMutations } from "vuex";
 import { parse } from "@/lib/utils";
 export default {
   name: "Preview",
   components: {
-    DataCanvas,
+    DatavCanvas,
   },
   data() {
     return {

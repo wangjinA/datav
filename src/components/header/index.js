@@ -1,1 +1,1 @@
-export default require('./Header.vue').default
+export default require('./HyHeader.vue').default

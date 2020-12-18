@@ -2,20 +2,18 @@
  * @Author: 汪锦
  * @Date: 2020-04-03 14:33:47
  * @LastEditors: 汪锦
- * @LastEditTime: 2020-11-25 17:58:00
+ * @LastEditTime: 2020-12-17 20:56:13
  * @Description: 3D动画标签
  -->
 <template>
   <div class="tagBall" ref="tagBall" @mouseover="onmousemove">
-    <span class="tagItem" v-for="(item, i) in list" :key="i" ref="tagItem">{{
-      item
-    }}</span>
+    <span class="tagItem" v-for="(item, i) in list" :key="i" ref="tagItem">{{ item }}</span>
   </div>
 </template>
 
 <script>
 export default {
-  name: "threedTags",
+  name: "ThreedTags",
   props: {
     speed: {
       // 数值越大，速度慢
@@ -37,10 +35,10 @@ export default {
   },
   watch: {
     list() {
-      this.f5()
+      this.f5();
     },
     speed() {
-      this.f5()
+      this.f5();
     },
   },
   computed: {
@@ -62,20 +60,19 @@ export default {
     },
     init() {
       let _this = this;
-      let tag = function (ele, x, y, z) {
+      let tag = function(ele, x, y, z) {
         this.ele = ele;
         this.x = x;
         this.y = y;
         this.z = z;
       };
       tag.prototype = {
-        move: function () {
+        move: function() {
           let scale = _this.fallLength / (_this.fallLength - this.z);
           let alpha = (this.z + _this.RADIUS) / (2 * _this.RADIUS);
           let left = this.x + _this.CX - this.ele.offsetWidth / 2 + "px";
           let top = this.y + _this.CY - this.ele.offsetHeight / 2 + "px";
-          let transform =
-            "translate(" + left + ", " + top + ") scale(" + scale + ")";
+          let transform = "translate(" + left + ", " + top + ") scale(" + scale + ")";
           this.ele.style.opacity = alpha + 0.5;
           this.ele.style.zIndex = parseInt(scale * 100);
           this.ele.style.transform = transform;
@@ -93,7 +90,7 @@ export default {
         (this.angleY = Math.PI / this.paperHeight / 1 / this.privatSpeed),
         (this.CX = this.paperWidth / 2),
         (this.CY = this.paperHeight / 2),
-        (Array.prototype.$forEach = function (callback) {
+        (Array.prototype.$forEach = function(callback) {
           for (let i = 0; i < this.length; i++) {
             callback.call(this[i]);
           }
@@ -106,9 +103,7 @@ export default {
         let y = this.RADIUS * Math.sin(a) * Math.sin(b);
         let z = this.RADIUS * Math.cos(a);
         let t = new tag(this.tagEle[i], x, y, z);
-        this.tagEle[i].style.color = this.colorRange[
-          this.getRandom(0, this.colorRange.length)
-        ];
+        this.tagEle[i].style.color = this.colorRange[this.getRandom(0, this.colorRange.length)];
         this.tags.push(t);
         t.move();
       }
@@ -116,7 +111,7 @@ export default {
     rotateX() {
       let cos = Math.cos(this.angleX);
       let sin = Math.sin(this.angleX);
-      this.tags.$forEach(function () {
+      this.tags.$forEach(function() {
         let y1 = this.y * cos - this.z * sin;
         let z1 = this.z * cos + this.y * sin;
         this.y = y1;
@@ -126,7 +121,7 @@ export default {
     rotateY() {
       let cos = Math.cos(this.angleY);
       let sin = Math.sin(this.angleY);
-      this.tags.$forEach(function () {
+      this.tags.$forEach(function() {
         let x1 = this.x * cos - this.z * sin;
         let z1 = this.z * cos + this.x * sin;
         this.x = x1;
@@ -145,7 +140,7 @@ export default {
     animate() {
       this.rotateX();
       this.rotateY();
-      this.tags.$forEach(function () {
+      this.tags.$forEach(function() {
         this.move();
       });
       this.requestId = requestAnimationFrame(this.animate);
@@ -155,7 +150,7 @@ export default {
     },
     f5() {
       this.$nextTick(() => {
-        this.destroy()
+        this.destroy();
         this.init();
         this.animate();
       });

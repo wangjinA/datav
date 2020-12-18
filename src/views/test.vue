@@ -1,36 +1,21 @@
 <template>
   <div id="test">
-    <Loading />
-    <img width="200" src="@/assets/lizi.png" alt="" />
-    <div>测试柜</div>
-    <small>
-      测试柜
-      <small>测试柜</small>
-    </small>
-    <Line-module></Line-module>
-    <transition name="test" appear>
-      <ModuleTitle :key="k" title="模块标题文案"></ModuleTitle>
-    </transition>
-    <!-- 测试scrollTable的BUG是不是因为key引起的 自己写个动画修改key模拟一下 -->
-    <input type="text" v-model="k" />
-
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      xmlns:xlink="http://www.w3.org/1999/xlink"
-      width="637.5px"
-      height="521.5px"
-    >
-      <path
-        fill-rule="evenodd"
-        stroke="rgb(6, 127, 255)"
-        stroke-width="1px"
-        stroke-linecap="butt"
-        stroke-linejoin="miter"
-        fill="none"
-        d="M32.023"
-        style="transition: 3s;"
-      />
-    </svg>
+    <VideoBg
+      src="http://localhost:8080/api/public/images/datav/_common/%E7%A7%91%E6%8A%80%E8%83%8C%E6%99%AF-%E5%8E%8B%E7%BC%A9.webm"
+    />
+    <div style="position: relation;z-index:1;">
+      <Loading />
+      <img width="200" src="@/assets/lizi.png" alt="" />
+      <div>测试柜</div>
+      <small>
+        测试柜
+        <small>测试柜</small>
+      </small>
+      <Line-module></Line-module>
+      <transition name="test" appear>
+        <ModuleTitle :key="k" title="模块标题文案"></ModuleTitle>
+      </transition>
+    </div>
   </div>
 </template>
 
@@ -38,11 +23,13 @@
 import Loading from "@/components/loading/Loading";
 import LineModule from "@/components/lineModule";
 import ModuleTitle from "@/components/moduleTitle";
+import VideoBg from "@/components/videoBg";
 export default {
   components: {
     Loading,
     LineModule,
     ModuleTitle,
+    VideoBg,
   },
   data() {
     return {
@@ -74,13 +61,20 @@ export default {
   flex-direction: column;
   align-items: center;
 }
+
+.test-leave-to,
 .test-enter {
   transform: scale(0);
 }
-.test-enter {
+.test-leave,
+.test-enter-to {
   transform: scale(1);
 }
+.test-leave-active,
 .test-enter-active {
-  transform: scale(1);
+  transition: 0.3s;
+}
+.test-move {
+  position: absolute;
 }
 </style>

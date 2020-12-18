@@ -2,7 +2,7 @@
  * @Author: 汪锦
  * @Date: 2020-06-19 11:32:06
  * @LastEditors: 汪锦
- * @LastEditTime: 2020-12-14 18:33:11
+ * @LastEditTime: 2020-12-17 15:25:58
  * @Description: 通过原生fetch封装请求
  */
 import { Message } from 'view-design'
@@ -56,15 +56,20 @@ function bodyFactory(method, url, params, showInfo) {
   }
   return requestAPI(url, options, showInfo)
 }
-export default {
-  install(Vue) {
-    Vue.prototype.$get = $get
-    // url, params, showInfo
-    Vue.prototype.$post = function () {
-      return bodyFactory('POST', ...arguments)
-    }
-    Vue.prototype.$put = function () {
-      return bodyFactory('PUT', ...arguments)
-    }
+export function install(Vue) {
+  Vue.prototype.$get = $get
+  // url, params, showInfo
+  Vue.prototype.$post = function () {
+    return bodyFactory('POST', ...arguments)
   }
+  Vue.prototype.$put = function () {
+    return bodyFactory('PUT', ...arguments)
+  }
+  Vue.prototype.$del = function () {
+    return bodyFactory('DELETE', ...arguments)
+  }
+  return Vue
+}
+export default {
+  install
 }

@@ -1,39 +1,41 @@
-.ivu-input {
-  background-color: var(--background-1);
-  color: #bfbfbf;
-  border: 1px solid #393b4a;
-  border-radius: 2px;
-  &:focus {
-    box-shadow: none;
-  }
-}
-
-.ivu-upload {
-  width: 100%;
-  height: 100px;
-  .ivu-upload-drag {
+.datav-style {
+  .ivu-input {
     background-color: var(--background-1);
-    border-color: transparent;
-    &:hover {
-      border-color: var(--primary-color);
+    color: #bfbfbf;
+    border: 1px solid #393b4a;
+    border-radius: 2px;
+    &:focus {
+      box-shadow: none;
     }
   }
-}
 
-.ivu-select-selection{
-  color: #bfbfbf;
-  background-color: var(--background-1);
-  border-color: var(--primary-color);
-}
+  .ivu-upload {
+    width: 100%;
+    height: 100px;
+    .ivu-upload-drag {
+      background-color: var(--background-1);
+      border-color: transparent;
+      &:hover {
+        border-color: var(--primary-color);
+      }
+    }
+  }
 
-.ivu-select-dropdown{
-  background-color: var(--background-1);
-  .ivu-select-item{
+  .ivu-select-selection {
     color: #bfbfbf;
-    &:hover,
-    &.ivu-select-item-selected{
-      color: var(--primary-color);
-      background-color: var(--background-hover);
+    background-color: var(--background-1);
+    border-color: #393b4a;
+  }
+
+  .ivu-select-dropdown {
+    background-color: var(--background-1);
+    .ivu-select-item {
+      color: #bfbfbf;
+      &:hover,
+      &.ivu-select-item-selected {
+        color: var(--primary-color);
+        background-color: var(--background-hover);
+      }
     }
   }
 }

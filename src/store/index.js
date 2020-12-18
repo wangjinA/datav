@@ -11,8 +11,13 @@ const store = new Vuex.Store({
     LayerHistoryIndex: 0,
     layerHistoryList: [],
 
+    currentTitleName: '数据大屏',
   },
   mutations: {
+    setCurrentTitleName(state, value) {
+      state['currentTitleName'] = value
+    },
+
     // 添加图层
     addLayer(state, value) {
       const { resourceLayers } = state

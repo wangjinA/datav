@@ -13,7 +13,7 @@
       {{ title }}
     </div>
     <transition appear name="showScale">
-      <ul class="st-header-nav">
+      <ul class="st-header-nav" v-if="type == 2">
         <li
           v-for="(item, index) in navList"
           :key="index"
@@ -24,7 +24,9 @@
         </li>
       </ul>
     </transition>
-    <div class="current-date">{{ currentDate }}</div>
+    <transition appear name="showScale">
+      <div class="current-date" v-if="type == 2">{{ currentDate }}</div>
+    </transition>
     <img class="guang" v-if="showGuang" src="./images/guang.png" />
   </div>
 </template>
@@ -32,6 +34,7 @@
 <script>
 import { getDateTimeFormat } from "@/lib/utils";
 export default {
+  name: "HyHeader",
   props: {
     color: {
       type: String,
@@ -143,6 +146,7 @@ export default {
   background-repeat: no-repeat;
   transition: 0.2s;
   display: flex;
+  position: relative;
   &.flexCenter {
     justify-content: center;
   }
@@ -230,7 +234,7 @@ export default {
   }
   & > img.guang {
     position: absolute;
-    bottom: -103%;
+    bottom: -93%;
     user-select: none;
     pointer-events: none;
   }

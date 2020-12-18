@@ -419,6 +419,7 @@
 
 <script>
 export default {
+  name: "Loading",
   props: {
     color: {
       type: String,

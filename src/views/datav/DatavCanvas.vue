@@ -1,13 +1,14 @@
 <template>
   <div class="DatavCanvas" ref="DatavCanvas" :style="wrapStyle" @click.self="canavsHandle">
     <vue-draggable-resizable
+      v-for="item in resourceLayers"
+      :key="item.$vueKey"
+      :z="item.zIndex === undefined ? 1 : item.zIndex"
       class-name="screen-box"
       class-name-draggable="screen-box-draggable"
-      :key="item.$vueKey"
       :active="item.active"
       :prevent-deactivation="true"
       snap
-      v-for="item in resourceLayers"
       v-bind="getBaseOption(item.editOption)"
       @activated="onActivated(item)"
       @deactivated="onDeactivated(item)"
@@ -46,15 +47,17 @@
 <script>
 import { mapState, mapMutations } from "vuex";
 
-import HeaderV1 from "@/components/header";
-import EchartTemplate from "@/components/echart-template";
-import ThreedTags from "@/components/threedTags";
-import ScrollText from "@/components/ScrollText";
-import BlockList from "@/components/blockList";
-import ModuleTitle from "@/components/moduleTitle";
+// import HeaderV1 from "@/components/header";
+// import EchartTemplate from "@/components/echart-template";
+// import ThreedTags from "@/components/threedTags";
+// import ScrollText from "@/components/ScrollText";
+// import BlockList from "@/components/blockList";
+// import ModuleTitle from "@/components/moduleTitle";
+// import VideoBg from "@/components/videoBg";
 
 import { getInt, getBfb, parse } from "@/lib/utils";
 import html2canvas from "html2canvas";
+import C from "@/components/exportCom";
 export default {
   name: "DatavCanvas",
   props: {
@@ -64,12 +67,7 @@ export default {
     },
   },
   components: {
-    HeaderV1,
-    EchartTemplate,
-    ThreedTags,
-    ScrollText,
-    BlockList,
-    ModuleTitle,
+    ...C,
   },
   data() {
     return {
@@ -85,7 +83,7 @@ export default {
       let bgi;
       let style;
       if (this.datavInfo && this.datavInfo.style) {
-        bgi = this.$getImgUrl(this.datavInfo.style.backgroundImage);
+        bgi = this.$getUrl(this.datavInfo.style.backgroundImage);
         style = this.datavInfo.style;
       }
       return {
@@ -166,8 +164,8 @@ export default {
           // window.open(url);
           const formData = new FormData();
           formData.append("file", file);
-          this.$post("/api/upload", formData).then(() => {
-            this.datavInfo.preview_img = filename;
+          this.$API.upload(formData).then((res) => {
+            this.datavInfo.preview_img = res.data.src;
           });
         });
       });

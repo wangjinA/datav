@@ -9,6 +9,7 @@ import '@/lib/iview/index.js'
 
 import axios from './myAxios'
 Vue.use(axios)
+import './api'
 
 Vue.config.productionTip = false
 // import VueDraggableResizable from 'vue-draggable-resizable';
@@ -28,8 +29,8 @@ import store from './store'
 import router from './router'
 
 
-Vue.prototype.$getImgUrl = (imgName) => {
-  return process.env.NODE_ENV === "development" ? `/api/public/${imgName}` : `/public/${imgName}`
+Vue.prototype.$getUrl = (imgName) => {
+  return process.env.NODE_ENV === "development" ? `/api/public/images/datav/${imgName}` : `/public/images/datav/${imgName}`
 }
 
 new Vue({
