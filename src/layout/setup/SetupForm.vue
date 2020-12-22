@@ -39,6 +39,11 @@
           />
         </template>
 
+        <!-- switch开关 -->
+        <template v-else-if="item.type === 'switch'">
+          <iSwitch v-model="target[item.key]" @on-change="() => {}" />
+        </template>
+
         <!-- 输入框 -->
         <Input v-else size="small" v-model="target[item.key]" :type="item.inputType" />
       </section>

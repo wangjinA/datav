@@ -13,6 +13,7 @@
         <ModuleTitle :key="k" title="模块标题文案"></ModuleTitle>
       </transition>
     </div>
+    <button v-for="i in 3" :key="i" v-debounce="debounceClick">防抖</button>
   </div>
 </template>
 
@@ -44,6 +45,33 @@ export default {
         },
       ],
     };
+  },
+  methods: {
+    debounceClick() {
+      console.log("只触发一次");
+    },
+
+    jjlayer() {
+      clearTimeout(this.timer);
+      this.timer = setTimeout(() => {
+        // 原先代码
+      }, 1000);
+    },
+  },
+  directives: {
+    debounce: {
+      inserted(el, binding) {
+        let timer;
+        el.addEventListener("click", () => {
+          if (timer) {
+            clearTimeout(timer);
+          }
+          timer = setTimeout(() => {
+            binding.value();
+          }, 1000);
+        });
+      },
+    },
   },
 };
 </script>

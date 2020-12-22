@@ -47,6 +47,21 @@ export default {
     type: {
       type: [Number, String],
       default: 0,
+      setupType: "select",
+      data: [
+        {
+          name: "默认",
+          value: 0,
+        },
+        {
+          name: "风格2",
+          value: 1,
+        },
+        {
+          name: "风格3",
+          value: 2,
+        },
+      ],
     },
   },
   data() {

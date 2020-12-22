@@ -19,7 +19,6 @@ import Layer from "@/layout/layer";
 import Setup from "@/layout/setup";
 import { mapMutations, mapState } from "vuex";
 import { stringify } from "@/lib/utils";
-
 export default {
   name: "Datav",
   components: {
@@ -43,8 +42,12 @@ export default {
           this.watch_resourceLayers_timer = setTimeout(() => {
             this.$put(`/api/datav/${this.id}`, {
               option: stringify(resourceLayers),
+            }).then((res) => {
+              if (res.data !== "暂无更改") {
+                this.addHistory(resourceLayers);
+              }
             });
-          }, 200);
+          }, 400);
         }
       },
     },
@@ -67,11 +70,26 @@ export default {
     ...mapState(["datavInfo", "resourceLayers"]),
   },
   methods: {
-    ...mapMutations(["setDatavInfo", "clearLayer"]),
+    ...mapMutations(["setDatavInfo", "clearLayer", "initLayer"]),
+    ...mapMutations("backoff", ["addHistory", "revoke", "reduction"]), // [['addHistory', 'revoke', 'reduction']] 来自 -> backoff模块
+    // 监听撤销和还原
+    watchKey(e) {
+      if (e.keyCode == 26 && e.ctrlKey) {
+        console.log("撤销Ctrl+z");
+        this.revoke();
+      }
+      if (e.keyCode == 25 && e.ctrlKey) {
+        console.log("还原：Ctrl+y");
+        this.reduction();
+      }
+    },
   },
-  created() {},
+  created() {
+    window.addEventListener("keypress", this.watchKey);
+  },
   destroyed() {
     this.clearLayer();
+    window.removeEventListener("keypress", this.watchKey);
   },
 };
 </script>
@@ -87,6 +105,7 @@ export default {
     flex: 1;
     > main {
       flex: 1;
+      height: calc(100vh - 60px);
     }
   }
 }

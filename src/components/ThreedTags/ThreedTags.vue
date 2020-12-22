@@ -2,7 +2,7 @@
  * @Author: 汪锦
  * @Date: 2020-04-03 14:33:47
  * @LastEditors: 汪锦
- * @LastEditTime: 2020-12-17 20:56:13
+ * @LastEditTime: 2020-12-22 17:52:00
  * @Description: 3D动画标签
  -->
 <template>
@@ -17,12 +17,29 @@ export default {
   props: {
     speed: {
       // 数值越大，速度慢
+      name: "速度",
       type: [Number, String],
       default: 1,
+      setupInputType: "number",
     },
     list: {
+      name: "数据",
       type: Array,
       required: true,
+      setupCodeType: "json",
+      default: () => [
+        "新冠病毒",
+        "社会环境",
+        "地摊",
+        "谨防诈骗",
+        "大前端",
+        "JavaScript",
+        "CSS",
+        "HTML",
+        "Vue",
+        "less",
+        "webpack",
+      ],
     },
     colorRange: {
       // 颜色范围

@@ -2,6 +2,7 @@ import Vuex from 'vuex'
 import Vue from 'vue'
 Vue.use(Vuex)
 import { randomString } from '@/lib/utils'
+import backoff from './modules/backoff'
 const store = new Vuex.Store({
   state: {
     datavInfo: null,
@@ -29,6 +30,21 @@ const store = new Vuex.Store({
     // 初始化图层
     initLayer(state, value) {
       if (value instanceof Array) {
+        state['resourceLayers'] = value
+        this.commit('backoff/initHistory', value)
+        // 设置选中图层
+        const activeLayer = value.filter(item => item.active)[0]
+        if (activeLayer) {
+          this.commit('setActiveLayer', activeLayer)
+        }
+      } else {
+        console.error('init value not Array')
+      }
+    },
+    // 重置图层 - 和初始化图层方法一样，不过内涵操作不一样；初始化是通过id初始化，重置是在这个id基础上重置，包含ctrl+z+y的图层覆盖
+    resetLayer(state, value) {
+      if (value instanceof Array) {
+        console.log(value);
         state['resourceLayers'] = value
         // 设置选中图层
         const activeLayer = value.filter(item => item.active)[0]
@@ -86,6 +102,9 @@ const store = new Vuex.Store({
         state['LayerHistoryIndex']--
       }
     }
+  },
+  modules: {
+    backoff
   }
 })
 

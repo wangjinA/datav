@@ -57,7 +57,7 @@ export default {
     this.$nextTick(this.init);
   },
   destroyed() {
-    this.myChart.dispose();
+    this.myChart && this.myChart.dispose();
   },
 };
 </script>

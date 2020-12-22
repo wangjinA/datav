@@ -1,5 +1,5 @@
 import { API } from '@/api'
-
+import { componentBaseConfig } from "@/config/modules";
 const bgList = [] // 视频列表
 API.getBgList().then(res => {
   bgList.splice(0, bgList.length)
@@ -13,9 +13,18 @@ API.getBgList().then(res => {
 
 import C from '@/components/exportCom'
 console.log(C.BaseText);
+// 最终生成的对象 key = props下的default
+// props: {
+//   color: {
+//     name: "字体颜色",
+//     setupType: "color",
+//     type: String,
+//     default: "#21DFFF",
+//   },
+// },
 const getBaseOption = (cName, isSetup = false) => {
-  // 最终生成的对象 key = props下的default
   let option = {
+    // 模板↓
     // fontSize: '16px',
     // color: '#fff'
   }
@@ -31,12 +40,14 @@ const getBaseOption = (cName, isSetup = false) => {
           if (isSetup && item.name) {
             setup.push({
               type: item.setupType,
+              inputType: item.setupInputType,
+              codeType: item.setupCodeType,
               name: item.name,
               key: key
             })
           } else {
             if (Object.prototype.hasOwnProperty.call(item, 'default')) {
-              option[key] = item.default
+              option[key] = typeof item.default === 'function' ? item.default() : item.default
             }
           }
         }
@@ -153,48 +164,24 @@ export const echart = [
     },
     componentSetup: [],
     editOption: {
+      ...componentBaseConfig(),
       w: 520,
       h: 250,
-      y: 77,
-      x: 0
     }
   }, {
     id: 3,
     background: '#000',
     name: '3d云标签',
-    componentName: 'threed-tags',
+    componentName: 'ThreedTags',
     previewImage: require('@/config/images/3d云标签.png'),
-    componentOption: {
-      speed: 1,
-      color: '#fff',
-      list: [
-        '新冠病毒',
-        '社会环境',
-        '地摊',
-        '谨防诈骗',
-        '大前端',
-        'JavaScript',
-        'CSS',
-        'HTML',
-        'Vue',
-        'less',
-        'webpack'
-      ]
-    },
-    componentSetup: [{
-      name: '速度',
-      key: 'speed',
-      inputType: 'number',
-    }, {
-      name: '数据',
-      key: 'list',
-      codeType: 'JSON',
-    }],
+    componentOption: getBaseOption('ThreedTags'),
+    componentSetup: [
+      ...getBaseOption('ThreedTags', true)
+    ],
     editOption: {
-      w: 320,
-      h: 320,
-      y: 0,
-      x: 0
+      ...componentBaseConfig(),
+      w: 450,
+      h: 450,
     }
   }
 ]
@@ -210,6 +197,7 @@ export const text = [
       ...getBaseOption('BaseText', true)
     ],
     editOption: {
+      ...componentBaseConfig(),
       w: 80,
       h: 25,
       x: 500,
@@ -228,6 +216,10 @@ export const text = [
       title: '汕头市应急管理综合应用平台',
       type: 0
     },
+    // componentOption: getBaseOption('HyHeader'),
+    // componentSetup: [
+    //   ...getBaseOption('HyHeader', true)
+    // ],
     componentSetup: [
       {
         name: '风格',
@@ -254,6 +246,7 @@ export const text = [
       }
     ],
     editOption: {
+      ...componentBaseConfig(),
       w: '100%',
       h: 77,
       y: 0,
@@ -275,10 +268,9 @@ export const text = [
       }
     ],
     editOption: {
+      ...componentBaseConfig(),
       w: '100%',
       h: 45,
-      y: 0,
-      x: 0
     }
   }, {
     id: 5,
@@ -314,10 +306,9 @@ export const text = [
       }
     ],
     editOption: {
+      ...componentBaseConfig(),
       w: 330,
       h: 100,
-      y: 0,
-      x: 0
     }
   }
 ]
@@ -350,10 +341,9 @@ export const base = [
       }
     ],
     editOption: {
+      ...componentBaseConfig(),
       w: 350,
       h: 45,
-      y: 0,
-      x: 0
     }
   },
   {
@@ -374,6 +364,7 @@ export const base = [
       }
     ],
     editOption: {
+      ...componentBaseConfig(),
       w: '100%',
       h: '100%',
       y: 0,

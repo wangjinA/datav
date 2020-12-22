@@ -1,65 +1,84 @@
 <template>
-  <div class="DatavCanvas" ref="DatavCanvas" :style="wrapStyle" @click.self="canavsHandle">
-    <vue-draggable-resizable
-      v-for="item in resourceLayers"
-      :key="item.$vueKey"
-      :z="item.zIndex === undefined ? 1 : item.zIndex"
-      class-name="screen-box"
-      class-name-draggable="screen-box-draggable"
-      :active="item.active"
-      :prevent-deactivation="true"
-      snap
-      v-bind="getBaseOption(item.editOption)"
-      @activated="onActivated(item)"
-      @deactivated="onDeactivated(item)"
-      @resizing="onResize(item, ...arguments)"
-      @dragging="onDragging(item, ...arguments)"
-      @refLineParams="getRefLineParams"
-    >
-      <component
-        :ref="item.name"
-        :is="item.componentName"
-        v-bind="item.componentOption"
-      ></component>
-    </vue-draggable-resizable>
-    <!-- 对齐基线 -->
-    <span
-      class="ref-line v-line"
-      v-for="(item, i) in vLine"
-      :key="i"
-      v-show="item.display"
-      :style="{
-        left: item.position,
-        top: item.origin,
-        height: item.lineLength,
-      }"
-    />
-    <span
-      class="ref-line h-line"
-      v-for="(item, i) in hLine"
-      :key="100 + i"
-      v-show="item.display"
-      :style="{ top: item.position, left: item.origin, width: item.lineLength }"
-    />
+  <div
+    class="DatavCanvas"
+    tabindex="0"
+    @keydown.space.prevent="handleSpaceDown"
+    @keyup.space.prevent="handleSpaceUp"
+    @wheel.prevent="handleTableWheel($event)"
+    @click.self="canavsHandle"
+  >
+    <div class="container-view" :style="{ transform: `scale(${this.scaleValue})` }">
+      <!-- 容器的配置操作都在warp.js mixins中 -->
+      <vue-draggable-resizable
+        ref="screen-box-wrap"
+        :class-name="!activeLayer ? 'screen-box-wrap select-screen' : 'screen-box-wrap'"
+        class-name-draggable="screen-box-wrap-draggable"
+        :style="wrapStyle"
+        :scaleRatio="scaleValue"
+        v-bind="getWrapBaseOption"
+        :draggable="screenDraggable"
+        :resizable="false"
+        @click.self.native="canavsHandle"
+        @resizing="onWrapResize"
+        @dragging="onWrapDragging"
+      >
+        <!-- 单个拖拽组件 -->
+        <vue-draggable-resizable
+          v-for="item in resourceLayers"
+          :key="item.$vueKey"
+          :z="item.zIndex === undefined ? 1 : item.zIndex"
+          class-name="screen-box"
+          class-name-draggable="-wrap"
+          :active="item.active"
+          :prevent-deactivation="true"
+          :scaleRatio="scaleValue"
+          snap
+          v-bind="getBaseOption(item.editOption)"
+          @activated="onActivated(item)"
+          @deactivated="onDeactivated(item)"
+          @resizing="onResize(item, ...arguments)"
+          @dragging="onDragging(item, ...arguments)"
+          @refLineParams="getRefLineParams"
+        >
+          <component
+            :ref="item.name"
+            :is="item.componentName"
+            v-bind="item.componentOption"
+          ></component>
+        </vue-draggable-resizable>
+        <span
+          class="ref-line v-line"
+          v-for="(item, i) in vLine"
+          :key="i"
+          v-show="item.display"
+          :style="{
+            left: item.position,
+            top: item.origin,
+            height: item.lineLength,
+          }"
+        />
+        <span
+          class="ref-line h-line"
+          v-for="(item, i) in hLine"
+          :key="100 + i"
+          v-show="item.display"
+          :style="{ top: item.position, left: item.origin, width: item.lineLength }"
+        />
+      </vue-draggable-resizable>
+      <!-- 对齐基线 -->
+    </div>
   </div>
 </template>
 
 <script>
 import { mapState, mapMutations } from "vuex";
-
-// import HeaderV1 from "@/components/header";
-// import EchartTemplate from "@/components/echart-template";
-// import ThreedTags from "@/components/threedTags";
-// import ScrollText from "@/components/ScrollText";
-// import BlockList from "@/components/blockList";
-// import ModuleTitle from "@/components/moduleTitle";
-// import VideoBg from "@/components/videoBg";
-
-import { getInt, getBfb, parse } from "@/lib/utils";
+import { getInt, getBfb, parse, deepClone } from "@/lib/utils";
 import html2canvas from "html2canvas";
-import C from "@/components/exportCom";
+import C from "@/components/exportCom"; // 导出组件
+import wrap from "./mixins/wrap";
 export default {
   name: "DatavCanvas",
+  mixins: [wrap],
   props: {
     readonly: {
       type: Boolean,
@@ -71,10 +90,11 @@ export default {
   },
   data() {
     return {
-      scale: 1,
+      scale: 0.5,
       vLine: [],
       hLine: [],
       id: this.$route.params.id,
+      screenDraggable: false, // 空格拖拽容器
     };
   },
   computed: {
@@ -89,13 +109,40 @@ export default {
       return {
         ...style,
         backgroundImage: `url(${bgi})`,
-        transform: `scale(${this.scale})`,
       };
+    },
+    scaleValue() {
+      return this.readonly ? 1 : this.scale;
     },
   },
   methods: {
     ...mapMutations(["addLayer", "setActiveLayer", "setDatavInfo", "initLayer"]),
 
+    // 滚轮
+    handleTableWheel(e) {
+      // e.wheelDelta 是120的倍数； 正数是放大 负数是缩小
+      // 按住了ctrl
+      if (e.ctrlKey) {
+        let multiple = e.wheelDelta / 120;
+        let scale_value = this.scale + 0.1 * multiple;
+        if (scale_value > 1.5) {
+          this.scale = 1.5;
+        } else if (scale_value < 0.2) {
+          this.scale = 0.2;
+        } else {
+          this.scale = scale_value;
+        }
+      }
+    },
+    // 键盘【空格】按下
+    handleSpaceDown() {
+      this.screenDraggable = true;
+    },
+    // 键盘【空格】弹起
+    handleSpaceUp() {
+      this.screenDraggable = false;
+    },
+    // 取消选中组件
     canavsHandle() {
       this.setActiveLayer(null);
     },
@@ -130,21 +177,24 @@ export default {
       //   this.$refs[item.name][0].resize();
       // }
     },
+    // 基本配置项
     getBaseOption(item) {
-      let readonlyProps = {
-        resizable: !this.readonly,
-        draggable: !this.readonly,
-      };
-      const DatavCanvasDom = this.$refs.DatavCanvas || {};
-      return {
+      const style = this.datavInfo.style;
+      const width = style ? style.w : 0;
+      const height = style ? style.h : 0;
+      const option = {
         ...item,
-        w: getBfb(item.w, DatavCanvasDom.offsetWidth),
-        h: getBfb(item.h, DatavCanvasDom.offsetHeight),
-        // h: item.h === "100%" ? DatavCanvasDom.offsetHeight * getBfb(item.h) : item.h,
+        w: getBfb(item.w, width),
+        h: getBfb(item.h, height),
         x: getInt(item.x),
         y: getInt(item.y),
-        ...readonlyProps,
       };
+      // 只读状态下 || 空格拖动容器状态下
+      if (this.readonly || this.screenDraggable) {
+        option.resizable = false;
+        option.draggable = false;
+      }
+      return option;
     },
     // 对基线
     getRefLineParams(params) {
@@ -154,7 +204,7 @@ export default {
     },
     // 截屏上传
     screenshot() {
-      html2canvas(this.$refs.DatavCanvas).then((canvas) => {
+      html2canvas(this.$refs["screen-box-wrap"].$el).then((canvas) => {
         canvas.toBlob((blob) => {
           let filename = `datav_${this.id + Date.now()}.jpg`;
           let file = new File([blob], filename, { type: "image/jpg" });
@@ -173,9 +223,16 @@ export default {
 
     initDataInfo(isInit) {
       this.$get(`/api/datav/${this.id}`).then((res) => {
-        isInit && this.initLayer(parse(res.data.option));
-        delete res.data.option;
-        this.setDatavInfo(res.data);
+        // 先渲染基本设置
+        {
+          let data = deepClone(res.data);
+          delete data.option;
+          this.setDatavInfo(data);
+        }
+        // if (res) return;
+        this.$nextTick(() => {
+          isInit && this.initLayer(parse(res.data.option));
+        });
       });
     },
   },
@@ -188,21 +245,45 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
+.outline-style() {
+  outline: 1px dashed var(--primary-color);
+}
 .DatavCanvas {
   background-color: #313239;
   height: 100%;
   width: 100%;
   position: relative;
   overflow: hidden;
+  outline: none;
+}
+.container-view {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-origin: left top;
+}
+.screen-box-wrap {
+  position: relative;
   background-size: 100% 100%;
+  &.select-screen {
+    .outline-style();
+  }
+}
+.screen-box-wrap-draggable {
+  filter: brightness(0.9);
+  cursor: grab;
+  .outline-style();
 }
 .screen-box {
   position: absolute;
-  &.resizable.active {
-    outline: 1px dashed #ccc;
+  &.active {
+    .outline-style();
   }
   /deep/ .handle {
     z-index: 99;
+    background: #fff;
+    border: 1px solid var(--primary-color);
+    border-radius: 50%;
   }
 }
 </style>

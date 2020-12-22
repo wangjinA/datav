@@ -1,4 +1,5 @@
 .datav-style {
+  // 输入框
   .ivu-input {
     background-color: var(--background-1);
     color: #bfbfbf;
@@ -9,6 +10,7 @@
     }
   }
 
+  // 图片上传
   .ivu-upload {
     width: 100%;
     height: 100px;
@@ -21,12 +23,12 @@
     }
   }
 
+  // 下拉选择器
   .ivu-select-selection {
     color: #bfbfbf;
     background-color: var(--background-1);
     border-color: #393b4a;
   }
-
   .ivu-select-dropdown {
     background-color: var(--background-1);
     .ivu-select-item {
@@ -36,6 +38,22 @@
         color: var(--primary-color);
         background-color: var(--background-hover);
       }
+    }
+  }
+
+  // switch
+  .ivu-switch {
+    background-color: var(--background-1);
+    border-color: #393b4a;
+    &.ivu-switch-checked {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+      &:after {
+        background-color: #fff;
+      }
+    }
+    &:after {
+      background-color: #e2e2e2;
     }
   }
 }

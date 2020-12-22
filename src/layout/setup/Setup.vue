@@ -2,11 +2,11 @@
  * @Author: 汪锦
  * @Date: 2020-12-14 16:22:51
  * @LastEditors: 汪锦
- * @LastEditTime: 2020-12-17 21:17:17
+ * @LastEditTime: 2020-12-22 17:55:45
  * @Description: 设置栏
 -->
 <template>
-  <div class="Setup" @click.self="$store.commit('setActiveLayer', null)">
+  <div class="Setup">
     <div class="Setup-title">{{ activeLayer ? "组件设置" : "页面设置" }}</div>
     <!-- 多个Setup-ul是因为target不同 -->
     <ul class="Setup-ul" v-if="activeLayer">
@@ -43,12 +43,25 @@
 <script>
 import { mapState, mapMutations } from "vuex";
 import componentConfig from "@/config/componentConfig";
+import { componentBaseConfig } from "@/config/modules";
 import SetupForm from "./SetupForm.vue";
 
 const imgList = [];
 
-// 组件基本设置 - 定位
-const componentBaseSetup = [
+// 项目基本设置
+const pageBaseSetup = [
+  {
+    name: "项目名称",
+    key: "name",
+  },
+  {
+    name: "预览图",
+    key: "preview_img",
+    type: "img",
+  },
+];
+// 页面属性风格设置
+const pageStyleSetup = [
   {
     name: "x",
     key: "x",
@@ -62,28 +75,13 @@ const componentBaseSetup = [
   {
     name: "w",
     key: "w",
-    type: "input",
+    inputType: "number",
   },
   {
     name: "h",
     key: "h",
-    type: "input",
+    inputType: "number",
   },
-];
-// 页面基本设置
-const pageBaseSetup = [
-  {
-    name: "项目名称",
-    key: "name",
-  },
-  {
-    name: "预览图",
-    key: "preview_img",
-    type: "img",
-  },
-];
-//
-const pageStyleSetup = [
   {
     name: "背景类型",
     key: "bgType",
@@ -125,7 +123,7 @@ export default {
   data() {
     return {
       contextMenuVisible: false,
-      componentBaseSetup,
+      componentBaseSetup: componentBaseConfig(true),
       pageBaseSetup,
       pageStyleSetup,
     };

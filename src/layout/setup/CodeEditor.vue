@@ -79,7 +79,7 @@ export default {
   },
   methods: {
     highlighter(code) {
-      return highlight(code, languages[this.type_filter || "javascript"]); // languages.<insert language> to return html with markup
+      return highlight(code, languages[this.type_filter || "json"]); // languages.<insert language> to return html with markup
     },
   },
 };
