@@ -1,14 +1,22 @@
 <template>
   <div>
-    <Drawer :closable="false" width="90%" placement="left" v-model="value"> </Drawer>
+    <Drawer :closable="false" width="90%" placement="left" v-model="showDatavAdd">
+      <div style="padding-top: 6vh;padding-left: 6vw;">
+        <DatavAdd />
+      </div>
+    </Drawer>
   </div>
 </template>
 
 <script>
+import DatavAdd from "@/views/workspace/datavList/DatavAdd";
 export default {
+  components: {
+    DatavAdd,
+  },
   data() {
     return {
-      value: false,
+      showDatavAdd: false,
     };
   },
   created() {
@@ -19,3 +27,10 @@ export default {
   },
 };
 </script>
+
+<style lang="less" scoped>
+/deep/ .ivu-drawer-content {
+  background-color: var(--background-1);
+  color: #fff;
+}
+</style>

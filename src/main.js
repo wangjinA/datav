@@ -29,8 +29,16 @@ import store from './store'
 import router from './router'
 
 
-Vue.prototype.$getUrl = (imgName) => {
-  return process.env.NODE_ENV === "development" ? `/api/public/images/datav/${imgName}` : `/public/images/datav/${imgName}`
+Vue.prototype.$getUrl = (imgName, isDefault = true) => {
+  let src = ''
+  if (isDefault && !imgName) {
+    imgName = 'datav_default.png'
+  }
+  src = `/public/images/datav/${imgName}`
+  if (process.env.NODE_ENV === "development") {
+    src = '/api' + src
+  }
+  return src
 }
 
 new Vue({

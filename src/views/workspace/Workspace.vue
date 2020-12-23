@@ -8,7 +8,7 @@
 
 <script>
 import DHeader from "@/layout/header";
-import DatavList from "./DatavList";
+import DatavList from "./datavList/DatavList";
 import BgList from "./BgList";
 export default {
   name: "Workspace",

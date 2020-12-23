@@ -2,7 +2,7 @@
  * @Author: 汪锦
  * @Date: 2020-12-22 15:28:05
  * @LastEditors: 汪锦
- * @LastEditTime: 2020-12-22 16:01:24
+ * @LastEditTime: 2020-12-23 09:28:05
  * @Description: 容器的配置操作
  */
 
@@ -36,9 +36,12 @@ export default {
         return {}
       }
       let { w, h, x, y } = this.datavInfo.style;
+      if (this.readonly) {
+        x = y = 0
+      }
       return {
-        w: getInt(w) || 1920,
-        h: getInt(h) || 1080,
+        w: getInt(w),
+        h: getInt(h),
         x: getInt(x),
         y: getInt(y),
       };

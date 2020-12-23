@@ -1,13 +1,18 @@
 <template>
   <div
     class="DatavCanvas"
+    :class="readonly ? 'readonly' : 'editor'"
     tabindex="0"
     @keydown.space.prevent="handleSpaceDown"
     @keyup.space.prevent="handleSpaceUp"
     @wheel.prevent="handleTableWheel($event)"
     @click.self="canavsHandle"
   >
-    <div class="container-view" :style="{ transform: `scale(${this.scaleValue})` }">
+    <div
+      class="container-view"
+      :style="{ transform: `scale(${this.scaleValue})` }"
+      v-if="datavInfo"
+    >
       <!-- 容器的配置操作都在warp.js mixins中 -->
       <vue-draggable-resizable
         ref="screen-box-wrap"
@@ -67,6 +72,15 @@
       </vue-draggable-resizable>
       <!-- 对齐基线 -->
     </div>
+    <Slider
+      class="Slider"
+      v-if="datavInfo && !readonly"
+      v-model="datavInfo.style.scale"
+      :max="1.5"
+      :min="0.2"
+      :step="0.1"
+      show-stops
+    ></Slider>
   </div>
 </template>
 
@@ -81,6 +95,7 @@ export default {
   mixins: [wrap],
   props: {
     readonly: {
+      // 预览状态
       type: Boolean,
       default: false,
     },
@@ -90,7 +105,6 @@ export default {
   },
   data() {
     return {
-      scale: 0.5,
       vLine: [],
       hLine: [],
       id: this.$route.params.id,
@@ -99,16 +113,25 @@ export default {
   },
   computed: {
     ...mapState(["resourceLayers", "activeLayer", "datavInfo"]),
+
+    scale() {
+      return this.datavInfo ? this.datavInfo.style.scale : 1;
+    },
+
     wrapStyle() {
-      let bgi;
+      let bg;
       let style;
       if (this.datavInfo && this.datavInfo.style) {
-        bgi = this.$getUrl(this.datavInfo.style.backgroundImage);
         style = this.datavInfo.style;
+        if (style.bgType == 0) {
+          bg = `url(${this.$getUrl(style.backgroundImage)})`;
+        } else {
+          bg = style.backgroundColor;
+        }
       }
       return {
         ...style,
-        backgroundImage: `url(${bgi})`,
+        background: bg,
       };
     },
     scaleValue() {
@@ -122,25 +145,25 @@ export default {
     handleTableWheel(e) {
       // e.wheelDelta 是120的倍数； 正数是放大 负数是缩小
       // 按住了ctrl
-      if (e.ctrlKey) {
+      if (e.ctrlKey && !this.readonly) {
         let multiple = e.wheelDelta / 120;
         let scale_value = this.scale + 0.1 * multiple;
         if (scale_value > 1.5) {
-          this.scale = 1.5;
+          this.datavInfo.style.scale = 1.5;
         } else if (scale_value < 0.2) {
-          this.scale = 0.2;
+          this.datavInfo.style.scale = 0.2;
         } else {
-          this.scale = scale_value;
+          this.datavInfo.style.scale = scale_value;
         }
       }
     },
     // 键盘【空格】按下
     handleSpaceDown() {
-      this.screenDraggable = true;
+      if (!this.readonly) this.screenDraggable = true;
     },
     // 键盘【空格】弹起
     handleSpaceUp() {
-      this.screenDraggable = false;
+      if (!this.readonly) this.screenDraggable = false;
     },
     // 取消选中组件
     canavsHandle() {
@@ -179,7 +202,7 @@ export default {
     },
     // 基本配置项
     getBaseOption(item) {
-      const style = this.datavInfo.style;
+      const style = this.datavInfo && this.datavInfo.style;
       const width = style ? style.w : 0;
       const height = style ? style.h : 0;
       const option = {
@@ -255,6 +278,36 @@ export default {
   position: relative;
   overflow: hidden;
   outline: none;
+  // 编辑状态下
+  &.editor {
+    .select-screen {
+      // background-color: var(--background-1);
+      .outline-style();
+    }
+    .screen-box {
+      &.active {
+        .outline-style();
+      }
+    }
+
+    .screen-box-wrap-draggable {
+      filter: brightness(0.9);
+      cursor: grab;
+      .outline-style();
+    }
+    .screen-box-wrap {
+      &.select-screen {
+        .outline-style();
+      }
+    }
+  }
+  // 只读状态下
+  .Slider {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    width: 150px;
+  }
 }
 .container-view {
   width: 100%;
@@ -265,20 +318,9 @@ export default {
 .screen-box-wrap {
   position: relative;
   background-size: 100% 100%;
-  &.select-screen {
-    .outline-style();
-  }
-}
-.screen-box-wrap-draggable {
-  filter: brightness(0.9);
-  cursor: grab;
-  .outline-style();
 }
 .screen-box {
   position: absolute;
-  &.active {
-    .outline-style();
-  }
   /deep/ .handle {
     z-index: 99;
     background: #fff;

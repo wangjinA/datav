@@ -35,6 +35,7 @@
           <ColorPicker
             v-model="target[item.key]"
             size="small"
+            alpha
             @on-active-change="colorActiveChange"
           />
         </template>

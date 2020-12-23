@@ -134,6 +134,7 @@ header {
         transform: scaleY(0);
         opacity: 0;
         transition-delay: 0.2s;
+        box-shadow: 6px 5px 10px 0px #131617;
         > ul {
           display: grid;
           grid-template-columns: repeat(3, 100px);

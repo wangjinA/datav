@@ -2,7 +2,7 @@
  * @Author: 汪锦
  * @Date: 2020-12-14 16:22:51
  * @LastEditors: 汪锦
- * @LastEditTime: 2020-12-22 17:55:45
+ * @LastEditTime: 2020-12-23 10:07:24
  * @Description: 设置栏
 -->
 <template>
@@ -92,12 +92,8 @@ const pageStyleSetup = [
         value: 0,
       },
       {
-        name: "视频背景",
-        value: 1,
-      },
-      {
         name: "颜色背景",
-        value: 2,
+        value: 1,
       },
     ],
     relation: {
@@ -107,6 +103,13 @@ const pageStyleSetup = [
           key: "backgroundImage",
           type: "select",
           data: imgList,
+        },
+      ],
+      1: [
+        {
+          name: "颜色选择",
+          key: "backgroundColor",
+          type: "color",
         },
       ],
     },

@@ -15,6 +15,7 @@
         <p>{{ item.name }}</p>
       </li>
     </ul>
+    <div class="not-data" v-if="!resourceLayers.length">暂无图层</div>
     <Vue-context-menu
       class="right-menu"
       :target="$refs['layer-ul']"

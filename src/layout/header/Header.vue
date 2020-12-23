@@ -79,8 +79,8 @@ header {
       &.active,
       &:hover {
         background: var(--background-hover);
-        cursor: pointer;
         color: #fff;
+        cursor: pointer;
         &::after {
           border-radius: 0;
           opacity: 1;
