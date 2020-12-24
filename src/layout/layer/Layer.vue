@@ -1,7 +1,7 @@
 <template>
   <div class="Layer" @click.self="setActiveLayer(null)">
     <div class="Layer-title">图层</div>
-    <ul class="Layer-ul" ref="layer-ul" @contextmenu.stop>
+    <ul class="Layer-ul not-data" ref="layer-ul" @contextmenu.stop>
       <li
         v-for="item in resourceLayers"
         :key="item.$vueKey"
@@ -15,7 +15,7 @@
         <p>{{ item.name }}</p>
       </li>
     </ul>
-    <div class="not-data" v-if="!resourceLayers.length">暂无图层</div>
+    <!-- <div class="not-data" v-if="!resourceLayers.length">暂无图层</div> -->
     <Vue-context-menu
       class="right-menu"
       :target="$refs['layer-ul']"

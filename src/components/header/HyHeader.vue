@@ -39,12 +39,16 @@ export default {
     color: {
       type: String,
       default: "#fff",
+      name: "字体颜色",
+      setupType: "color",
     },
     title: {
+      name: "标题",
       type: String,
-      default: "汕头市应急管理综合应用平台",
+      default: "海云数据大屏可视化",
     },
     type: {
+      name: "风格",
       type: [Number, String],
       default: 0,
       setupType: "select",

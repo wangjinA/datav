@@ -2,7 +2,7 @@
  * @Author: 汪锦
  * @Date: 2020-12-16 16:51:20
  * @LastEditors: 汪锦
- * @LastEditTime: 2020-12-23 17:54:13
+ * @LastEditTime: 2020-12-24 14:51:56
  * @Description: 数据大屏列表
 -->
 <template>
@@ -172,12 +172,17 @@ export default {
     },
     // 添加项目
     add() {
+      let message = "";
       if (!this.formItem.name) {
-        return this.$Message.error("请填写项目名称");
+        message = "请填写项目名称";
       } else if (!this.formItem.w) {
-        return this.$Message.error("请填写屏幕宽度");
+        message = "请填写屏幕宽度";
       } else if (!this.formItem.h) {
-        return this.$Message.error("请填写屏幕高度");
+        message = "请填写屏幕高度";
+      }
+      if (message) {
+        this.showAdd = false;
+        return this.$Message.error(message);
       }
       this.$post("/api/datav", {
         style: {
@@ -201,11 +206,8 @@ export default {
         });
     },
     useTemplate() {
-      // this.$delAPI({
-      //   title: "温馨提醒",
-      //   content: `确认使用该模板(${name})`,
-      // }).then(() => {
       if (!this.useTemplateForm.name) {
+        this.showUseTemplate = false;
         return this.$Message.error("请填写项目名称");
       }
       this.$post("/api/useTemplate", {
@@ -216,7 +218,6 @@ export default {
         this.editDatav({ id: res.data.id });
         this.showUseTemplate = false;
       });
-      // });
     },
   },
   created() {

@@ -43,7 +43,8 @@ const getBaseOption = (cName, isSetup = false) => {
               inputType: item.setupInputType,
               codeType: item.setupCodeType,
               name: item.name,
-              key: key
+              key: key,
+              data: item.data
             })
           } else {
             if (Object.prototype.hasOwnProperty.call(item, 'default')) {
@@ -74,7 +75,6 @@ export const echart = [
     id: 2,
     width: '100%',
     height: 200,
-    background: '#000',
     name: '应急维稳保障',
     previewImage: require('@/config/images/柱状图.jpg'),
 
@@ -170,7 +170,6 @@ export const echart = [
     }
   }, {
     id: 3,
-    background: '#000',
     name: '3d云标签',
     componentName: 'ThreedTags',
     previewImage: require('@/config/images/3d云标签.png'),
@@ -206,44 +205,12 @@ export const text = [
   },
   {
     id: 1,
-    background: '#000',
     name: '头部',
     componentName: 'HyHeader',
     previewImage: require('@/config/images/头部v1.jpg'),
-    componentOption: {
-      color: '#fff',
-      size: 50,
-      title: '汕头市应急管理综合应用平台',
-      type: 0
-    },
-    // componentOption: getBaseOption('HyHeader'),
-    // componentSetup: [
-    //   ...getBaseOption('HyHeader', true)
-    // ],
+    componentOption: getBaseOption('HyHeader'),
     componentSetup: [
-      {
-        name: '风格',
-        key: 'type',
-        type: 'select',
-        data: [{
-          name: '默认',
-          value: 0,
-        }, {
-          name: '风格2',
-          value: 1
-        }, {
-          name: '风格3',
-          value: 2
-        }]
-      },
-      {
-        name: '颜色',
-        type: 'input',
-        key: 'color'
-      }, {
-        name: '标题',
-        key: 'title'
-      }
+      ...getBaseOption('HyHeader', true)
     ],
     editOption: {
       ...componentBaseConfig(),
@@ -254,23 +221,19 @@ export const text = [
     }
   }, {
     id: 4,
-    background: '#000',
     name: '滚动文字',
     componentName: 'ScrollText',
     previewImage: require('@/config/images/滚动文本.png'),
-    componentOption: {
-      text: '风圈半径：七级风圈半径 东北方向200公里；东南方向170公里；西南方向120公里；西北方向140公里 十级风圈半径　东北方向60公里；东南方向50公里；西南方向30公里；西北方向40公里预报结论：“白海豚”将以每小时15-20公里的速度向东北方向移动，强度变化不大时 间：23 日 10 时命 名：“白海豚”，DOLPHIN中心位置：北纬31.0度、东经137.0度强度等级：强热带风暴最大风力：10级， 28米/秒（约101公里/小时）中心气压：980 hPa参考位置：位于日本以南洋面，距离日本东京南偏西方向约580公里'
-    },
+    componentOption: getBaseOption('ScrollText'),
     componentSetup: [
-      {
-        name: '文本',
-        key: 'text'
-      }
+      ...getBaseOption('ScrollText', true)
     ],
     editOption: {
       ...componentBaseConfig(),
       w: '100%',
       h: 45,
+      x: 0,
+      y: 77
     }
   }, {
     id: 5,
@@ -319,26 +282,9 @@ export const base = [
     name: '模块标题',
     componentName: 'ModuleTitle',
     previewImage: require('@/config/images/模块标题.png'),
-    componentOption: {
-      title: '今日人口流动',
-      type: 0
-    },
+    componentOption: getBaseOption('ModuleTitle'),
     componentSetup: [
-      {
-        name: '风格',
-        key: 'type',
-        type: 'select',
-        data: [{
-          name: '默认',
-          value: 0,
-        }, {
-          name: '风格2',
-          value: 1
-        }]
-      }, {
-        name: '标题',
-        key: 'title'
-      }
+      ...getBaseOption('ModuleTitle', true)
     ],
     editOption: {
       ...componentBaseConfig(),
@@ -368,7 +314,9 @@ export const base = [
       w: '100%',
       h: '100%',
       y: 0,
-      x: 0
+      x: 0,
+      resizable: false,
+      draggable: false
     }
   }
 ]

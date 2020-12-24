@@ -19,11 +19,16 @@
 export default {
   name: "ScrollText",
   props: {
-    text: String,
+    text: {
+      name: "文本",
+      type: String,
+      default:
+        "风圈半径：七级风圈半径 东北方向200公里；东南方向170公里；西南方向120公里；西北方向140公里 十级风圈半径　东北方向60公里；东南方向50公里；西南方向30公里；西北方向40公里预报结论：“白海豚”将以每小时15-20公里的速度向东北方向移动，强度变化不大时 间：23 日 10 时命 名：“白海豚”，DOLPHIN中心位置：北纬31.0度、东经137.0度强度等级：强热带风暴最大风力：10级， 28米/秒（约101公里/小时）中心气压：980 hPa参考位置：位于日本以南洋面，距离日本东京南偏西方向约580公里",
+    },
     speed: {
       type: Number,
-      default: 60
-    }
+      default: 60,
+    },
   },
   data() {
     return {
@@ -33,10 +38,10 @@ export default {
   },
   watch: {
     text() {
-      this.$nextTick(this.init)
+      this.$nextTick(this.init);
     },
     speed() {
-      this.$nextTick(this.init)
+      this.$nextTick(this.init);
     },
   },
   methods: {
@@ -48,7 +53,7 @@ export default {
     },
     //移动的方法
     moveLeft() {
-      this.destroy()
+      this.destroy();
       let startDis = 0; //初始位置
       this.nowTime = setInterval(() => {
         startDis -= 0.5;
@@ -65,10 +70,10 @@ export default {
     },
     init() {
       this.$width = this.$refs.content.clientWidth;
-      if(this.$width > this.$refs.ScrollText.clientWidth){
+      if (this.$width > this.$refs.ScrollText.clientWidth) {
         this.moveLeft();
-      }else {
-        this.destroy()
+      } else {
+        this.destroy();
       }
     },
   },

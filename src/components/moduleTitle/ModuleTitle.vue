@@ -9,16 +9,25 @@ export default {
   name: "ModuleTitle",
   props: {
     title: {
+      name: "标题",
       type: String,
-      default: "",
-    },
-    fontSize: {
-      type: String,
-      default: "",
+      default: "今日人口流动",
     },
     type: {
       type: [Number, String],
       default: 0,
+      name: "风格",
+      setupType: "select",
+      data: [
+        {
+          name: "默认",
+          value: 0,
+        },
+        {
+          name: "风格2",
+          value: 1,
+        },
+      ],
     },
   },
   computed: {
