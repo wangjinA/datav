@@ -12,7 +12,6 @@ API.getBgList().then(res => {
 })
 
 import C from '@/components/exportCom'
-console.log(C.BaseText);
 // 最终生成的对象 key = props下的default
 // props: {
 //   color: {
@@ -41,6 +40,8 @@ const getBaseOption = (cName, isSetup = false) => {
             setup.push({
               type: item.setupType,
               inputType: item.setupInputType,
+              min: item.min,
+              max: item.max,
               codeType: item.setupCodeType,
               name: item.name,
               key: key,
@@ -58,18 +59,6 @@ const getBaseOption = (cName, isSetup = false) => {
   return isSetup ? setup : option
 
 }
-// const baseConfig = {
-//   fontSize: {
-//     name: '字体大小',
-//     key: 'fontSize',
-//   },
-//   color: {
-//     name: '字体颜色',
-//     key: 'color',
-//     type: 'color'
-//   },
-// }
-
 export const echart = [
   {
     id: 2,
@@ -169,6 +158,105 @@ export const echart = [
       h: 250,
     }
   }, {
+    id: 35131,
+    width: '100%',
+    height: 200,
+    name: '应急维稳保障',
+    previewImage: require('@/config/images/柱状图.jpg'),
+
+    componentName: 'EchartTemplate',
+    componentOption: {
+      options: `
+      option = {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          }
+        },
+        grid: {
+          top: '5%',
+          right: '3%',
+          left: '8%',
+          bottom: '10%'
+        },
+        xAxis: [
+          {
+            type: 'category',
+            data: ['全市', '濠江区', '潮阳区', '潮南区', '澄海区', '龙湖区', '金平区', '南澳县'],
+            axisLine: {
+              show: true,
+              lineStyle: {
+                color: '#027DB3',
+                width: 2,
+              }
+            },
+            axisTick: {
+              show: false
+            },
+            axisLabel: {
+              margin: 10,
+              color: '#e2e9ff',
+              textStyle: {
+                fontSize: 12
+              }
+            }
+          }
+        ],
+        yAxis: [
+          {
+            axisLabel: {
+              formatter: '{value}',
+              color: '#e2e9ff',
+              textStyle: {
+                fontSize: 14
+              }
+            },
+            axisLine: {
+              show: true,
+              lineStyle: {
+                color: '#027DB3',
+                width: 2,
+              }
+            },
+            splitLine: {
+              lineStyle: {
+                color: '#027DB3',
+                type: 'dashed'
+              }
+            }
+          }
+        ],
+        series: [
+          {
+            type: 'bar',
+            data: [170, 220, 180, 210, 169, 230, 170, 210],
+            barWidth: '15px',
+            itemStyle: {
+              normal: {
+                color: (params) => { let colorList = ['#0ED6F4', '#FFB56C', '#02A1FD', '#5AE7AE', '#0ED6F4', '#FFB56C', '#02A1FD', '#5AE7AE']; return colorList[params.dataIndex] },
+                barBorderRadius: [30, 30, 0, 0],
+              }
+            },
+            label: {
+              normal: {
+                show: true,
+                position: 'outside'
+              }
+            }
+          }
+        ]
+      }`
+    },
+    componentSetup: [
+      ...getBaseOption('EchartTemplate', true)
+    ],
+    editOption: {
+      ...componentBaseConfig(),
+      w: 520,
+      h: 250,
+    }
+  }, {
     id: 3,
     name: '3d云标签',
     componentName: 'ThreedTags',
@@ -190,7 +278,7 @@ export const text = [
     id: 1123,
     name: '普通文字',
     componentName: 'BaseText',
-    previewImage: require('@/config/images/头部v1.jpg'),
+    previewImage: require('@/config/images/普通文字.png'),
     componentOption: getBaseOption('BaseText'),
     componentSetup: [
       ...getBaseOption('BaseText', true)
@@ -207,7 +295,7 @@ export const text = [
     id: 1,
     name: '头部',
     componentName: 'HyHeader',
-    previewImage: require('@/config/images/头部v1.jpg'),
+    previewImage: require('@/config/images/头部v1.png'),
     componentOption: getBaseOption('HyHeader'),
     componentSetup: [
       ...getBaseOption('HyHeader', true)
@@ -240,38 +328,28 @@ export const text = [
     name: '文字模块',
     componentName: 'BlockList',
     previewImage: require('@/config/images/文字模块.png'),
-    componentOption: {
-      gap: 5,
-      list: [
-        {
-          name: "人口流入",
-          value: 200,
-        },
-        {
-          name: "人口流出",
-          value: 200,
-        },
-        {
-          name: "人口总数",
-          value: 200,
-        },
-      ],
-    },
+    componentOption: getBaseOption('BlockList'),
     componentSetup: [
-      {
-        name: '间距',
-        key: 'gap',
-        inputType: 'number',
-      }, {
-        name: '数据',
-        key: 'list',
-        codeType: 'JSON',
-      }
+      ...getBaseOption('BlockList', true)
     ],
     editOption: {
       ...componentBaseConfig(),
       w: 330,
       h: 100,
+    }
+  }, {
+    id: 5151,
+    name: '图片',
+    componentName: 'BaseImage',
+    previewImage: require('@/config/images/基本图片.png'),
+    componentOption: getBaseOption('BaseImage'),
+    componentSetup: [
+      ...getBaseOption('BaseImage', true)
+    ],
+    editOption: {
+      ...componentBaseConfig(),
+      w: 200,
+      h: 200,
     }
   }
 ]
@@ -315,6 +393,7 @@ export const base = [
       h: '100%',
       y: 0,
       x: 0,
+      z: 0,
       resizable: false,
       draggable: false
     }

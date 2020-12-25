@@ -28,10 +28,10 @@
         @dragging="onWrapDragging"
       >
         <!-- 单个拖拽组件 -->
+        <!-- :z="item.zIndex === undefined ? 1 : item.zIndex" -->
         <vue-draggable-resizable
           v-for="item in resourceLayers"
           :key="item.$vueKey"
-          :z="item.zIndex === undefined ? 1 : item.zIndex"
           class-name="screen-box"
           class-name-draggable="-wrap"
           :active="item.active"
@@ -179,23 +179,29 @@ export default {
     },
     // 调整位置
     onDragging(item, ...position) {
-      const x = position[0];
-      const y = position[1];
-      item.editOption.x = x;
-      item.editOption.y = y;
+      clearTimeout(this.onDragging_timer);
+      this.onDragging_timer = setTimeout(() => {
+        const x = position[0];
+        const y = position[1];
+        item.editOption.x = x;
+        item.editOption.y = y;
+      }, 200);
     },
     // 调整大小 echarts
     onResize(item, ...size) {
-      const x = size[0];
-      const y = size[1];
-      const w = size[2];
-      const h = size[3];
-      item.editOption.x = x;
-      item.editOption.y = y;
-      item.editOption.w = w;
-      item.editOption.h = h;
-      let target = this.$refs[item.name][0];
-      target.resize && target.resize();
+      clearTimeout(this.onDragging_timer);
+      this.onResize_timer = setTimeout(() => {
+        const x = size[0];
+        const y = size[1];
+        const w = size[2];
+        const h = size[3];
+        item.editOption.x = x;
+        item.editOption.y = y;
+        item.editOption.w = w;
+        item.editOption.h = h;
+        let target = this.$refs[item.name][0];
+        target.resize && target.resize();
+      }, 200);
       // if (item.componentName === "echart-template" || item.componentName === "echart") {
       //   this.$refs[item.name][0].resize();
       // }
@@ -211,6 +217,7 @@ export default {
         h: getBfb(item.h, height),
         x: getInt(item.x),
         y: getInt(item.y),
+        z: getInt(item.z, 2),
       };
       // 只读状态下 || 空格拖动容器状态下
       if (this.readonly || this.screenDraggable) {
@@ -254,7 +261,7 @@ export default {
         }
         // if (res) return;
         this.$nextTick(() => {
-          isInit && this.initLayer(parse(res.data.option));
+          isInit && this.initLayer(parse(res.data.option || "[]"));
         });
       });
     },

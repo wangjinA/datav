@@ -3,10 +3,29 @@
   .ivu-input {
     background-color: var(--background-1);
     color: #bfbfbf;
-    border: 1px solid #393b4a;
+    border: 1px solid var(--border-color);
     border-radius: 2px;
     &:focus {
       box-shadow: none;
+    }
+  }
+
+  // 数字输入框
+  .ivu-input-number {
+    width: 100%;
+    background-color: var(--background-1);
+    border: 1px solid var(--border-color);
+    border-radius: 2px;
+    .ivu-input-number-input {
+      color: #bfbfbf;
+      background-color: var(--background-1);
+    }
+    .ivu-input-number-handler-wrap {
+      border-left: 1px solid var(--border-color);
+      background-color: transparent;
+    }
+    .ivu-input-number-handler-down {
+      border-top: 1px solid var(--border-color);
     }
   }
 
@@ -27,7 +46,7 @@
   .ivu-select-selection {
     color: #bfbfbf;
     background-color: var(--background-1);
-    border-color: #393b4a;
+    border-color: var(--border-color);
   }
   .ivu-select-dropdown {
     background-color: var(--background-1);
@@ -44,7 +63,7 @@
   // switch
   .ivu-switch {
     background-color: var(--background-1);
-    border-color: #393b4a;
+    border-color: var(--border-color);
     &.ivu-switch-checked {
       background-color: var(--primary-color);
       border-color: var(--primary-color);

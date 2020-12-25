@@ -21,6 +21,7 @@
     "view-design": "^4.4.0",
     "vivus": "^0.4.5",
     "vue": "^2.6.11",
+    "vue-codemirror": "^4.0.6",
     "vue-drag-resize": "^1.4.2",
     "vue-draggable-resizable-gorkys": "^2.4.4",
     "vue-prism-editor": "^1.2.2",

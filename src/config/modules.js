@@ -26,6 +26,13 @@ export const componentBaseConfig = (isSetup) => {
       default: 400,
     },
     {
+      name: "层级",
+      key: "z",
+      inputType: "number",
+      default: 1,
+      min: 0,
+    },
+    {
       name: "切换大小",
       key: "resizable",
       type: "switch",

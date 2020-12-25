@@ -1,42 +1,49 @@
 <template>
-  <prism-editor
+  <codemirror
     class="CodeEditor"
-    :min-length="3"
-    v-model="code"
-    :highlight="highlighter"
-  ></prism-editor>
+    :value="code"
+    :options="cmOptions"
+    @ready="onCmReady"
+    @focus="onCmFocus"
+    @input="onCmCodeChange"
+  />
 </template>
 
 <script>
-// demo https://codesandbox.io/s/61yrlnlnmn?file=/src/App.vue
-// document https://github.com/koca/vue-prism-editor
+// csdn https://blog.csdn.net/qq_16698261/article/details/106397108
+import { codemirror } from "vue-codemirror";
+import "codemirror/lib/codemirror.css";
+import "codemirror/theme/base16-dark.css";
+// 滚动条
+import "codemirror/addon/scroll/simplescrollbars.css";
+import "codemirror/addon/scroll/simplescrollbars.js";
 
-import { PrismEditor } from "vue-prism-editor";
-import "vue-prism-editor/dist/prismeditor.min.css"; // import the styles somewhere
-
-// import highlighting library (you can use any library you want just return html string)
-import { highlight, languages } from "prismjs/components/prism-core";
-import "prismjs/components/prism-clike";
-import "prismjs/components/prism-javascript";
-import "prismjs/components/prism-json";
-import "prismjs/themes/prism-tomorrow.css"; // import syntax highlighting styles
-
+import "codemirror/mode/javascript/javascript.js"; //
 import { parse, stringify } from "@/lib/utils";
 export default {
-  name: "CodeEditor",
   props: {
+    value: null,
     type: {
       type: String,
       default: "javascript",
     },
-    value: null,
   },
   components: {
-    PrismEditor,
+    codemirror,
   },
   data() {
     return {
       code: "",
+      cmOptions: {
+        // codemirror options
+        tabSize: 4,
+        mode: "text/javascript",
+        theme: "base16-dark",
+        lineNumbers: true,
+        line: true,
+        scrollbarStyle: "simple",
+        // more codemirror options, 更多 codemirror 的高级配置...
+      },
     };
   },
   computed: {
@@ -46,29 +53,38 @@ export default {
   },
   watch: {
     code() {
-      let code = this.code;
-      if (this.type_filter === "json") {
-        try {
-          if (typeof parse(code) === "object") {
-            code = parse(code);
-          } else {
+      console.log("code改变");
+      clearTimeout(this.watch_code_timer);
+      this.watch_code_timer = setTimeout(() => {
+        let code = this.code;
+        if (this.type_filter === "json") {
+          try {
+            if (typeof parse(code) === "object") {
+              code = parse(code);
+            } else {
+              return;
+            }
+          } catch (error) {
+            console.log(code);
+            console.error("json转换出错");
             return;
           }
-        } catch (error) {
-          console.error("json转换出错");
-          return;
         }
-      }
-      this.$emit("input", code);
+        this.$emit("input", code);
+      }, 200);
     },
     value: {
       immediate: true,
       handler(value) {
+        console.log("value改变");
+        console.log(this.value);
+        console.log(this.code);
         let _value = value;
         if (this.type_filter === "json") {
           try {
             _value = stringify(_value);
           } catch (error) {
+            console.log(_value);
             console.error("json转换出错");
             return;
           }
@@ -78,33 +94,36 @@ export default {
     },
   },
   methods: {
-    highlighter(code) {
-      return highlight(code, languages[this.type_filter || "json"]); // languages.<insert language> to return html with markup
+    onCmReady(cm) {
+      console.log("the editor is readied!", cm);
+    },
+    onCmFocus(cm) {
+      cm;
+      // console.log("the editor is focus!", cm);
+    },
+    onCmCodeChange(newCode) {
+      this.code = newCode;
     },
   },
 };
 </script>
 
 <style lang="less" scoped>
-// required class
 .CodeEditor {
-  background: #2d2d2d;
-  color: #ccc;
-  font-family: Fira code, Fira Mono, Consolas, Menlo, Courier, monospace;
-  font-size: 14px;
-  line-height: 1.5;
-  padding: 5px;
-  overflow-x: hidden;
-  // min-height: 200px;
-  /deep/ textarea {
-    &:focus {
-      border-color: var(--primary-color);
-      // outline-color: var(--primary-color);
-      outline: none;
-    }
+  /deep/ .CodeMirror-scroll {
+    overflow: hidden !important;
   }
-  /deep/ .prism-editor__container {
-    // height: 100%;
+  /deep/ .CodeMirror {
+    min-height: 100px;
+    max-height: 300px;
+    height: auto;
+  }
+  /deep/ .cm-s-base16-dark.CodeMirror {
+    background-color: var(--background-1);
+  }
+  /deep/ .cm-s-base16-dark .CodeMirror-gutters {
+    background-color: var(--background-1);
+    border-right: 1px solid var(--border-color);
   }
 }
 </style>

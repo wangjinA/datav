@@ -12,10 +12,27 @@ export default {
   name: "BlockList",
   props: {
     list: {
+      name: "列表",
+      setupCodeType: "json",
       type: Array,
-      default: () => [],
+      default: () => [
+        {
+          name: "人口流入",
+          value: 200,
+        },
+        {
+          name: "人口流出",
+          value: 200,
+        },
+        {
+          name: "人口总数",
+          value: 200,
+        },
+      ],
     },
     gap: {
+      name: "间距",
+      setupInputType: "number",
       type: [Number, String],
       default: 5,
     },

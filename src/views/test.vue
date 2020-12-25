@@ -14,6 +14,9 @@
       </transition>
     </div>
     <button v-for="i in 3" :key="i" v-debounce="debounceClick">防抖</button>
+    <div style="width: 500px;">
+      <CodeEditor />
+    </div>
   </div>
 </template>
 
@@ -21,6 +24,7 @@
 import Loading from "@/components/loading/Loading";
 import LineModule from "@/components/lineModule";
 import ModuleTitle from "@/components/moduleTitle";
+import CodeEditor from "@/layout/setup/CodeEditor";
 const draggable = {
   inserted: function(el) {
     el.style.cursor = "move";
@@ -58,10 +62,12 @@ export default {
     Loading,
     LineModule,
     ModuleTitle,
+    CodeEditor,
   },
   data() {
     return {
       k: 1,
+      code: "",
       list: [
         {
           name: "人口流入",

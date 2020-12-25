@@ -20,10 +20,10 @@ export const deepClone = (obj, hash = new WeakMap()) => {
   return cloneObj;
 }
 
-// 对象转字符串，包括字符串
-export const stringify = json => {
+// 对象转字符串，包括函数
+export const stringify = (json, fnParse = false) => {
   return JSON.stringify(json, (key, val) => {
-    if (typeof val === 'function') {
+    if (fnParse && typeof val === 'function') {
       return val.toString();
     }
     return val;
@@ -32,9 +32,9 @@ export const stringify = json => {
 
 
 // 字符串转对象，包括函数
-export const parse = str => {
+export const parse = (str, fnParse = false) => {
   return JSON.parse(str, function (k, v) {
-    if (v.indexOf && (v.indexOf('function') > -1 || v.indexOf('=>') > -1)) {
+    if (fnParse && v && v.indexOf && (v.indexOf('function') > -1 || v.indexOf('=>') > -1)) {
       return eval("(function(){return " + v + " })()")
     }
     return v;
@@ -72,10 +72,10 @@ export const randomString = (length = 10, chats) => {
 * @param {Number} value 字符串  
 * @return {Number} 返回数字
 */
-export const getInt = (value) => {
+export const getInt = (value, default_value = 0) => {
   let _v = parseInt(value)
   if (isNaN(_v)) {
-    return 0
+    return default_value
   }
   return _v
 }

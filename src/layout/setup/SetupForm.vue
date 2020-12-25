@@ -45,6 +45,16 @@
           <iSwitch v-model="target[item.key]" @on-change="() => {}" />
         </template>
 
+        <!-- 数字输入框 -->
+        <template v-else-if="item.inputType === 'number'">
+          <InputNumber
+            size="small"
+            :max="item.max"
+            :min="item.min"
+            v-model="target[item.key]"
+          ></InputNumber>
+        </template>
+
         <!-- 输入框 -->
         <Input v-else size="small" v-model="target[item.key]" :type="item.inputType" />
       </section>

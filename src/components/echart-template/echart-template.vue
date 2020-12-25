@@ -9,8 +9,9 @@ export default {
   name: "EchartTemplate",
   props: {
     options: {
-      type: Object,
-      required: true,
+      name: "echart配置",
+      setupCodeType: "javascript",
+      type: [Object, String],
     },
     width: {
       type: String,
@@ -46,7 +47,22 @@ export default {
       } else {
         this.myChart.clear();
       }
-      this.myChart.setOption(this.options);
+      var option;
+      if (typeof this.options === "string") {
+        try {
+          eval(this.options);
+        } catch (error) {
+          // let errInfo = error.toString();
+          console.error(error);
+        }
+      } else {
+        option = this.options;
+      }
+      console.log(option);
+      if (!option) {
+        return;
+      }
+      this.myChart.setOption(option);
       this.resize();
       this.myChart.on("click", (params) => {
         this.$emit("click", params);
