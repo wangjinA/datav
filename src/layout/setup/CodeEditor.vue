@@ -77,8 +77,6 @@ export default {
       immediate: true,
       handler(value) {
         console.log("value改变");
-        console.log(this.value);
-        console.log(this.code);
         let _value = value;
         if (this.type_filter === "json") {
           try {

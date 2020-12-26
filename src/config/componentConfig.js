@@ -1,5 +1,6 @@
 import { API } from '@/api'
 import { componentBaseConfig } from "@/config/modules";
+import * as echartList from "./echartList";
 const bgList = [] // 视频列表
 API.getBgList().then(res => {
   bgList.splice(0, bgList.length)
@@ -61,203 +62,89 @@ const getBaseOption = (cName, isSetup = false) => {
 }
 export const echart = [
   {
-    id: 2,
-    width: '100%',
-    height: 200,
-    name: '应急维稳保障',
+    name: '图表自定义',
     previewImage: require('@/config/images/柱状图.jpg'),
-
     componentName: 'EchartTemplate',
     componentOption: {
-      options: {
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'shadow'
-          }
-        },
-        grid: {
-          top: '5%',
-          right: '3%',
-          left: '8%',
-          bottom: '10%'
-        },
-        xAxis: [
-          {
-            type: 'category',
-            data: ['全市', '濠江区', '潮阳区', '潮南区', '澄海区', '龙湖区', '金平区', '南澳县'],
-            axisLine: {
-              show: true,
-              lineStyle: {
-                color: '#027DB3',
-                width: 2,
-              }
-            },
-            axisTick: {
-              show: false
-            },
-            axisLabel: {
-              margin: 10,
-              color: '#e2e9ff',
-              textStyle: {
-                fontSize: 12
-              }
-            }
-          }
-        ],
-        yAxis: [
-          {
-            axisLabel: {
-              formatter: '{value}',
-              color: '#e2e9ff',
-              textStyle: {
-                fontSize: 14
-              }
-            },
-            axisLine: {
-              show: true,
-              lineStyle: {
-                color: '#027DB3',
-                width: 2,
-              }
-            },
-            splitLine: {
-              lineStyle: {
-                color: '#027DB3',
-                type: 'dashed'
-              }
-            }
-          }
-        ],
-        series: [
-          {
-            type: 'bar',
-            data: [170, 220, 180, 210, 169, 230, 170, 210],
-            barWidth: '15px',
-            itemStyle: {
-              normal: {
-                color: (params) => { let colorList = ['#0ED6F4', '#FFB56C', '#02A1FD', '#5AE7AE', '#0ED6F4', '#FFB56C', '#02A1FD', '#5AE7AE']; return colorList[params.dataIndex] },
-                barBorderRadius: [30, 30, 0, 0],
-                // shadowBlur: 4
-              }
-            },
-            label: {
-              normal: {
-                show: true,
-                position: 'outside'
-              }
-            }
-          }
-        ]
-      }
+      options: ``
     },
-    componentSetup: [],
+    componentSetup: [
+      {
+        name: 'echart配置',
+        key: 'options',
+        codeType: 'javascript',
+      }
+    ],
     editOption: {
       ...componentBaseConfig(),
-      w: 520,
-      h: 250,
+      w: 430,
+      h: 200,
     }
-  }, {
-    id: 35131,
-    width: '100%',
-    height: 200,
-    name: '应急维稳保障',
+  },
+  {
+    name: '柱状图',
     previewImage: require('@/config/images/柱状图.jpg'),
-
     componentName: 'EchartTemplate',
     componentOption: {
-      options: `
-      option = {
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'shadow'
-          }
-        },
-        grid: {
-          top: '5%',
-          right: '3%',
-          left: '8%',
-          bottom: '10%'
-        },
-        xAxis: [
-          {
-            type: 'category',
-            data: ['全市', '濠江区', '潮阳区', '潮南区', '澄海区', '龙湖区', '金平区', '南澳县'],
-            axisLine: {
-              show: true,
-              lineStyle: {
-                color: '#027DB3',
-                width: 2,
-              }
-            },
-            axisTick: {
-              show: false
-            },
-            axisLabel: {
-              margin: 10,
-              color: '#e2e9ff',
-              textStyle: {
-                fontSize: 12
-              }
-            }
-          }
-        ],
-        yAxis: [
-          {
-            axisLabel: {
-              formatter: '{value}',
-              color: '#e2e9ff',
-              textStyle: {
-                fontSize: 14
-              }
-            },
-            axisLine: {
-              show: true,
-              lineStyle: {
-                color: '#027DB3',
-                width: 2,
-              }
-            },
-            splitLine: {
-              lineStyle: {
-                color: '#027DB3',
-                type: 'dashed'
-              }
-            }
-          }
-        ],
-        series: [
-          {
-            type: 'bar',
-            data: [170, 220, 180, 210, 169, 230, 170, 210],
-            barWidth: '15px',
-            itemStyle: {
-              normal: {
-                color: (params) => { let colorList = ['#0ED6F4', '#FFB56C', '#02A1FD', '#5AE7AE', '#0ED6F4', '#FFB56C', '#02A1FD', '#5AE7AE']; return colorList[params.dataIndex] },
-                barBorderRadius: [30, 30, 0, 0],
-              }
-            },
-            label: {
-              normal: {
-                show: true,
-                position: 'outside'
-              }
-            }
-          }
-        ]
-      }`
+      options: echartList.zzt
     },
     componentSetup: [
       ...getBaseOption('EchartTemplate', true)
     ],
     editOption: {
       ...componentBaseConfig(),
-      w: 520,
-      h: 250,
+      w: 430,
+      h: 200,
+    }
+  },
+  {
+    name: '横向柱状图',
+    previewImage: require('@/config/images/柱状图.jpg'),
+    componentName: 'EchartTemplate',
+    componentOption: {
+      options: echartList.zzt1
+    },
+    componentSetup: [
+      ...getBaseOption('EchartTemplate', true)
+    ],
+    editOption: {
+      ...componentBaseConfig(),
+      w: 430,
+      h: 200,
+    }
+  },
+  {
+    name: '折线图',
+    previewImage: require('@/config/images/柱状图.jpg'),
+    componentName: 'EchartTemplate',
+    componentOption: {
+      options: echartList.zxt
+    },
+    componentSetup: [
+      ...getBaseOption('EchartTemplate', true)
+    ],
+    editOption: {
+      ...componentBaseConfig(),
+      w: 430,
+      h: 200,
+    }
+  },
+  {
+    name: '折线图',
+    previewImage: require('@/config/images/柱状图.jpg'),
+    componentName: 'EchartTemplate',
+    componentOption: {
+      options: echartList.zxt1
+    },
+    componentSetup: [
+      ...getBaseOption('EchartTemplate', true)
+    ],
+    editOption: {
+      ...componentBaseConfig(),
+      w: 430,
+      h: 200,
     }
   }, {
-    id: 3,
     name: '3d云标签',
     componentName: 'ThreedTags',
     previewImage: require('@/config/images/3d云标签.png'),
@@ -275,7 +162,6 @@ export const echart = [
 
 export const text = [
   {
-    id: 1123,
     name: '普通文字',
     componentName: 'BaseText',
     previewImage: require('@/config/images/普通文字.png'),
@@ -292,7 +178,6 @@ export const text = [
     }
   },
   {
-    id: 1,
     name: '头部',
     componentName: 'HyHeader',
     previewImage: require('@/config/images/头部v1.png'),
@@ -308,7 +193,6 @@ export const text = [
       x: 0
     }
   }, {
-    id: 4,
     name: '滚动文字',
     componentName: 'ScrollText',
     previewImage: require('@/config/images/滚动文本.png'),
@@ -324,7 +208,6 @@ export const text = [
       y: 77
     }
   }, {
-    id: 5,
     name: '文字模块',
     componentName: 'BlockList',
     previewImage: require('@/config/images/文字模块.png'),
@@ -338,7 +221,6 @@ export const text = [
       h: 100,
     }
   }, {
-    id: 5151,
     name: '图片',
     componentName: 'BaseImage',
     previewImage: require('@/config/images/基本图片.png'),
@@ -356,7 +238,6 @@ export const text = [
 
 export const base = [
   {
-    id: 6,
     name: '模块标题',
     componentName: 'ModuleTitle',
     previewImage: require('@/config/images/模块标题.png'),
@@ -371,7 +252,6 @@ export const base = [
     }
   },
   {
-    id: 7,
     name: '视频背景',
     zIndex: 0,
     componentName: 'VideoBg',
