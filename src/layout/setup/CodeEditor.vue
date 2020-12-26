@@ -123,5 +123,12 @@ export default {
     background-color: var(--background-1);
     border-right: 1px solid var(--border-color);
   }
+  /deep/ .CodeMirror-simplescroll-horizontal{
+    background-color: #2d2f38;
+  }
+  /deep/ .CodeMirror-simplescroll-horizontal div{
+    background: #5a6073;
+    border: 1px solid var(--border-color);
+  }
 }
 </style>

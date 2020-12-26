@@ -114,6 +114,8 @@ export default {
           titleStyle: {
             paddingTop: "10px",
             fontSize: "34px",
+            minWidth: '500px',
+            justifyContent: 'left'
           },
         },
       ];

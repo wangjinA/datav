@@ -100,6 +100,7 @@ var getBaseOption = function getBaseOption(cName) {
 };
 
 var echart = [{
+  id: 1,
   name: '图表自定义',
   previewImage: require('@/config/images/柱状图.jpg'),
   componentName: 'EchartTemplate',
@@ -116,6 +117,7 @@ var echart = [{
     h: 200
   })
 }, {
+  id: 2,
   name: '柱状图',
   previewImage: require('@/config/images/柱状图.jpg'),
   componentName: 'EchartTemplate',
@@ -128,6 +130,7 @@ var echart = [{
     h: 200
   })
 }, {
+  id: 3,
   name: '横向柱状图',
   previewImage: require('@/config/images/柱状图.jpg'),
   componentName: 'EchartTemplate',
@@ -140,6 +143,7 @@ var echart = [{
     h: 200
   })
 }, {
+  id: 4,
   name: '折线图',
   previewImage: require('@/config/images/柱状图.jpg'),
   componentName: 'EchartTemplate',
@@ -152,6 +156,7 @@ var echart = [{
     h: 200
   })
 }, {
+  id: 5,
   name: '折线图',
   previewImage: require('@/config/images/柱状图.jpg'),
   componentName: 'EchartTemplate',
@@ -164,6 +169,7 @@ var echart = [{
     h: 200
   })
 }, {
+  id: 6,
   name: '3d云标签',
   componentName: 'ThreedTags',
   previewImage: require('@/config/images/3d云标签.png'),
@@ -176,6 +182,7 @@ var echart = [{
 }];
 exports.echart = echart;
 var text = [{
+  id: 7,
   name: '普通文字',
   componentName: 'BaseText',
   previewImage: require('@/config/images/普通文字.png'),
@@ -188,6 +195,20 @@ var text = [{
     y: 300
   })
 }, {
+  id: 8,
+  name: '数字累加器',
+  componentName: 'BaseNumber',
+  previewImage: require('@/config/images/普通文字.png'),
+  componentOption: getBaseOption('BaseNumber'),
+  componentSetup: _toConsumableArray(getBaseOption('BaseNumber', true)),
+  editOption: _objectSpread({}, (0, _modules.componentBaseConfig)(), {
+    w: 120,
+    h: 45,
+    x: 500,
+    y: 300
+  })
+}, {
+  id: 9,
   name: '头部',
   componentName: 'HyHeader',
   previewImage: require('@/config/images/头部v1.png'),
@@ -200,6 +221,18 @@ var text = [{
     x: 0
   })
 }, {
+  id: 13,
+  name: '模块标题',
+  componentName: 'ModuleTitle',
+  previewImage: require('@/config/images/模块标题.png'),
+  componentOption: getBaseOption('ModuleTitle'),
+  componentSetup: _toConsumableArray(getBaseOption('ModuleTitle', true)),
+  editOption: _objectSpread({}, (0, _modules.componentBaseConfig)(), {
+    w: 350,
+    h: 45
+  })
+}, {
+  id: 10,
   name: '滚动文字',
   componentName: 'ScrollText',
   previewImage: require('@/config/images/滚动文本.png'),
@@ -212,6 +245,7 @@ var text = [{
     y: 77
   })
 }, {
+  id: 11,
   name: '文字模块',
   componentName: 'BlockList',
   previewImage: require('@/config/images/文字模块.png'),
@@ -222,6 +256,7 @@ var text = [{
     h: 100
   })
 }, {
+  id: 12,
   name: '图片',
   componentName: 'BaseImage',
   previewImage: require('@/config/images/基本图片.png'),
@@ -234,16 +269,7 @@ var text = [{
 }];
 exports.text = text;
 var base = [{
-  name: '模块标题',
-  componentName: 'ModuleTitle',
-  previewImage: require('@/config/images/模块标题.png'),
-  componentOption: getBaseOption('ModuleTitle'),
-  componentSetup: _toConsumableArray(getBaseOption('ModuleTitle', true)),
-  editOption: _objectSpread({}, (0, _modules.componentBaseConfig)(), {
-    w: 350,
-    h: 45
-  })
-}, {
+  id: 14,
   name: '视频背景',
   zIndex: 0,
   componentName: 'VideoBg',

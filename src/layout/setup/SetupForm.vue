@@ -90,6 +90,9 @@ export default {
     // 图片上传
     beforeUpload(file) {
       const formData = new FormData();
+      if(this.$route.params.id){
+        formData.append('dir', 'datav_' + this.$route.params.id)
+      }
       formData.append("file", file);
       this.$API.upload(formData).then((res) => {
         this.$set(this.target, this.item.key, res.data.src);

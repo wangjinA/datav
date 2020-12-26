@@ -23,6 +23,7 @@ export default {
     fontSize: {
       name: "字体大小",
       type: [Number, String],
+      min: 12,
       default: 18,
     },
 
