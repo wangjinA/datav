@@ -2,7 +2,7 @@
  * @Author: 汪锦
  * @Date: 2020-12-16 16:51:20
  * @LastEditors: 汪锦
- * @LastEditTime: 2020-12-24 14:51:56
+ * @LastEditTime: 2020-12-28 16:48:37
  * @Description: 数据大屏列表
 -->
 <template>
@@ -67,7 +67,7 @@
         </FormItem>
       </Form>
     </Modal>
-    <Modal loading v-model="showUseTemplate" title="使用模板" @on-ok="useTemplate">
+    <Modal loading v-model="showUseTemplate" title="使用模板创建项目" @on-ok="useTemplate">
       <Form :model="useTemplateForm" :label-width="80">
         <FormItem label="项目名称">
           <i-input v-model="useTemplateForm.name" placeholder="项目名称"></i-input>

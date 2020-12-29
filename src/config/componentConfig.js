@@ -64,7 +64,7 @@ export const echart = [
   {
     id: 1,
     name: '图表自定义',
-    previewImage: require('@/config/images/柱状图.jpg'),
+    previewImage: require('@/config/images/图表自定义.png'),
     componentName: 'EchartTemplate',
     componentOption: {
       options: ``
@@ -102,7 +102,7 @@ export const echart = [
   {
     id: 3,
     name: '横向柱状图',
-    previewImage: require('@/config/images/柱状图.jpg'),
+    previewImage: require('@/config/images/横向柱状图.png'),
     componentName: 'EchartTemplate',
     componentOption: {
       options: echartList.zzt1
@@ -119,7 +119,7 @@ export const echart = [
   {
     id: 4,
     name: '折线图',
-    previewImage: require('@/config/images/柱状图.jpg'),
+    previewImage: require('@/config/images/折线图.png'),
     componentName: 'EchartTemplate',
     componentOption: {
       options: echartList.zxt
@@ -136,7 +136,7 @@ export const echart = [
   {
     id: 5,
     name: '折线图',
-    previewImage: require('@/config/images/柱状图.jpg'),
+    previewImage: require('@/config/images/折线图1.png'),
     componentName: 'EchartTemplate',
     componentOption: {
       options: echartList.zxt1
@@ -162,6 +162,7 @@ export const echart = [
       ...componentBaseConfig(),
       w: 450,
       h: 450,
+      lockAspectRatio: true
     }
   }
 ]
@@ -183,7 +184,7 @@ export const text = [
       x: 500,
       y: 300,
     }
-  },{
+  }, {
     id: 8,
     name: '数字累加器',
     componentName: 'BaseNumber',
@@ -216,7 +217,7 @@ export const text = [
       y: 0,
       x: 0
     }
-  },{
+  }, {
     id: 13,
     name: '模块标题',
     componentName: 'ModuleTitle',
@@ -278,7 +279,7 @@ export const text = [
 ]
 
 export const base = [
-  
+
   {
     id: 14,
     name: '视频背景',

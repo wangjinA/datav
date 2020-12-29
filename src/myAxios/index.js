@@ -2,14 +2,13 @@
  * @Author: 汪锦
  * @Date: 2020-06-19 11:32:06
  * @LastEditors: 汪锦
- * @LastEditTime: 2020-12-17 15:25:58
+ * @LastEditTime: 2020-12-29 10:42:45
  * @Description: 通过原生fetch封装请求
  */
 import { Message } from 'view-design'
 const qs = require('qs')
 const requestAPI = (url, options, showInfo = false) => {
-  let baseUrl = process.env.NODE_ENV === "development" ? '/api' : ''
-  url = baseUrl + url
+  url = window.$baseUrl + url
   if (!(options.body instanceof FormData)) {
     options.headers = {
       'content-type': 'application/json',

@@ -3,6 +3,8 @@ import Vue from 'vue'
 Vue.use(Vuex)
 import { randomString } from '@/lib/utils'
 import backoff from './modules/backoff'
+import { API } from '@/api'
+import router from '@/router'
 const store = new Vuex.Store({
   state: {
     datavInfo: null,
@@ -26,6 +28,9 @@ const store = new Vuex.Store({
       resourceLayers.push(value)
       this.commit('setActiveLayer', value)
       this.commit('setLayerHistoryList')
+      this.dispatch('updateLayers', {
+        name: '添加图层：' + value.name
+      })
     },
     // 初始化图层
     initLayer(state, value) {
@@ -38,6 +43,7 @@ const store = new Vuex.Store({
           this.commit('setActiveLayer', activeLayer)
         }
       } else {
+        console.log(value);
         console.error('init value not Array')
       }
     },
@@ -52,6 +58,7 @@ const store = new Vuex.Store({
           this.commit('setActiveLayer', activeLayer)
         }
       } else {
+        console.log(value);
         console.error('init value not Array')
       }
     },
@@ -67,6 +74,9 @@ const store = new Vuex.Store({
       if (index !== -1) {
         resourceLayers.splice(index, 1)
         this.commit('setLayerHistoryList')
+        this.dispatch('updateLayers', {
+          name: '删除图层：' + value.name
+        })
       }
     },
 
@@ -101,6 +111,29 @@ const store = new Vuex.Store({
         state['resourceLayers'] = layerHistoryList[LayerHistoryIndex - 1]
         state['LayerHistoryIndex']--
       }
+    }
+  },
+  actions: {
+    // 画布图层组件更新
+    updateLayers({ state, commit }, params) {
+      console.log(params);
+      API.updateLayers(state['resourceLayers'], router.app.$route.params.id)
+        .then((res) => {
+          if (res.data !== "暂无更改") {
+            commit('backoff/addHistory', state['resourceLayers']);
+          }
+        })
+    },
+    // 项目配置设置更新
+    updateDatavInfo({ state }, params) {
+      console.log(params);
+      const { datavInfo } = state
+      API.updateDatav({
+        id: datavInfo.id,
+        name: datavInfo.name,
+        preview_img: datavInfo.preview_img,
+        style: JSON.stringify(datavInfo.style),
+      }, router.app.$route.params.id);
     }
   },
   modules: {

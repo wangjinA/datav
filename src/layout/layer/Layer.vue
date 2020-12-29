@@ -22,7 +22,7 @@
       :show="contextMenuVisible"
       @update:show="(show) => (contextMenuVisible = show)"
     >
-      <a href="javascript:;" @click="del">删除</a>
+      <Right-menu-list @click="contextMenuVisible = false"></Right-menu-list>
     </Vue-context-menu>
   </div>
 </template>
@@ -30,10 +30,12 @@
 <script>
 import { mapState, mapMutations } from "vuex";
 import { component as VueContextMenu } from "@xunlei/vue-context-menu";
+import RightMenuList from "./rightMenuList";
 export default {
   name: "Layer",
   components: {
     VueContextMenu,
+    RightMenuList,
   },
   data() {
     return {
@@ -45,13 +47,6 @@ export default {
   },
   methods: {
     ...mapMutations(["removeLayer", "setActiveLayer"]),
-
-    del() {
-      this.$delAPI("确认删除").then(() => {
-        this.removeLayer(this.activeLayer);
-      });
-    },
-
     onContextmenu(item) {
       this.setActiveLayer(item);
     },
@@ -78,6 +73,8 @@ export default {
   color: #fafafa;
   flex-shrink: 0;
   &-ul {
+    flex: 1;
+    overflow: auto;
     > li {
       padding: 0 8px;
       position: relative;
@@ -112,46 +109,5 @@ export default {
     background: #2d2f38;
     border-bottom: 1px solid #0d0e10;
   }
-}
-</style>
-
-<style lang="less">
-.right-menu {
-  position: fixed;
-  background: #fff;
-  border: solid 1px rgba(0, 0, 0, 0.2);
-  border-radius: 3px;
-  z-index: 999;
-  display: none;
-}
-.right-menu a {
-  width: 75px;
-  height: 28px;
-  line-height: 28px;
-  text-align: center;
-  display: block;
-  color: #1a1a1a;
-}
-.right-menu a:hover {
-  background: #eee;
-  color: #fff;
-}
-html,
-body {
-  height: 100%;
-}
-.right-menu {
-  border: 1px solid #eee;
-  box-shadow: 0 0.5em 1em 0 rgba(0, 0, 0, 0.1);
-  border-radius: 1px;
-}
-a {
-  text-decoration: none;
-}
-.right-menu a {
-  padding: 2px;
-}
-.right-menu a:hover {
-  background: #42b983;
 }
 </style>

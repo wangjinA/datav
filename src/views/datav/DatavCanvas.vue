@@ -1,6 +1,7 @@
 <template>
   <div
     class="DatavCanvas"
+    ref="DatavCanvas"
     :class="readonly ? 'readonly' : 'editor'"
     tabindex="0"
     @keydown.space.prevent="handleSpaceDown"
@@ -39,10 +40,13 @@
           :scaleRatio="scaleValue"
           snap
           v-bind="getBaseOption(item.editOption)"
+          @contextmenu.native="onActivated(item)"
           @activated="onActivated(item)"
           @deactivated="onDeactivated(item)"
-          @resizing="onResize(item, ...arguments)"
-          @dragging="onDragging(item, ...arguments)"
+          @resizing="onResize(item, false, ...arguments)"
+          @dragging="onDragging(item, false, ...arguments)"
+          @resizestop="onResize(item, true, ...arguments)"
+          @dragstop="onDragging(item, true, ...arguments)"
           @refLineParams="getRefLineParams"
         >
           <component
@@ -81,15 +85,26 @@
       :step="0.1"
       show-stops
     ></Slider>
+    <Vue-context-menu
+      v-if="!readonly"
+      class="right-menu"
+      :target="$refs['DatavCanvas']"
+      :show="contextMenuVisible"
+      @update:show="(show) => (contextMenuVisible = show)"
+    >
+      <Right-menu-list @click="contextMenuVisible = false"></Right-menu-list>
+    </Vue-context-menu>
   </div>
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
 import { getInt, getBfb, parse, deepClone } from "@/lib/utils";
 import html2canvas from "html2canvas";
 import C from "@/components/exportCom"; // 导出组件
 import wrap from "./mixins/wrap";
+import { component as VueContextMenu } from "@xunlei/vue-context-menu";
+import RightMenuList from "@/layout/layer/rightMenuList";
 export default {
   name: "DatavCanvas",
   mixins: [wrap],
@@ -102,6 +117,8 @@ export default {
   },
   components: {
     ...C,
+    VueContextMenu,
+    RightMenuList,
   },
   data() {
     return {
@@ -109,6 +126,7 @@ export default {
       hLine: [],
       id: this.$route.params.id,
       screenDraggable: false, // 空格拖拽容器
+      contextMenuVisible: false,
     };
   },
   computed: {
@@ -140,6 +158,7 @@ export default {
   },
   methods: {
     ...mapMutations(["addLayer", "setActiveLayer", "setDatavInfo", "initLayer"]),
+    ...mapActions(["updateLayers"]),
 
     // 滚轮
     handleTableWheel(e) {
@@ -178,30 +197,42 @@ export default {
       // this.setActiveLayer(null);
     },
     // 调整位置
-    onDragging(item, ...position) {
+    onDragging(item, triggerUpdate = false, ...position) {
       clearTimeout(this.onDragging_timer);
       this.onDragging_timer = setTimeout(() => {
-        const x = position[0];
-        const y = position[1];
-        item.editOption.x = x;
-        item.editOption.y = y;
-      }, 200);
+        if (!triggerUpdate) {
+          console.log("调整位置 - 开始");
+          const x = position[0];
+          const y = position[1];
+          item.editOption.x = x;
+          item.editOption.y = y;
+        } else {
+          console.log("调整位置 - 停止");
+          this.updateLayers({ name: "调整位置" });
+        }
+      }, 20);
     },
     // 调整大小 echarts
-    onResize(item, ...size) {
-      clearTimeout(this.onDragging_timer);
+    onResize(item, triggerUpdate = false, ...size) {
+      clearTimeout(this.onResize_timer);
       this.onResize_timer = setTimeout(() => {
-        const x = size[0];
-        const y = size[1];
-        const w = size[2];
-        const h = size[3];
-        item.editOption.x = x;
-        item.editOption.y = y;
-        item.editOption.w = w;
-        item.editOption.h = h;
-        let target = this.$refs[item.name][0];
-        target.resize && target.resize();
-      }, 200);
+        if (!triggerUpdate) {
+          console.log("调整大小 - 开始");
+          const x = size[0];
+          const y = size[1];
+          const w = size[2];
+          const h = size[3];
+          item.editOption.x = x;
+          item.editOption.y = y;
+          item.editOption.w = w;
+          item.editOption.h = h;
+          let target = this.$refs[item.name][0];
+          target.resize && target.resize();
+        } else {
+          console.log("调整大小 - 停止");
+          this.updateLayers({ name: "调整大小" });
+        }
+      }, 20);
       // if (item.componentName === "echart-template" || item.componentName === "echart") {
       //   this.$refs[item.name][0].resize();
       // }
@@ -246,6 +277,9 @@ export default {
           formData.append("file", file);
           this.$API.upload(formData).then((res) => {
             this.datavInfo.preview_img = res.data.src;
+            this.$store.dispatch("updateDatavInfo", {
+              name: "预览图设置",
+            });
           });
         });
       });

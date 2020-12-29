@@ -15,7 +15,7 @@
 
         <!-- 下拉选择器 -->
         <template v-else-if="item.type === 'select'">
-          <Select size="small" :value="value" @on-change="onchange">
+          <Select size="small" v-model="value">
             <Option
               v-for="select in item.data"
               :value="select.value"
@@ -27,38 +27,26 @@
 
         <!-- 代码编辑器 -->
         <template v-else-if="item.type === 'code' || item.codeType">
-          <CodeEditor :value="value" @input="codeOnChange" :type="item.codeType" />
+          <CodeEditor v-model="value" :type="item.codeType" />
         </template>
 
         <!-- 颜色选择器 -->
         <template v-else-if="item.type === 'color'">
-          <ColorPicker :value="value" size="small" alpha @on-active-change="onchange" />
+          <ColorPicker v-model="value" size="small" alpha @on-active-change="colorActiveChange" />
         </template>
 
         <!-- switch开关 -->
         <template v-else-if="item.type === 'switch'">
-          <iSwitch :value="value" @on-change="onchange" />
+          <iSwitch v-model="value" @on-change="() => {}" />
         </template>
 
         <!-- 数字输入框 -->
         <template v-else-if="item.inputType === 'number'">
-          <InputNumber
-            size="small"
-            :max="item.max"
-            :min="item.min"
-            :value="value"
-            @on-change="onchange"
-          ></InputNumber>
+          <InputNumber size="small" :max="item.max" :min="item.min" v-model="value"></InputNumber>
         </template>
 
         <!-- 输入框 -->
-        <Input
-          v-else
-          size="small"
-          :value="value"
-          :type="item.inputType"
-          @on-change="inputOnChange"
-        />
+        <Input v-else size="small" v-model="value" :type="item.inputType" />
       </section>
     </div>
     <!-- 递归组件实现关联选项 -->
@@ -72,8 +60,7 @@
 
 <script>
 import CodeEditor from "./CodeEditor";
-import { deepClone } from "@/lib/utils";
-import { mapState } from "vuex";
+import { debounce, deepClone } from "@/lib/utils";
 export default {
   name: "SetupForm",
   props: {
@@ -85,59 +72,39 @@ export default {
       type: Object,
       default: () => ({}),
     },
-    isUpdateLayers: {
-      type: Boolean,
-      default: false,
-    },
-    isUpdateDatavInfo: {
-      type: Boolean,
-      default: false,
-    },
   },
   data() {
-    return {};
+    return {
+      value: null,
+    };
   },
-  computed: {
-    ...mapState(["activeLayer"]),
-    value() {
-      if (this.target && this.item) {
-        return deepClone(this.target[this.item.key]);
-      }
-      return "";
+  watch: {
+    target: {
+      deep: true,
+      immediate: true,
+      handler: "initValue",
+    },
+    item: {
+      deep: true,
+      immediate: true,
+      handler: "initValue",
+    },
+    value: {
+      deep: true,
+      handler(value) {
+        console.log(this.item.name);
+        console.log(value);
+      },
     },
   },
   components: {
     CodeEditor,
   },
   methods: {
-    setTargetValue(value) {
-      clearTimeout(this.setTargetValue_timer);
-      this.setTargetValue_timer = setTimeout(() => {
-        this.$set(this.target, this.item.key, deepClone(value));
-
-        if (this.isUpdateLayers) {
-          this.$store.dispatch("updateLayers", {
-            name: this.activeLayer.name,
-            key: this.item.key,
-            value: value,
-          });
-        } else if (this.isUpdateDatavInfo) {
-          this.$store.dispatch("updateDatavInfo", {
-            name: "全局设置",
-            key: this.item.key,
-            value: value,
-          });
-        }
-      }, 20);
-    },
-    onchange(v) {
-      this.setTargetValue(v);
-    },
-    inputOnChange(e) {
-      this.setTargetValue(e.target.value);
-    },
-    codeOnChange(code) {
-      this.setTargetValue(code);
+    initValue() {
+      if (this.target && this.item) {
+        this.value = deepClone(this.target[this.item.key]);
+      }
     },
 
     // 图片上传
@@ -148,10 +115,15 @@ export default {
       }
       formData.append("file", file);
       this.$API.upload(formData).then((res) => {
-        this.setTargetValue(res.data.src);
+        this.$set(this.target, this.item.key, res.data.src);
       });
       return false;
     },
+
+    // 颜色实时触发
+    colorActiveChange: debounce(function(e) {
+      this.target[this.item.key] = e;
+    }),
   },
 };
 </script>

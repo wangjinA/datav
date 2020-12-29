@@ -2,7 +2,7 @@
  * @Author: 汪锦
  * @Date: 2020-07-13 09:35:50
  * @LastEditors: 汪锦
- * @LastEditTime: 2020-12-17 15:10:21
+ * @LastEditTime: 2020-12-29 11:05:13
  * @Description: iview配置
  */
 import Vue from 'vue'
@@ -35,16 +35,22 @@ Vue.prototype.$Message = new Proxy({}, {
 })
 Vue.prototype.$Modal = Modal
 Vue.prototype.$Notice = Notice
-Vue.prototype.$delAPI = (option) => {
+Vue.prototype.$delAPI = (optionOrContent, title) => {
   return new Promise((resolve, reject) => {
-    Modal.confirm({
-      title: '删除提醒',
+    let option = {
+      title: title || '温馨提示',
       cancelText: '取消',
-      content: '是否确认删除？',
+      content: optionOrContent || '是否确认删除？',
       loading: true,
       onOk: () => (Modal.remove(), resolve()),
       onCancel: () => (reject()),
-      ...option
-    })
+    }
+    if (typeof optionOrContent === 'object') {
+      option = {
+        ...option,
+        ...optionOrContent
+      }
+    }
+    Modal.confirm(option)
   })
 }

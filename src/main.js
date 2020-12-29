@@ -7,6 +7,8 @@ import './style/variable.less'
 import '@/lib/bus'
 import '@/lib/iview/index.js'
 
+window.$baseUrl = process.env.NODE_ENV === "development" ? '/api' : ''
+Vue.prototype.$baseUrl = window.$baseUrl
 import axios from './myAxios'
 Vue.use(axios)
 import './api'
@@ -28,7 +30,6 @@ window.$echarts = echarts
 import store from './store'
 import router from './router'
 
-
 Vue.prototype.$getUrl = (imgName, isDefault = true) => {
   let src = ''
   if (isDefault && !imgName) {
@@ -36,7 +37,7 @@ Vue.prototype.$getUrl = (imgName, isDefault = true) => {
   }
   src = `/public/images/datav/${imgName}`
   if (process.env.NODE_ENV === "development") {
-    src = '/api' + src
+    src = window.$baseUrl + src
   }
   return src
 }

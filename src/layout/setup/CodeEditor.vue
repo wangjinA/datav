@@ -11,12 +11,13 @@
 
 <script>
 // csdn https://blog.csdn.net/qq_16698261/article/details/106397108
+// 官网 https://codemirror.net/index.html
 import { codemirror } from "vue-codemirror";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/base16-dark.css";
 // 滚动条
-import "codemirror/addon/scroll/simplescrollbars.css";
-import "codemirror/addon/scroll/simplescrollbars.js";
+// import "codemirror/addon/scroll/simplescrollbars.css";
+// import "codemirror/addon/scroll/simplescrollbars.js";
 
 import "codemirror/mode/javascript/javascript.js"; //
 import { parse, stringify } from "@/lib/utils";
@@ -41,7 +42,7 @@ export default {
         theme: "base16-dark",
         lineNumbers: true,
         line: true,
-        scrollbarStyle: "simple",
+        // scrollbarStyle: "simple",
         // more codemirror options, 更多 codemirror 的高级配置...
       },
     };
@@ -52,31 +53,9 @@ export default {
     },
   },
   watch: {
-    code() {
-      console.log("code改变");
-      clearTimeout(this.watch_code_timer);
-      this.watch_code_timer = setTimeout(() => {
-        let code = this.code;
-        if (this.type_filter === "json") {
-          try {
-            if (typeof parse(code) === "object") {
-              code = parse(code);
-            } else {
-              return;
-            }
-          } catch (error) {
-            console.log(code);
-            console.error("json转换出错");
-            return;
-          }
-        }
-        this.$emit("input", code);
-      }, 200);
-    },
     value: {
       immediate: true,
       handler(value) {
-        console.log("value改变");
         let _value = value;
         if (this.type_filter === "json") {
           try {
@@ -89,6 +68,25 @@ export default {
         }
         this.code = _value;
       },
+    },
+    code() {
+      clearTimeout(this.watch_code_timer);
+      this.watch_code_timer = setTimeout(() => {
+        let code = this.code;
+        if (this.type_filter === "json") {
+          try {
+            if (typeof parse(code) === "object") {
+              code = parse(code);
+            } else {
+              return;
+            }
+          } catch (error) {
+            console.error("json转换出错");
+            return;
+          }
+        }
+        this.$emit("input", code);
+      }, 200);
     },
   },
   methods: {
@@ -108,13 +106,8 @@ export default {
 
 <style lang="less" scoped>
 .CodeEditor {
-  /deep/ .CodeMirror-scroll {
-    overflow: hidden !important;
-  }
   /deep/ .CodeMirror {
-    min-height: 100px;
-    max-height: 300px;
-    height: auto;
+    height: 200px;
   }
   /deep/ .cm-s-base16-dark.CodeMirror {
     background-color: var(--background-1);
@@ -123,10 +116,10 @@ export default {
     background-color: var(--background-1);
     border-right: 1px solid var(--border-color);
   }
-  /deep/ .CodeMirror-simplescroll-horizontal{
+  /deep/ .CodeMirror-simplescroll-horizontal {
     background-color: #2d2f38;
   }
-  /deep/ .CodeMirror-simplescroll-horizontal div{
+  /deep/ .CodeMirror-simplescroll-horizontal div {
     background: #5a6073;
     border: 1px solid var(--border-color);
   }

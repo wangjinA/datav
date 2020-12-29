@@ -2,7 +2,7 @@
  * @Author: 汪锦
  * @Date: 2020-10-20 17:56:47
  * @LastEditors: 汪锦
- * @LastEditTime: 2020-12-18 01:06:52
+ * @LastEditTime: 2020-12-28 16:08:14
  * @Description: 基本文字
 -->
 <template>
@@ -23,6 +23,7 @@ export default {
     fontSize: {
       name: "字体大小",
       type: [Number, String],
+      setupInputType: "number",
       min: 12,
       default: 18,
     },

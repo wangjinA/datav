@@ -44,6 +44,13 @@ export const componentBaseConfig = (isSetup) => {
       type: "switch",
       default: true
     },
+    {
+      name: "横纵比锁定",
+      key: "lockAspectRatio",
+      type: "switch",
+      default: false
+    },
+
   ];
   if (isSetup) {
     return baseConfig
