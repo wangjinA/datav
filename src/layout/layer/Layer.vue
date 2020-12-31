@@ -43,10 +43,10 @@ export default {
     };
   },
   computed: {
-    ...mapState(["resourceLayers", "activeLayer"]),
+    ...mapState("layer", ["resourceLayers", "activeLayer"]),
   },
   methods: {
-    ...mapMutations(["removeLayer", "setActiveLayer"]),
+    ...mapMutations("layer", ["removeLayer", "setActiveLayer"]),
     onContextmenu(item) {
       this.setActiveLayer(item);
     },

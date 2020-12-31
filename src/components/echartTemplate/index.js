@@ -1,1 +1,1 @@
-export default require('./echart-template.vue').default
+export default require('./EchartTemplate.vue').default

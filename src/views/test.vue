@@ -1,5 +1,5 @@
 <template>
-  <div id="test" v-draggable>
+  <div id="test">
     <div style="position: relation;z-index:1;">
       <Loading />
       <img width="200" src="@/assets/lizi.png" />
@@ -9,22 +9,26 @@
         <small>测试柜</small>
       </small>
       <Line-module></Line-module>
-      <transition name="test" appear>
-        <ModuleTitle :key="k" title="模块标题文案"></ModuleTitle>
-      </transition>
     </div>
-    <button v-for="i in 3" :key="i" v-debounce="debounceClick">防抖</button>
     <div style="width: 500px;">
-      <CodeEditor />
+      <!-- <CodeEditor /> -->
     </div>
+    <!-- <MonacoEditor
+      height="600"
+      language="json"
+      :code="JSON.stringify(list)"
+      @mounted="onMounted"
+      @codeChange="onCodeChange"
+    >
+    </MonacoEditor> -->
   </div>
 </template>
 
 <script>
 import Loading from "@/components/loading/Loading";
 import LineModule from "@/components/lineModule";
-import ModuleTitle from "@/components/moduleTitle";
-import CodeEditor from "@/layout/setup/CodeEditor";
+// import CodeEditor from "@/layout/setup/CodeEditor";
+// import MonacoEditor from "vue-monaco-editor";
 const draggable = {
   inserted: function(el) {
     el.style.cursor = "move";
@@ -61,8 +65,8 @@ export default {
   components: {
     Loading,
     LineModule,
-    ModuleTitle,
-    CodeEditor,
+    // CodeEditor,
+    // MonacoEditor,
   },
   data() {
     return {
@@ -85,6 +89,14 @@ export default {
     };
   },
   methods: {
+    onMounted(editor) {
+      /* eslint-disable */
+      this.editor = editor;
+      console.log(this.editor);
+    },
+    onCodeChange(editor) {
+      console.log(this.editor.getValue());
+    },
     debounceClick() {
       console.log("只触发一次");
     },
@@ -112,6 +124,7 @@ export default {
       },
     },
   },
+  created() {},
 };
 </script>
 
@@ -120,9 +133,6 @@ export default {
   background-color: #000;
   height: 100vh;
   width: 100vw;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
 .test-leave-to,

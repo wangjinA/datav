@@ -48,6 +48,9 @@ export default {
         this.myChart.clear();
       }
       var option;
+      /* eslint-disable */
+      let myChart = this.myChart;
+      let echarts = window.$echarts;
       if (typeof this.options === "string") {
         try {
           eval(this.options);

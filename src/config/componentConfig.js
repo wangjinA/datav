@@ -164,6 +164,36 @@ export const echart = [
       h: 450,
       lockAspectRatio: true
     }
+  }, {
+    id: '仪表盘-1',
+    name: '仪表盘',
+    previewImage: require('@/config/images/仪表盘.png'),
+    componentName: 'EchartTemplate',
+    componentOption: {
+      options: echartList.ybp
+    },
+    componentSetup: [
+      ...getBaseOption('EchartTemplate', true)
+    ],
+    editOption: {
+      ...componentBaseConfig(),
+      w: 220,
+      h: 220,
+    }
+  }, {
+    id: '飞线地图-1',
+    name: '飞线地图',
+    previewImage: require('@/config/images/飞线地图.png'),
+    componentName: 'flyLineMap',
+    componentOption: getBaseOption('flyLineMap'),
+    componentSetup: [
+      ...getBaseOption('flyLineMap', true)
+    ],
+    editOption: {
+      ...componentBaseConfig(),
+      w: 220,
+      h: 220,
+    }
   }
 ]
 

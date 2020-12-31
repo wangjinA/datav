@@ -26,6 +26,7 @@ Vue.component('vue-draggable-resizable', VueDraggableResizable);
 // echarts
 import echarts from 'echarts'
 window.$echarts = echarts
+Vue.prototype.$echarts = echarts
 
 import store from './store'
 import router from './router'

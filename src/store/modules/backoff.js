@@ -2,7 +2,7 @@
  * @Author: 汪锦
  * @Date: 2020-12-21 17:11:09
  * @LastEditors: 汪锦
- * @LastEditTime: 2020-12-28 14:31:27
+ * @LastEditTime: 2020-12-31 17:26:57
  * @Description: 回退操作 - 有BUG
  */
 
@@ -34,7 +34,7 @@ export default {
       if (historyIndex <= 0) {
         console.log("不可撤销，下标索引 <= 0");
       } else {
-        this.commit('resetLayer', historyList[--historyIndex]);
+        this.commit('layer/resetLayer', historyList[--historyIndex]);
       }
     },
     // 还原
@@ -42,7 +42,7 @@ export default {
       if (historyIndex >= historyList.length - 1) {
         console.log("不可还原，下标索引 >= 记录长度");
       } else {
-        this.commit('resetLayer', historyList[++historyIndex]);
+        this.commit('layer/resetLayer', historyList[++historyIndex]);
       }
     },
   },

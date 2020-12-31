@@ -20,6 +20,8 @@
       </li>
     </ul>
     <ul class="right-handler">
+      <li @click="generator">生成Vue文件</li>
+      <li @click="lookjson">查看json配置</li>
       <li @click="screenshot">截图</li>
       <li @click="goToPreview">预览</li>
     </ul>
@@ -32,6 +34,7 @@ import IconBase from "@/layout/icons/IconBase";
 import { echart, text, base } from "@/config/componentConfig";
 import { deepClone } from "@/lib/utils";
 import { mapMutations, mapState } from "vuex";
+import generator from "@/lib/generator";
 export default {
   components: {
     IconBase,
@@ -59,10 +62,23 @@ export default {
     };
   },
   computed: {
-    ...mapState(["datavInfo"]),
+    ...mapState("layer", ["datavInfo", "resourceLayers"]),
   },
   methods: {
-    ...mapMutations(["addLayer"]),
+    ...mapMutations("layer", ["addLayer"]),
+    generator() {
+      generator();
+    },
+
+    lookjson() {
+      this.$store.commit("codeEditor/editorOpen", {
+        code: this.resourceLayers,
+        codeType: "json",
+        callback(code) {
+          console.log(code);
+        },
+      });
+    },
     addHanlde(com) {
       const cloneCom = deepClone(com);
       cloneCom.active = true;

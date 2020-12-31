@@ -28,6 +28,9 @@
         <!-- 代码编辑器 -->
         <template v-else-if="item.type === 'code' || item.codeType">
           <CodeEditor :value="value" @input="codeOnChange" :type="item.codeType" />
+          <Button type="primary" size="small" style="margin-top: 12px;" @click="bigEditor"
+            >放大编辑</Button
+          >
         </template>
 
         <!-- 颜色选择器 -->
@@ -98,7 +101,7 @@ export default {
     return {};
   },
   computed: {
-    ...mapState(["activeLayer"]),
+    ...mapState("layer", ["activeLayer"]),
     value() {
       if (this.target && this.item) {
         return deepClone(this.target[this.item.key]);
@@ -110,6 +113,15 @@ export default {
     CodeEditor,
   },
   methods: {
+    bigEditor() {
+      this.$store.commit("codeEditor/editorOpen", {
+        code: this.value,
+        type: this.item.codeType,
+        callback: (e) => {
+          this.setTargetValue(e);
+        },
+      });
+    },
     setTargetValue(value) {
       clearTimeout(this.setTargetValue_timer);
       this.setTargetValue_timer = setTimeout(() => {

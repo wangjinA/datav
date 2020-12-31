@@ -2,7 +2,7 @@
  * @Author: 汪锦
  * @Date: 2020-12-14 16:22:51
  * @LastEditors: 汪锦
- * @LastEditTime: 2020-12-28 14:42:15
+ * @LastEditTime: 2020-12-31 17:02:37
  * @Description: 设置栏
 -->
 <template>
@@ -129,7 +129,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["resourceLayers", "activeLayer", "datavInfo"]),
+    ...mapState("layer", ["resourceLayers", "activeLayer", "datavInfo"]),
 
     componentSetup() {
       if (this.activeLayer) {
@@ -142,7 +142,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(["removeLayer"]),
+    ...mapMutations("layer", ["removeLayer"]),
 
     del() {
       this.$delAPI("确认删除").then(() => {

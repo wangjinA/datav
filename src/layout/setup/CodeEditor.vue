@@ -1,12 +1,19 @@
 <template>
-  <codemirror
-    class="CodeEditor"
-    :value="code"
-    :options="cmOptions"
-    @ready="onCmReady"
-    @focus="onCmFocus"
-    @input="onCmCodeChange"
-  />
+  <div class="CodeEditor-wrap" :style="{ height: height }">
+    <codemirror
+      class="CodeEditor"
+      :value="code"
+      :options="cmOptions"
+      @ready="onCmReady"
+      @focus="onCmFocus"
+      @input="onCmCodeChange"
+    />
+    <transition name="scaleY">
+      <div class="json-error" v-if="type_filter === 'json' && jsonErr">
+        json转换出错，请检查
+      </div>
+    </transition>
+  </div>
 </template>
 
 <script>
@@ -20,13 +27,18 @@ import "codemirror/theme/base16-dark.css";
 // import "codemirror/addon/scroll/simplescrollbars.js";
 
 import "codemirror/mode/javascript/javascript.js"; //
-import { parse, stringify } from "@/lib/utils";
+// import { parse, stringify } from "@/lib/utils";
+import { beautifierConf } from "./config";
 export default {
   props: {
     value: null,
     type: {
       type: String,
       default: "javascript",
+    },
+    height: {
+      type: String,
+      default: "150px",
     },
   },
   components: {
@@ -35,6 +47,7 @@ export default {
   data() {
     return {
       code: "",
+      jsonErr: false,
       cmOptions: {
         // codemirror options
         tabSize: 4,
@@ -56,37 +69,19 @@ export default {
     value: {
       immediate: true,
       handler(value) {
+        // console.log(value);
         let _value = value;
         if (this.type_filter === "json") {
           try {
-            _value = stringify(_value);
+            _value = JSON.stringify(_value);
           } catch (error) {
             console.log(_value);
             console.error("json转换出错");
             return;
           }
         }
-        this.code = _value;
+        this.code = window.beautifier.js(_value, beautifierConf.js);
       },
-    },
-    code() {
-      clearTimeout(this.watch_code_timer);
-      this.watch_code_timer = setTimeout(() => {
-        let code = this.code;
-        if (this.type_filter === "json") {
-          try {
-            if (typeof parse(code) === "object") {
-              code = parse(code);
-            } else {
-              return;
-            }
-          } catch (error) {
-            console.error("json转换出错");
-            return;
-          }
-        }
-        this.$emit("input", code);
-      }, 200);
     },
   },
   methods: {
@@ -98,16 +93,48 @@ export default {
       // console.log("the editor is focus!", cm);
     },
     onCmCodeChange(newCode) {
-      this.code = newCode;
+      // this.code = newCode;
+      let _value = newCode;
+      if (this.type_filter === "json") {
+        try {
+          _value = JSON.parse(_value);
+          this.jsonErr = false;
+        } catch (error) {
+          this.jsonErr = true;
+          console.log(_value);
+          console.error("json转换出错");
+          return;
+        }
+      }
+      this.$emit("input", _value);
     },
   },
+  mounted() {},
 };
 </script>
 
 <style lang="less" scoped>
+.CodeEditor-wrap {
+  position: relative;
+  .json-error {
+    position: absolute;
+    top: 0;
+    left: 30px;
+    right: 5px;
+    padding: 0 10px;
+    z-index: 99999;
+    background-color: #ffefe6;
+    border-radius: 2px;
+    color: #f05a33;
+    transform-origin: top;
+  }
+}
 .CodeEditor {
+  height: 100%;
   /deep/ .CodeMirror {
-    height: 200px;
+    height: 100%;
+    font-size: 14px;
+    font-family: Consolas, "Courier New", monospace;
   }
   /deep/ .cm-s-base16-dark.CodeMirror {
     background-color: var(--background-1);

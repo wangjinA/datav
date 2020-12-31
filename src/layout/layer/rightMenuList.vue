@@ -2,7 +2,7 @@
  * @Author: 汪锦
  * @Date: 2020-12-29 10:50:20
  * @LastEditors: 汪锦
- * @LastEditTime: 2020-12-29 11:05:29
+ * @LastEditTime: 2020-12-31 17:01:59
  * @Description: 右键菜单操作
 -->
 
@@ -23,10 +23,10 @@ import { mapState, mapMutations } from "vuex";
 export default {
   name: "RightMenuList",
   computed: {
-    ...mapState(["activeLayer"]),
+    ...mapState("layer", ["activeLayer"]),
   },
   methods: {
-    ...mapMutations(["removeLayer"]),
+    ...mapMutations("layer", ["removeLayer"]),
     del() {
       this.$delAPI("确认删除：" + this.activeLayer.name).then(() => {
         this.removeLayer(this.activeLayer);

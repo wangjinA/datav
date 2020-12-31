@@ -2,7 +2,7 @@
  * @Author: 汪锦
  * @Date: 2020-11-30 09:55:57
  * @LastEditors: 汪锦
- * @LastEditTime: 2020-12-17 16:56:48
+ * @LastEditTime: 2020-12-31 17:02:44
  * @Description: 预览
 -->
 <template>
@@ -24,7 +24,7 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(["initLayer"]),
+    ...mapMutations("layer", ["initLayer"]),
   },
   created() {
     this.$get(`/api/datav/${this.id}`).then((res) => {

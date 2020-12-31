@@ -130,7 +130,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["resourceLayers", "activeLayer", "datavInfo"]),
+    ...mapState("layer", ["resourceLayers", "activeLayer", "datavInfo"]),
 
     scale() {
       return this.datavInfo ? this.datavInfo.style.scale : 1;
@@ -157,8 +157,8 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(["addLayer", "setActiveLayer", "setDatavInfo", "initLayer"]),
-    ...mapActions(["updateLayers"]),
+    ...mapMutations("layer", ["addLayer", "setActiveLayer", "setDatavInfo", "initLayer"]),
+    ...mapActions("layer", ["updateLayers"]),
 
     // 滚轮
     handleTableWheel(e) {
@@ -301,6 +301,7 @@ export default {
     },
   },
   created() {
+    console.log(this);
     this.initDataInfo(true);
     this.$bus_$on("screenshot", this.screenshot);
   },

@@ -32,10 +32,10 @@ export default {
     };
   },
   computed: {
-    ...mapState(["datavInfo", "resourceLayers"]),
+    ...mapState("layer", ["datavInfo", "resourceLayers"]),
   },
   methods: {
-    ...mapMutations(["setDatavInfo", "clearLayer", "initLayer"]),
+    ...mapMutations("layer", ["setDatavInfo", "clearLayer", "initLayer"]),
     ...mapMutations("backoff", ["addHistory", "revoke", "reduction"]), // [['addHistory', 'revoke', 'reduction']] 来自 -> backoff模块
     // 监听撤销和还原
     watchKey(e) {

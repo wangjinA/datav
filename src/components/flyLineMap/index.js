@@ -1,0 +1,1 @@
+export default require('./FlyLineMap.vue').default
