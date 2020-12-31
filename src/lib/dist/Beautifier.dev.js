@@ -1,4 +1,12 @@
-export const beautifierConf = {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.beautifierJs = beautifierJs;
+exports.beautifierHtml = beautifierHtml;
+exports.beautifierConf = void 0;
+var beautifierConf = {
   html: {
     indent_size: '2',
     indent_char: ' ',
@@ -37,4 +45,13 @@ export const beautifierConf = {
     e4x: true,
     indent_empty_lines: true
   }
+};
+exports.beautifierConf = beautifierConf;
+
+function beautifierJs(code) {
+  return window.beautifier.js(code, beautifierConf.js);
+}
+
+function beautifierHtml(code) {
+  return window.beautifier.html(code, beautifierConf.html);
 }

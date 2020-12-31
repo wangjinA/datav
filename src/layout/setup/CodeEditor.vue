@@ -28,7 +28,7 @@ import "codemirror/theme/base16-dark.css";
 
 import "codemirror/mode/javascript/javascript.js"; //
 // import { parse, stringify } from "@/lib/utils";
-import { beautifierConf } from "./config";
+import { beautifierJs } from "@/lib/Beautifier";
 export default {
   props: {
     value: null,
@@ -40,6 +40,10 @@ export default {
       type: String,
       default: "150px",
     },
+    isBeautifier: {
+      type: Boolean,
+      default: true,
+    }
   },
   components: {
     codemirror,
@@ -80,7 +84,11 @@ export default {
             return;
           }
         }
-        this.code = window.beautifier.js(_value, beautifierConf.js);
+        if(this.isBeautifier) {
+          this.code = beautifierJs(_value);
+        }else {
+          this.code = _value;
+        }
       },
     },
   },

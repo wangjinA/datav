@@ -17,8 +17,9 @@
       placement="right"
       :value="editorShow"
       @on-close="editorClose"
+      
     >
-      <CodeEditor height="100%" :value="code" :type="codeType" @input="onChange" />
+      <CodeEditor height="100%" :value="code" :type="codeType" @input="onChange" :isBeautifier="isBeautifier" />
     </Drawer>
   </div>
 </template>
@@ -39,7 +40,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("codeEditor", ["editorShow", "code", "codeType"]),
+    ...mapState("codeEditor", ["editorShow", "code", "codeType", "isBeautifier"]),
   },
   methods: {
     ...mapMutations("codeEditor", ["onChange", "editorClose"]),

@@ -12,13 +12,16 @@ export default {
   state: {
     codeType: 'javascript',
     editorShow: false,
-    code: ''
+    code: '',
+    isBeautifier: true
   },
   mutations: {
     editorOpen(state, params) {
       state.editorShow = true
       state.code = params.code
       state.codeType = params.codeType || params.type
+      /* eslint-disable */
+      state.isBeautifier = params.hasOwnProperty('isBeautifier') ? params.isBeautifier : true
       callback = params.callback || (() => { }) // 回调函数
     },
     editorClose(state) {

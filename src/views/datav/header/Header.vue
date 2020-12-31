@@ -67,7 +67,14 @@ export default {
   methods: {
     ...mapMutations("layer", ["addLayer"]),
     generator() {
-      generator();
+      this.$store.commit("codeEditor/editorOpen", {
+        code: generator(),
+        codeType: "javascript",
+        isBeautifier: false,
+        callback(code) {
+          console.log(code);
+        },
+      });
     },
 
     lookjson() {
