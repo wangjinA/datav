@@ -14,8 +14,10 @@ function importComponents() {
   const { resourceLayers } = store.state.layer
   let str = ''
   resourceLayers.forEach(item => {
-    str += `
+    if (str.indexOf(`import ${item.componentName}`) === -1) {
+      str += `
   import ${item.componentName} from "@/components/${item.componentName}";`
+    }
   })
   return str
 }
@@ -25,8 +27,10 @@ function registerComponents() {
   const { resourceLayers } = store.state.layer
   let str = ''
   resourceLayers.forEach(item => {
-    str += `
+    if (str.indexOf(item.componentName) === -1) {
+      str += `
       ${item.componentName},`
+    }
   })
   return str
 
@@ -40,9 +44,10 @@ function getStyles() {
   const width = style ? style.w : 0;
   const height = style ? style.h : 0;
   resourceLayers.forEach(item => {
+    let num = getStrCount(str, `${item.componentName}Style`)|| ''
     const editOption = item.editOption
     str += `
-        ${item.componentName}Style: {
+        ${item.componentName}Style${num}: {
           position: 'absolute',
           zIndex: ${editOption.z},
           width: '${getBfb(editOption.w, width)}px',
@@ -61,9 +66,8 @@ function getComponentsAttr() {
   let str = ''
   resourceLayers.forEach(item => {
     const componentOption = item.componentOption
-    let num = getStrCount(str, `${item.componentName}Attr`)
-    num = num || ''
-    str+= `
+    let num = getStrCount(str, `${item.componentName}Attr`)|| ''
+    str += `
         ${item.componentName}Attr${num}: ${JSON.stringify(componentOption)},
     `
   })
@@ -72,7 +76,7 @@ function getComponentsAttr() {
 }
 // 获取script内容
 function getScript() {
-  
+
   let scriptStr = `
 <script>
   ${importComponents()}
@@ -94,12 +98,12 @@ function getComponentsTags() {
   const { resourceLayers } = store.state.layer
   let str = ''
   resourceLayers.forEach(item => {
-    let num = getStrCount(str, `${item.componentName}Attr`)
-    num = num || ''
+    let attrNum = getStrCount(str, `${item.componentName}Attr`) || ''
+    let styleNum = getStrCount(str, `${item.componentName}Style`) || ''
     str += `
     <!-- ${item.name} -->
-    <div :style="${item.componentName}Style">
-      <${item.componentName} v-bind="${item.componentName}Attr${num}"/>
+    <div :style="${item.componentName}Style${styleNum}">
+      <${item.componentName} v-bind="${item.componentName}Attr${attrNum}"/>
     </div>
     `
   })
@@ -107,7 +111,7 @@ function getComponentsTags() {
 }
 
 export default function () {
-  
+
   const htmlStr = `<template>
   <div>
     ${getComponentsTags()}

@@ -5,7 +5,12 @@
       <section>
         <!-- 图片上传 -->
         <template v-if="item.type === 'img'">
-          <Upload action="/" type="drag" :before-upload="beforeUpload" accept="image/*">
+          <Upload
+            action="/"
+            type="drag"
+            :before-upload="beforeUpload"
+            accept="image/*"
+          >
             <div class="upload-preview" v-if="value">
               <img :src="$getUrl(value)" />
             </div>
@@ -27,15 +32,28 @@
 
         <!-- 代码编辑器 -->
         <template v-else-if="item.type === 'code' || item.codeType">
-          <CodeEditor :value="value" @input="codeOnChange" :codeType="item.codeType" />
-          <Button type="primary" size="small" style="margin-top: 12px;" @click="bigEditor"
+          <CodeEditor
+            :value="value"
+            @input="codeOnChange"
+            :codeType="item.codeType"
+          />
+          <Button
+            type="primary"
+            size="small"
+            style="margin-top: 12px"
+            @click="bigEditor"
             >放大编辑</Button
           >
         </template>
 
         <!-- 颜色选择器 -->
         <template v-else-if="item.type === 'color'">
-          <ColorPicker :value="value" size="small" alpha @on-active-change="onchange" />
+          <ColorPicker
+            :value="value"
+            size="small"
+            alpha
+            @on-active-change="onchange"
+          />
         </template>
 
         <!-- switch开关 -->
@@ -67,7 +85,12 @@
     <!-- 递归组件实现关联选项 -->
     <template v-if="target && item.relation && item.relation[value]">
       <div v-for="(child, i) in item.relation[value]" :key="i">
-        <SetupForm :target="target" :item="child" />
+        <SetupForm
+          :isUpdateLayers="isUpdateLayers"
+          :isUpdateDatavInfo="isUpdateDatavInfo"
+          :target="target"
+          :item="child"
+        />
       </div>
     </template>
   </div>
@@ -123,18 +146,19 @@ export default {
       });
     },
     setTargetValue(value) {
+      console.log(value);
       clearTimeout(this.setTargetValue_timer);
       this.setTargetValue_timer = setTimeout(() => {
         this.$set(this.target, this.item.key, deepClone(value));
 
         if (this.isUpdateLayers) {
-          this.$store.dispatch("updateLayers", {
+          this.$store.dispatch("layer/updateLayers", {
             name: this.activeLayer.name,
             key: this.item.key,
             value: value,
           });
         } else if (this.isUpdateDatavInfo) {
-          this.$store.dispatch("updateDatavInfo", {
+          this.$store.dispatch("layer/updateDatavInfo", {
             name: "全局设置",
             key: this.item.key,
             value: value,

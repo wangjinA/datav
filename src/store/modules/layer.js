@@ -25,7 +25,7 @@ export default {
       resourceLayers.push(value)
       this.commit('layer/setActiveLayer', value)
       this.commit('layer/setLayerHistoryList')
-      this.dispatch('updateLayers', {
+      this.dispatch('layer/updateLayers', {
         name: '添加图层：' + value.name
       })
     },
@@ -74,7 +74,7 @@ export default {
       if (index !== -1) {
         resourceLayers.splice(index, 1)
         this.commit('layer/setLayerHistoryList')
-        this.dispatch('updateLayers', {
+        this.dispatch('layer/updateLayers', {
           name: '删除图层：' + value.name
         })
       }
