@@ -151,3 +151,16 @@ export const getNumberUnit = _value => {
   }
   return value
 }
+/**
+ * 查找子字符串个数
+ * @param {String} scrstr 目标字符串
+ * @param {String} armstr 子字符串
+ */
+export const getStrCount = (scrstr,armstr) => {
+  var count=0;
+  while(scrstr.indexOf(armstr) != -1 ) {
+     scrstr = scrstr.replace(armstr,"")
+     count++;    
+  }
+  return count;
+}

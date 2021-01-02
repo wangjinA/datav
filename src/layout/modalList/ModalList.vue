@@ -19,7 +19,7 @@
       @on-close="editorClose"
       
     >
-      <CodeEditor height="100%" :value="code" :type="codeType" @input="onChange" :isBeautifier="isBeautifier" />
+      <CodeEditor height="100%" :value="code" :codeType="codeType" @input="onChange" :isBeautifier="isBeautifier" />
     </Drawer>
   </div>
 </template>

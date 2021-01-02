@@ -27,7 +27,7 @@
 
         <!-- 代码编辑器 -->
         <template v-else-if="item.type === 'code' || item.codeType">
-          <CodeEditor :value="value" @input="codeOnChange" :type="item.codeType" />
+          <CodeEditor :value="value" @input="codeOnChange" :codeType="item.codeType" />
           <Button type="primary" size="small" style="margin-top: 12px;" @click="bigEditor"
             >放大编辑</Button
           >

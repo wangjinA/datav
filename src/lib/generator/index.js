@@ -6,7 +6,7 @@
  * @Description: 代码生成器
  */
 import store from '@/store'
-import { getInt, getBfb } from "@/lib/utils";
+import { getInt, getBfb, getStrCount } from "@/lib/utils";
 // import { beautifierJs } from "@/lib/Beautifier";
 
 // 引入组件
@@ -61,14 +61,16 @@ function getComponentsAttr() {
   let str = ''
   resourceLayers.forEach(item => {
     const componentOption = item.componentOption
-    str += `
-        ${item.componentName}Attr: ${JSON.stringify(componentOption)},
+    let num = getStrCount(str, `${item.componentName}Attr`)
+    num = num || ''
+    str+= `
+        ${item.componentName}Attr${num}: ${JSON.stringify(componentOption)},
     `
   })
   return str
 
 }
-
+// 获取script内容
 function getScript() {
   
   let scriptStr = `
@@ -87,20 +89,28 @@ function getScript() {
   return scriptStr
 }
 
-export default function () {
+// 获取组件标签列表
+function getComponentsTags() {
   const { resourceLayers } = store.state.layer
-  let componentStr = ''
+  let str = ''
   resourceLayers.forEach(item => {
-    componentStr += `
+    let num = getStrCount(str, `${item.componentName}Attr`)
+    num = num || ''
+    str += `
     <!-- ${item.name} -->
     <div :style="${item.componentName}Style">
-      <${item.componentName} v-bind="${item.componentName}Attr"/>
+      <${item.componentName} v-bind="${item.componentName}Attr${num}"/>
     </div>
     `
   })
+  return str
+}
+
+export default function () {
+  
   const htmlStr = `<template>
   <div>
-    ${componentStr}
+    ${getComponentsTags()}
   </div>
 </template>
   `

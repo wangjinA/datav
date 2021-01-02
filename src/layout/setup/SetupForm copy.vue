@@ -27,7 +27,7 @@
 
         <!-- 代码编辑器 -->
         <template v-else-if="item.type === 'code' || item.codeType">
-          <CodeEditor v-model="value" :type="item.codeType" />
+          <CodeEditor v-model="value" :codeType="item.codeType" />
         </template>
 
         <!-- 颜色选择器 -->

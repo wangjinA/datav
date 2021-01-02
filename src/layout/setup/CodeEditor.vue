@@ -22,17 +22,13 @@
 import { codemirror } from "vue-codemirror";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/base16-dark.css";
-// 滚动条
-// import "codemirror/addon/scroll/simplescrollbars.css";
-// import "codemirror/addon/scroll/simplescrollbars.js";
 
-import "codemirror/mode/javascript/javascript.js"; //
-// import { parse, stringify } from "@/lib/utils";
+import "codemirror/mode/javascript/javascript.js";
 import { beautifierJs } from "@/lib/Beautifier";
 export default {
   props: {
     value: null,
-    type: {
+    codeType: {
       type: String,
       default: "javascript",
     },
@@ -66,7 +62,7 @@ export default {
   },
   computed: {
     type_filter() {
-      return this.type.toLowerCase();
+      return this.codeType.toLowerCase();
     },
   },
   watch: {
