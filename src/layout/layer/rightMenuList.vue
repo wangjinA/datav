@@ -2,31 +2,45 @@
  * @Author: 汪锦
  * @Date: 2020-12-29 10:50:20
  * @LastEditors: 汪锦
- * @LastEditTime: 2020-12-31 17:01:59
+ * @LastEditTime: 2021-01-05 09:30:12
  * @Description: 右键菜单操作
 -->
 
 <template>
   <div class="rightMenuList" v-if="activeLayer">
     <a href="javascript:;" @click="del">删除</a>
-    <a
-      :href="`${$baseUrl}/api/downloadComponent?name=${activeLayer.componentName}`"
-      @click="contextMenuVisible = false"
-      target="_blank"
+    <a @click="copy">复制组件</a>
+    <a :href="`${$baseUrl}/api/downloadComponent?name=${activeLayer.componentName}`" target="_blank"
       >下载组件</a
     >
   </div>
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
+import { deepClone } from "@/lib/utils";
 export default {
   name: "RightMenuList",
   computed: {
     ...mapState("layer", ["activeLayer"]),
   },
   methods: {
-    ...mapMutations("layer", ["removeLayer"]),
+    ...mapMutations("layer", ["removeLayer", "copyLayer"]),
+    ...mapActions("layer", ["updateLayers"]),
+
+    copy() {
+      const copyObj = deepClone(this.activeLayer);
+      // 复制的时候偏移像素
+      const offsetNum = 20;
+      if (copyObj.editOption.w != "100%") {
+        copyObj.editOption.x = parseInt(copyObj.editOption.x) + offsetNum;
+      }
+      if (copyObj.editOption.h != "100%") {
+        copyObj.editOption.y = parseInt(copyObj.editOption.y) + offsetNum;
+      }
+      this.copyLayer(copyObj);
+    },
+
     del() {
       this.$delAPI("确认删除：" + this.activeLayer.name).then(() => {
         this.removeLayer(this.activeLayer);

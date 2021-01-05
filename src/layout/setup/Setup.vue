@@ -2,38 +2,47 @@
  * @Author: 汪锦
  * @Date: 2020-12-14 16:22:51
  * @LastEditors: 汪锦
- * @LastEditTime: 2020-12-31 17:02:37
+ * @LastEditTime: 2021-01-05 16:35:09
  * @Description: 设置栏
 -->
 <template>
   <div class="Setup">
     <div class="Setup-title">{{ activeLayer ? "组件设置" : "页面设置" }}</div>
     <!-- 多个Setup-ul是因为target不同 -->
-    <!-- 组件设置 props -->
-    <ul class="Setup-ul" v-if="activeLayer">
-      <li v-for="(item, index) in componentSetup" :key="index">
-        <SetupForm isUpdateLayers :target="activeLayer.componentOption" :item="item" />
-      </li>
-    </ul>
-    <!-- 组件基本设置 xywh -->
-    <ul class="Setup-ul" v-if="activeLayer">
-      <li v-for="(item, index) in componentBaseSetup" :key="index">
-        <SetupForm isUpdateLayers :target="activeLayer.editOption" :item="item" />
-      </li>
-    </ul>
-
-    <!-- 项目基本信息设置 name 预览图 -->
-    <ul class="Setup-ul" v-if="!activeLayer">
-      <li v-for="(item, index) in pageBaseSetup" :key="index">
-        <SetupForm isUpdateDatavInfo :target="datavInfo" :item="item" />
-      </li>
-    </ul>
-    <!-- 项目风格属性设置 xywh -->
-    <ul class="Setup-ul" v-if="!activeLayer">
-      <li v-for="(item, index) in pageStyleSetup" :key="index">
-        <SetupForm isUpdateDatavInfo :target="datavInfo && datavInfo.style" :item="item" />
-      </li>
-    </ul>
+    <template v-if="activeLayer">
+      <!-- 图层组件名称信息设置 -->
+      <ul class="Setup-ul">
+        <li v-for="(item, index) in layerInfoSetup" :key="index">
+          <SetupForm isUpdateLayers :target="activeLayer" :item="item" />
+        </li>
+      </ul>
+      <!-- 组件设置 props -->
+      <ul class="Setup-ul">
+        <li v-for="(item, index) in componentSetup" :key="index">
+          <SetupForm isUpdateLayers :target="activeLayer.componentOption" :item="item" />
+        </li>
+      </ul>
+      <!-- 组件基本设置 xywh -->
+      <ul class="Setup-ul">
+        <li v-for="(item, index) in componentBaseSetup" :key="index">
+          <SetupForm isUpdateLayers :target="activeLayer.editOption" :item="item" />
+        </li>
+      </ul>
+    </template>
+    <template v-else>
+      <!-- 项目基本信息设置 name 预览图 -->
+      <ul class="Setup-ul" v-if="!activeLayer">
+        <li v-for="(item, index) in pageBaseSetup" :key="index">
+          <SetupForm isUpdateDatavInfo :target="datavInfo" :item="item" />
+        </li>
+      </ul>
+      <!-- 项目风格属性设置 xywh -->
+      <ul class="Setup-ul" v-if="!activeLayer">
+        <li v-for="(item, index) in pageStyleSetup" :key="index">
+          <SetupForm isUpdateDatavInfo :target="datavInfo && datavInfo.style" :item="item" />
+        </li>
+      </ul>
+    </template>
   </div>
 </template>
 
@@ -44,6 +53,13 @@ import { componentBaseConfig } from "@/config/modules";
 import SetupForm from "./SetupForm.vue";
 
 const imgList = [];
+
+const layerInfoSetup = [
+  {
+    name: "组件名称",
+    key: "name",
+  },
+];
 
 // 项目基本设置
 const pageBaseSetup = [
@@ -126,6 +142,7 @@ export default {
       componentBaseSetup: componentBaseConfig(true),
       pageBaseSetup,
       pageStyleSetup,
+      layerInfoSetup,
     };
   },
   computed: {

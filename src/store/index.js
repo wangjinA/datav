@@ -17,19 +17,19 @@ const store = new Vuex.Store({
     },
 
     // 设置图层记录
-    setLayerHistoryList(state) {
-      const { layerHistoryList, resourceLayers } = state
-      layerHistoryList.push(resourceLayers)
-      state['LayerHistoryIndex']++
-    },
+    // setLayerHistoryList(state) {
+    //   const { layerHistoryList, resourceLayers } = state
+    //   layerHistoryList.push(resourceLayers)
+    //   state['LayerHistoryIndex']++
+    // },
     // 图层撤销
-    backLayer(state) {
-      const { layerHistoryList, LayerHistoryIndex } = state
-      if (LayerHistoryIndex > 1) {
-        state['resourceLayers'] = layerHistoryList[LayerHistoryIndex - 1]
-        state['LayerHistoryIndex']--
-      }
-    }
+    // backLayer(state) {
+    //   const { layerHistoryList, LayerHistoryIndex } = state
+    //   if (LayerHistoryIndex > 1) {
+    //     state['resourceLayers'] = layerHistoryList[LayerHistoryIndex - 1]
+    //     state['LayerHistoryIndex']--
+    //   }
+    // }
   },
   modules: {
     layer,

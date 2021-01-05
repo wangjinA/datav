@@ -43,14 +43,13 @@ export default {
     },
     init() {
       if (!this.myChart) {
-        this.myChart = window.$echarts.init(this.$refs.echartTemplate);
+        this.myChart = window.echarts.init(this.$refs.echartTemplate);
       } else {
         this.myChart.clear();
       }
       var option;
       /* eslint-disable */
       let myChart = this.myChart;
-      let echarts = window.$echarts;
       if (typeof this.options === "string") {
         try {
           eval(this.options);

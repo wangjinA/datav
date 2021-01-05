@@ -152,7 +152,7 @@ export const zzt1 = `
         itemStyle: {
           normal: {
             color: () => {
-              var colorResult = new window.$echarts.graphic.LinearGradient(
+              var colorResult = new window.echarts.graphic.LinearGradient(
                 0,
                 0,
                 1,
@@ -426,7 +426,7 @@ export const zxt1 = `
           borderWidth: 1,
         },
         areaStyle: {
-          color: new window.$echarts.graphic.LinearGradient(
+          color: new window.echarts.graphic.LinearGradient(
             0,
             0,
             0,

@@ -2,13 +2,13 @@
  * @Author: 汪锦
  * @Date: 2020-12-16 16:51:20
  * @LastEditors: 汪锦
- * @LastEditTime: 2020-12-28 16:48:37
+ * @LastEditTime: 2021-01-05 10:09:56
  * @Description: 数据大屏列表
 -->
 <template>
   <div class="list-container">
-    <ul>
-      <li class="add-li" v-if="type === 1" @click="showAdd = true">
+    <transition-group tag="ul" name="list">
+      <li class="add-li" v-if="type === 1" @click="showAdd = true" key="create">
         <Icon type="md-add" size="120" />
         <div>创建空白项目</div>
       </li>
@@ -45,11 +45,12 @@
               @on-enter="setName(item)"
             />
           </div>
+          <span v-if="type === 0" class="del-btn" @click="delDatav(item)">删除</span>
           <span class="preview-btn" @click="editDatav(item)">编辑</span>
           <span v-if="type === 1" class="preview-btn" @click="preview(item)">预览</span>
         </div>
       </li>
-    </ul>
+    </transition-group>
     <Modal loading v-model="showAdd" title="新建项目" @on-ok="add">
       <Form :model="formItem" :label-width="80">
         <FormItem label="项目名称">
@@ -117,6 +118,18 @@ export default {
     },
   },
   methods: {
+    delDatav(item) {
+      this.$delAPI("确认删除：" + item.name).then(() => {
+        this.$del(`/api/datav/${item.id}`, {}, true).then((res) => {
+          if (res.status) {
+            const index = this.list.findIndex((_) => _.id === item.id);
+            if (index !== -1) {
+              this.list.splice(index, 1);
+            }
+          }
+        });
+      });
+    },
     // 编辑项目名称
     editName(item) {
       this.$set(item, "editName", true);
@@ -227,6 +240,12 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.list-leave-active {
+  display: none;
+}
+.list-move {
+  transition: 0.3s;
+}
 ul {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -264,8 +283,8 @@ ul {
       width: 100%;
       height: 0;
       padding-top: 58%;
-      position: relative;
       overflow: hidden;
+      position: relative;
       &:hover {
         .tips {
           transform: scale(1);
@@ -307,6 +326,14 @@ ul {
       color: #333;
       height: 43px;
       line-height: 43px;
+      .del-btn {
+        display: none;
+      }
+      &:hover {
+        .del-btn {
+          display: block;
+        }
+      }
       .item-name-box {
         flex: 1;
         padding-right: 20px;
@@ -323,10 +350,18 @@ ul {
           }
         }
       }
-      .preview-btn {
+      & > span {
         padding-left: 12px;
         flex-shrink: 0;
         color: #666;
+      }
+      .del-btn {
+        &:hover {
+          cursor: pointer;
+          color: var(--warning-color);
+        }
+      }
+      .preview-btn {
         &:hover {
           cursor: pointer;
           color: var(--primary-color);

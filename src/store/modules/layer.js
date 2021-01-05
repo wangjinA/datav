@@ -2,7 +2,7 @@
  * @Author: 汪锦
  * @Date: 2020-12-21 17:38:06
  * @LastEditors: 汪锦
- * @LastEditTime: 2020-12-31 17:29:15
+ * @LastEditTime: 2021-01-05 17:04:15
  * @Description: 图层管理
  */
 
@@ -24,9 +24,20 @@ export default {
       value.$vueKey = randomString()
       resourceLayers.push(value)
       this.commit('layer/setActiveLayer', value)
-      this.commit('layer/setLayerHistoryList')
+      // this.commit('layer/setLayerHistoryList')
       this.dispatch('layer/updateLayers', {
         name: '添加图层：' + value.name
+      })
+    },
+    // 复制图层
+    copyLayer(state, value) {
+      const { resourceLayers } = state
+      value.$vueKey = randomString()
+      resourceLayers.push(value)
+      this.commit('layer/setActiveLayer', value)
+      // this.commit('layer/setLayerHistoryList')
+      this.dispatch('layer/updateLayers', {
+        name: '复制图层：' + value.name
       })
     },
     // 初始化图层
@@ -47,7 +58,7 @@ export default {
       }
     },
 
-    // 重置图层 - 和初始化图层方法一样，不过内涵操作不一样；初始化是通过id初始化，重置是在这个id基础上重置，包含ctrl+z+y的图层覆盖
+    // 重置图层 - 和初始化图层方法一样，不过内含操作不一样；初始化是通过id初始化，重置是在这个id基础上重置，包含ctrl+z+y的图层覆盖和图层移动
     resetLayer(state, value) {
       if (value instanceof Array) {
         console.log(value);
@@ -73,7 +84,7 @@ export default {
       const index = resourceLayers.findIndex(item => item === value) // 通过下标删除
       if (index !== -1) {
         resourceLayers.splice(index, 1)
-        this.commit('layer/setLayerHistoryList')
+        // this.commit('layer/setLayerHistoryList')
         this.dispatch('layer/updateLayers', {
           name: '删除图层：' + value.name
         })

@@ -5,12 +5,7 @@
       <section>
         <!-- 图片上传 -->
         <template v-if="item.type === 'img'">
-          <Upload
-            action="/"
-            type="drag"
-            :before-upload="beforeUpload"
-            accept="image/*"
-          >
+          <Upload action="/" type="drag" :before-upload="beforeUpload" accept="image/*">
             <div class="upload-preview" v-if="value">
               <img :src="$getUrl(value)" />
             </div>
@@ -32,28 +27,15 @@
 
         <!-- 代码编辑器 -->
         <template v-else-if="item.type === 'code' || item.codeType">
-          <CodeEditor
-            :value="value"
-            @input="codeOnChange"
-            :codeType="item.codeType"
-          />
-          <Button
-            type="primary"
-            size="small"
-            style="margin-top: 12px"
-            @click="bigEditor"
+          <CodeEditor :value="value" @input="codeOnChange" :codeType="item.codeType" />
+          <Button type="primary" size="small" style="margin-top: 12px" @click="bigEditor"
             >放大编辑</Button
           >
         </template>
 
         <!-- 颜色选择器 -->
         <template v-else-if="item.type === 'color'">
-          <ColorPicker
-            :value="value"
-            size="small"
-            alpha
-            @on-active-change="onchange"
-          />
+          <ColorPicker :value="value" size="small" alpha @on-active-change="onchange" />
         </template>
 
         <!-- switch开关 -->
@@ -146,14 +128,14 @@ export default {
       });
     },
     setTargetValue(value) {
-      console.log(value);
+      // console.log(value);
       clearTimeout(this.setTargetValue_timer);
       this.setTargetValue_timer = setTimeout(() => {
         this.$set(this.target, this.item.key, deepClone(value));
 
         if (this.isUpdateLayers) {
           this.$store.dispatch("layer/updateLayers", {
-            name: this.activeLayer.name,
+            name: "组件设置：" + this.item.name,
             key: this.item.key,
             value: value,
           });
@@ -164,7 +146,7 @@ export default {
             value: value,
           });
         }
-      }, 20);
+      }, 200);
     },
     onchange(v) {
       this.setTargetValue(v);
@@ -213,6 +195,7 @@ section {
         width: 100%;
         left: 0;
         position: absolute;
+        object-fit: contain;
       }
     }
   }

@@ -3,70 +3,33 @@
     <div style="position: relation;z-index:1;">
       <Loading />
       <img width="200" src="@/assets/lizi.png" />
-      <div>测试柜</div>
-      <small>
-        测试柜
-        <small>测试柜</small>
-      </small>
+      <div>测试</div>
+      <big>测试1</big>
+      <small>测试2</small>
       <Line-module></Line-module>
     </div>
-    <div style="width: 500px;">
-      <!-- <CodeEditor /> -->
-    </div>
-    <!-- <MonacoEditor
-      height="600"
-      language="json"
-      :code="JSON.stringify(list)"
-      @mounted="onMounted"
-      @codeChange="onCodeChange"
-    >
-    </MonacoEditor> -->
+    <input type="file" accept="image/*" id="f" />
+    <button @click="upload">上传</button>
+    <draggable tag="h1" v-model="list">
+      <transition-group>
+        <div v-for="item in list" :key="item.name">
+          {{ item.name }}
+        </div>
+      </transition-group>
+    </draggable>
   </div>
 </template>
 
 <script>
 import Loading from "@/components/loading/Loading";
 import LineModule from "@/components/lineModule";
-// import CodeEditor from "@/layout/setup/CodeEditor";
-// import MonacoEditor from "vue-monaco-editor";
-const draggable = {
-  inserted: function(el) {
-    el.style.cursor = "move";
-    el.onmousedown = function(e) {
-      let disx = e.pageX - el.offsetLeft;
-      let disy = e.pageY - el.offsetTop;
-      document.onmousemove = function(e) {
-        let x = e.pageX - disx;
-        let y = e.pageY - disy;
-        let maxX = document.body.clientWidth - parseInt(window.getComputedStyle(el).width);
-        let maxY = document.body.clientHeight - parseInt(window.getComputedStyle(el).height);
-        if (x < 0) {
-          x = 0;
-        } else if (x > maxX) {
-          x = maxX;
-        }
-
-        if (y < 0) {
-          y = 0;
-        } else if (y > maxY) {
-          y = maxY;
-        }
-
-        el.style.left = x + "px";
-        el.style.top = y + "px";
-      };
-      document.onmouseup = function() {
-        document.onmousemove = document.onmouseup = null;
-      };
-    };
-  },
-};
+import * as qiniu from "qiniu-js";
+import draggable from "vuedraggable";
 export default {
   components: {
     Loading,
     LineModule,
-    // CodeEditor,
-    // MonacoEditor,
+    draggable,
   },
   data() {
     return {
@@ -89,6 +52,28 @@ export default {
     };
   },
   methods: {
+    upload() {
+      let file = document.querySelector("#f").files[0];
+      let key = "wj-qiniu/" + file.name;
+      let token =
+        "Us3NNIqxq4UI6w6qkm4c9pQY6b78p2R8sI28ZrvB:_D4H-OeWYA4Wq1yc7Wrh50sU9d0=:eyJzY29wZSI6IndqLWRhdGF2IiwiZGVhZGxpbmUiOjE2MDk4MzU3MDR9";
+      let putExtra = {};
+      let config = {};
+      const observable = qiniu.upload(file, key, token, putExtra, config);
+      const subscription = observable.subscribe({
+        next: (...args) => {
+          console.log(args);
+        },
+        error: (error) => {
+          console.log(error);
+        },
+        complete: (...args) => {
+          console.log(args);
+        },
+      });
+      subscription;
+      // subscription.unsubscribe() // 取消上传
+    },
     onMounted(editor) {
       /* eslint-disable */
       this.editor = editor;
@@ -109,7 +94,6 @@ export default {
     },
   },
   directives: {
-    draggable,
     debounce: {
       inserted(el, binding) {
         let timer;

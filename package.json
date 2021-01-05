@@ -18,6 +18,7 @@
     "less-loader": "^7.1.0",
     "npm": "^6.14.9",
     "prismjs": "^1.22.0",
+    "qiniu-js": "^3.1.2",
     "view-design": "^4.4.0",
     "vivus": "^0.4.5",
     "vue": "^2.6.11",
@@ -26,6 +27,7 @@
     "vue-drag-resize": "^1.4.2",
     "vue-draggable-resizable-gorkys": "^2.4.4",
     "vue-router": "^3.2.0",
+    "vuedraggable": "^2.24.3",
     "vuex": "^3.5.1"
   },
   "devDependencies": {

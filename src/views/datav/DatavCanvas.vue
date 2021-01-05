@@ -50,7 +50,7 @@
           @refLineParams="getRefLineParams"
         >
           <component
-            :ref="item.name"
+            :ref="item.$vueKey"
             :is="item.componentName"
             v-bind="item.componentOption"
           ></component>
@@ -92,7 +92,7 @@
       :show="contextMenuVisible"
       @update:show="(show) => (contextMenuVisible = show)"
     >
-      <Right-menu-list @click="contextMenuVisible = false"></Right-menu-list>
+      <Right-menu-list @click.native="contextMenuVisible = false"></Right-menu-list>
     </Vue-context-menu>
   </div>
 </template>
@@ -226,7 +226,8 @@ export default {
           item.editOption.y = y;
           item.editOption.w = w;
           item.editOption.h = h;
-          let target = this.$refs[item.name][0];
+          let target = this.$refs[item.$vueKey][0];
+          console.log(item);
           target.resize && target.resize();
         } else {
           console.log("调整大小 - 停止");

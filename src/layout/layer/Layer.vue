@@ -1,41 +1,48 @@
 <template>
   <div class="Layer" @click.self="setActiveLayer(null)">
     <div class="Layer-title">图层</div>
-    <ul class="Layer-ul not-data" ref="layer-ul" @contextmenu.stop>
-      <li
-        v-for="item in resourceLayers"
-        :key="item.$vueKey"
-        :class="{ active: item.active }"
-        @click="selectHandle(item)"
-        @contextmenu.prevent="onContextmenu(item)"
-      >
-        <div class="preview-img-box">
-          <img :src="item.previewImage" />
-        </div>
-        <p>{{ item.name }}</p>
-      </li>
-    </ul>
-    <!-- <div class="not-data" v-if="!resourceLayers.length">暂无图层</div> -->
+    <!-- <ul class="Layer-ul not-data" ref="layer-ul" > -->
+    <div ref="list-wrap" class="list-wrap">
+      <draggable v-model="draggableList">
+        <transition-group tag="ul" class="Layer-ul not-data" @contextmenu.stop>
+          <li
+            v-for="item in resourceLayers"
+            :key="item.$vueKey"
+            :class="{ active: item.active }"
+            @click="selectHandle(item)"
+            @contextmenu.prevent="onContextmenu(item)"
+          >
+            <div class="preview-img-box">
+              <img :src="item.previewImage" />
+            </div>
+            <p>{{ item.name }}</p>
+          </li>
+        </transition-group>
+      </draggable>
+    </div>
+    <!-- </ul> -->
     <Vue-context-menu
       class="right-menu"
-      :target="$refs['layer-ul']"
+      :target="$refs['list-wrap']"
       :show="contextMenuVisible"
       @update:show="(show) => (contextMenuVisible = show)"
     >
-      <Right-menu-list @click="contextMenuVisible = false"></Right-menu-list>
+      <Right-menu-list @click.native="contextMenuVisible = false"></Right-menu-list>
     </Vue-context-menu>
   </div>
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
 import { component as VueContextMenu } from "@xunlei/vue-context-menu";
 import RightMenuList from "./rightMenuList";
+import draggable from "vuedraggable";
 export default {
   name: "Layer",
   components: {
     VueContextMenu,
     RightMenuList,
+    draggable,
   },
   data() {
     return {
@@ -44,9 +51,21 @@ export default {
   },
   computed: {
     ...mapState("layer", ["resourceLayers", "activeLayer"]),
+    draggableList: {
+      get() {
+        return this.resourceLayers;
+      },
+      set(value) {
+        this.resetLayer(value);
+        this.updateLayers({
+          name: "图层移动",
+        });
+      },
+    },
   },
   methods: {
-    ...mapMutations("layer", ["removeLayer", "setActiveLayer"]),
+    ...mapMutations("layer", ["removeLayer", "setActiveLayer", "resetLayer"]),
+    ...mapActions("layer", ["updateLayers"]),
     onContextmenu(item) {
       this.setActiveLayer(item);
     },
@@ -72,9 +91,12 @@ export default {
   font-size: 14px;
   color: #fafafa;
   flex-shrink: 0;
-  &-ul {
+  .list-wrap {
     flex: 1;
     overflow: auto;
+  }
+  &-ul {
+    padding-bottom: 50px;
     > li {
       padding: 0 8px;
       position: relative;

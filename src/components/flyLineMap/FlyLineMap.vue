@@ -96,7 +96,7 @@ export default {
     },
     createdEchart(region, points, targetProvince) {
       const geoJson = require("./quanguo.json");
-      this.$echarts.registerMap("quanguo", geoJson);
+      this.echarts.registerMap("quanguo", geoJson);
       let options = {
         backgroundColor: "transparent",
         geo: {
