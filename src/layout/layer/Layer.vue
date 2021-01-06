@@ -3,7 +3,7 @@
     <div class="Layer-title">图层</div>
     <!-- <ul class="Layer-ul not-data" ref="layer-ul" > -->
     <div ref="list-wrap" class="list-wrap">
-      <draggable v-model="draggableList">
+      <draggable v-model="draggableList" animation="300">
         <transition-group tag="ul" class="Layer-ul not-data" @contextmenu.stop>
           <li
             v-for="item in resourceLayers"
@@ -15,7 +15,7 @@
             <div class="preview-img-box">
               <img :src="item.previewImage" />
             </div>
-            <p>{{ item.name }}</p>
+            <p class="text-overflow" :title="item.name">{{ item.name }}</p>
           </li>
         </transition-group>
       </draggable>
@@ -116,6 +116,7 @@ export default {
         width: 45px;
         height: 29px;
         margin-right: 5px;
+        flex-shrink: 0;
         > img {
           width: 100%;
           height: 100%;

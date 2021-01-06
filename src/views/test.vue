@@ -23,7 +23,7 @@
 <script>
 import Loading from "@/components/loading/Loading";
 import LineModule from "@/components/lineModule";
-import * as qiniu from "qiniu-js";
+// import * as qiniu from "qiniu-js";
 import draggable from "vuedraggable";
 export default {
   components: {
@@ -54,24 +54,29 @@ export default {
   methods: {
     upload() {
       let file = document.querySelector("#f").files[0];
-      let key = "wj-qiniu/" + file.name;
-      let token =
-        "Us3NNIqxq4UI6w6qkm4c9pQY6b78p2R8sI28ZrvB:_D4H-OeWYA4Wq1yc7Wrh50sU9d0=:eyJzY29wZSI6IndqLWRhdGF2IiwiZGVhZGxpbmUiOjE2MDk4MzU3MDR9";
-      let putExtra = {};
-      let config = {};
-      const observable = qiniu.upload(file, key, token, putExtra, config);
-      const subscription = observable.subscribe({
-        next: (...args) => {
-          console.log(args);
-        },
-        error: (error) => {
-          console.log(error);
-        },
-        complete: (...args) => {
-          console.log(args);
-        },
-      });
-      subscription;
+      let formData = new FormData();
+      formData.append("file", file);
+      this.$post("/api/qiniu/upload", formData);
+
+      // let file = document.querySelector("#f").files[0];
+      // let key = "wj-qiniu/" + file.name;
+      // let token =
+      //   "Us3NNIqxq4UI6w6qkm4c9pQY6b78p2R8sI28ZrvB:_D4H-OeWYA4Wq1yc7Wrh50sU9d0=:eyJzY29wZSI6IndqLWRhdGF2IiwiZGVhZGxpbmUiOjE2MDk4MzU3MDR9";
+      // let putExtra = {};
+      // let config = {};
+      // const observable = qiniu.upload(file, key, token, putExtra, config);
+      // const subscription = observable.subscribe({
+      //   next: (...args) => {
+      //     console.log(args);
+      //   },
+      //   error: (error) => {
+      //     console.log(error);
+      //   },
+      //   complete: (...args) => {
+      //     console.log(args);
+      //   },
+      // });
+      // subscription;
       // subscription.unsubscribe() // 取消上传
     },
     onMounted(editor) {

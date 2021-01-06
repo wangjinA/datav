@@ -725,5 +725,5 @@ function draw() {
 setInterval(function() {
   //用setInterval做动画感觉有问题
   draw();
-}, 10011);
+}, 100);
 `

@@ -2,7 +2,7 @@
  * @Author: 汪锦
  * @Date: 2020-12-17 11:57:26
  * @LastEditors: 汪锦
- * @LastEditTime: 2020-12-17 15:17:24
+ * @LastEditTime: 2021-01-06 11:16:47
  * @Description: 图片添加
 -->
 <template>
@@ -47,7 +47,7 @@ export default {
       formItem: {
         src: "",
         name: "",
-        type: 0,
+        type: 0, // 0 图片 1 视频
       },
     };
   },
@@ -77,6 +77,7 @@ export default {
       this.formItem.name = file.name;
       const formData = new FormData();
       formData.append("file", file);
+      formData.append("dir", "背景" + this.typeText);
       this.$API.upload(formData).then((res) => {
         this.formItem.src = res.data.src;
       });
