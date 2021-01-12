@@ -2,7 +2,7 @@
  * @Author: 汪锦
  * @Date: 2020-12-17 11:57:26
  * @LastEditors: 汪锦
- * @LastEditTime: 2021-01-06 11:16:47
+ * @LastEditTime: 2021-01-12 10:36:50
  * @Description: 图片添加
 -->
 <template>
@@ -54,11 +54,15 @@ export default {
   watch: {
     "formItem.type": {
       handler() {
-        this.formItem.src = "";
+        this.clearInfo();
       },
     },
   },
   methods: {
+    clearInfo() {
+      this.formItem.src = "";
+      this.formItem.name = "";
+    },
     getData() {
       return new Promise((resolve, reject) => {
         if (!this.formItem.src) {
@@ -76,8 +80,8 @@ export default {
       console.log(file);
       this.formItem.name = file.name;
       const formData = new FormData();
-      formData.append("file", file);
       formData.append("dir", "背景" + this.typeText);
+      formData.append("file", file);
       this.$API.upload(formData).then((res) => {
         this.formItem.src = res.data.src;
       });
@@ -88,6 +92,7 @@ export default {
       return this.getData().then((data) => {
         return this.$post("/api/bgList", data).then((res) => {
           if (res.status) {
+            this.clearInfo();
             this.$Message.success("创建成功");
           }
         });

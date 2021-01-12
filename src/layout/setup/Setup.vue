@@ -2,7 +2,7 @@
  * @Author: 汪锦
  * @Date: 2020-12-14 16:22:51
  * @LastEditors: 汪锦
- * @LastEditTime: 2021-01-05 16:35:09
+ * @LastEditTime: 2021-01-11 15:53:52
  * @Description: 设置栏
 -->
 <template>
@@ -70,6 +70,7 @@ const pageBaseSetup = [
   {
     name: "预览图",
     key: "preview_img",
+    disabled: true,
     type: "img",
   },
 ];

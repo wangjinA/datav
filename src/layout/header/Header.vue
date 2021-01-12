@@ -10,6 +10,13 @@
         {{ item.name }}
       </div>
     </nav>
+    <div class="right-menu">
+      <div class="user-name">
+        <Icon type="md-person" />
+        <span> {{ $store.state.login.userInfo.username }}</span>
+      </div>
+      <div class="login-out" @click="loginOut">退出登录</div>
+    </div>
   </header>
 </template>
 
@@ -28,6 +35,11 @@ export default {
         },
       ],
     };
+  },
+  methods: {
+    loginOut() {
+      this.$store.dispatch("login/loginOut");
+    },
   },
 };
 </script>
@@ -50,6 +62,7 @@ header {
   left: 0;
   top: 0;
   width: 100%;
+
   > nav {
     display: flex;
     padding-left: 200px;
@@ -86,6 +99,23 @@ header {
           opacity: 1;
           width: 100%;
         }
+      }
+    }
+  }
+  > .right-menu {
+    display: flex;
+    margin-left: auto;
+    margin-right: 20px;
+    > div + div {
+      margin-left: 20px;
+    }
+    .user-name {
+      color: var(--info-color);
+    }
+    .login-out {
+      &:hover {
+        color: var(--warning-color);
+        cursor: pointer;
       }
     }
   }

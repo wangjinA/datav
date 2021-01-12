@@ -266,24 +266,50 @@ export default {
     },
     // 截屏上传
     screenshot() {
-      html2canvas(this.$refs["screen-box-wrap"].$el).then((canvas) => {
-        canvas.toBlob((blob) => {
-          let filename = `datav_${this.id + Date.now()}.jpg`;
-          let file = new File([blob], filename, { type: "image/jpg" });
-          const url = window.URL.createObjectURL(file);
-          console.log(file);
-          console.log(url);
-          // window.open(url);
-          const formData = new FormData();
-          formData.append("file", file);
-          this.$API.upload(formData).then((res) => {
-            this.datavInfo.preview_img = res.data.src;
-            this.$store.dispatch("updateDatavInfo", {
-              name: "预览图设置",
-            });
-          });
+      let scaleValue = this.datavInfo.style.scale;
+      let result = new Promise((resolve, reject) => {
+        this.$Spin.show();
+        this.datavInfo.style.scale = 1;
+        this.$nextTick(() => {
+          html2canvas(this.$refs["screen-box-wrap"].$el)
+            .then((canvas) => {
+              canvas.toBlob((blob) => {
+                let filename = `预览图.jpg`;
+                let file = new File([blob], filename, { type: "image/jpg" });
+                const url = window.URL.createObjectURL(file);
+                console.log(file);
+                console.log(url);
+                // window.open(url);
+                const formData = new FormData();
+                formData.append("dir", `datav_${this.id}`);
+                formData.append("file", file);
+                this.$API
+                  .upload(formData)
+                  .then((res) => {
+                    this.datavInfo.preview_img = res.data.src;
+                    resolve();
+                  })
+                  .catch(reject);
+              });
+            })
+            .catch(reject);
         });
       });
+      result
+        .then(() => {
+          this.$Message.success("生成成功");
+        })
+        .catch((err) => {
+          console.log(err);
+          this.$Message.success("生成失败");
+        })
+        .finally(() => {
+          this.datavInfo.style.scale = scaleValue;
+          this.$store.dispatch("layer/updateDatavInfo", {
+            name: "预览图设置",
+          });
+          this.$Spin.hide();
+        });
     },
 
     initDataInfo(isInit) {

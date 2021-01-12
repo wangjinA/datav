@@ -4,6 +4,7 @@ Vue.use(Vuex)
 import backoff from './modules/backoff'
 import codeEditor from './modules/codeEditor'
 import layer from './modules/layer'
+import login from './modules/login'
 const store = new Vuex.Store({
   state: {
     LayerHistoryIndex: 0,
@@ -34,7 +35,8 @@ const store = new Vuex.Store({
   modules: {
     layer,
     backoff,
-    codeEditor
+    codeEditor,
+    login
   }
 })
 

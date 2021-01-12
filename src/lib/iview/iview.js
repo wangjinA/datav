@@ -2,7 +2,7 @@
  * @Author: 汪锦
  * @Date: 2020-07-13 09:35:50
  * @LastEditors: 汪锦
- * @LastEditTime: 2020-12-29 11:05:13
+ * @LastEditTime: 2021-01-12 11:32:33
  * @Description: iview配置
  */
 import Vue from 'vue'
@@ -16,7 +16,7 @@ Message.config({
   duration: 2.5,
 })
 // 只是为了默认显示背景颜色。 该死的iview不提供config配置
-Vue.prototype.$Message = new Proxy({}, {
+export const $Message = new Proxy({}, {
   get(target, prop) {
     return (config) => {
       if (config instanceof Object) {
@@ -33,9 +33,10 @@ Vue.prototype.$Message = new Proxy({}, {
     }
   }
 })
+Vue.prototype.$Message = Message
 Vue.prototype.$Modal = Modal
 Vue.prototype.$Notice = Notice
-Vue.prototype.$delAPI = (optionOrContent, title) => {
+export const $delAPI = (optionOrContent, title) => {
   return new Promise((resolve, reject) => {
     let option = {
       title: title || '温馨提示',
@@ -54,3 +55,4 @@ Vue.prototype.$delAPI = (optionOrContent, title) => {
     Modal.confirm(option)
   })
 }
+Vue.prototype.$delAPI = $delAPI

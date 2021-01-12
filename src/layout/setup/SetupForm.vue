@@ -5,9 +5,15 @@
       <section>
         <!-- 图片上传 -->
         <template v-if="item.type === 'img'">
-          <Upload action="/" type="drag" :before-upload="beforeUpload" accept="image/*">
+          <Upload
+            action="/"
+            type="drag"
+            :before-upload="beforeUpload"
+            accept="image/*"
+            :disabled="item.disabled"
+          >
             <div class="upload-preview" v-if="value">
-              <img :src="$getUrl(value)" />
+              <img :src="$getUrl(value)" v-preview="item.disabled" />
             </div>
             <div class="upload-text" v-else>点击上传</div>
           </Upload>
@@ -116,6 +122,68 @@ export default {
   },
   components: {
     CodeEditor,
+  },
+  directives: {
+    preview: {
+      inserted(el, options) {
+        /* eslint-disable */
+        if (options.hasOwnProperty("value") && !options.value) {
+          return;
+        }
+        let rect = el.getClientRects()[0];
+        let clickHandler = (e) => {
+          let el_img = e.target;
+          let divId = "datav-preview-container";
+          let div = document.getElementById(divId);
+          let img;
+          if (!div) {
+            div = document.createElement("div");
+            div.onclick = function() {
+              this.style.display = "none";
+            };
+            div.id = divId;
+            img = document.createElement("img");
+            img.src = el_img.src;
+            div.appendChild(img);
+            document.body.appendChild(div);
+          } else {
+            div.style.display = "flex";
+            img = div.querySelector("img");
+            img.src = el_img.src;
+          }
+          div.style.cssText = `
+              position: absolute; z-index: 999;
+              left: ${rect.left}px; top: ${rect.top}px;
+              width: ${rect.width}px; height: ${rect.height}px;
+              background: rgba(0, 0, 0, .7);
+              display: flex; justify-content: center; align-items: center;
+              opacity: 0; transition: 0.3s;
+            `;
+          setTimeout(() => {
+            div.style.cssText += `
+              width: 100vw; height: 100vh;
+              left: 0; top: 0;
+              opacity: 1; 
+            `;
+          }, 0);
+          img.style.cssText = `
+              width: 100%; height: 100%;
+              transition: 0.3s;
+            `;
+          setTimeout(() => {
+            img.style.cssText += `
+              width: auto; height: auto;
+              max-height: 80vh; max-width: 80vw;
+            `;
+          }, 0);
+        };
+        el.datav_clickHandler = clickHandler;
+        el.addEventListener("click", clickHandler);
+      },
+      unbind(el) {
+        el.removeEventListener("click", el.datav_clickHandler);
+      },
+    },
   },
   methods: {
     bigEditor() {

@@ -22,7 +22,7 @@
     <ul class="right-handler">
       <li @click="generator">生成Vue文件</li>
       <li @click="lookjson">查看json配置</li>
-      <li @click="screenshot">截图</li>
+      <li @click="screenshot">生成预览图</li>
       <li @click="goToPreview">预览</li>
     </ul>
     <div></div>

@@ -6,7 +6,8 @@
       <div>测试</div>
       <big>测试1</big>
       <small>测试2</small>
-      <Line-module></Line-module>
+      <!-- <Line-module></Line-module> -->
+      <div class="1123" :is="test">123</div>
     </div>
     <input type="file" accept="image/*" id="f" />
     <button @click="upload">上传</button>
@@ -17,14 +18,29 @@
         </div>
       </transition-group>
     </draggable>
+    <input type="text" v-model="test" />
+    <button>按钮</button>
+
+    <component
+      :is="{
+        render(h) {
+          return h('h1', {}, test);
+        },
+      }"
+    />
   </div>
 </template>
 
 <script>
 import Loading from "@/components/loading/Loading";
 import LineModule from "@/components/lineModule";
+
 // import * as qiniu from "qiniu-js";
 import draggable from "vuedraggable";
+const hhh = {
+  template: "<h1>666</h1>",
+};
+import Vue from "vue";
 export default {
   components: {
     Loading,
@@ -33,6 +49,7 @@ export default {
   },
   data() {
     return {
+      test: "Line-module",
       k: 1,
       code: "",
       list: [
@@ -113,7 +130,11 @@ export default {
       },
     },
   },
-  created() {},
+  created() {
+    Vue;
+    hhh;
+    console.log(require);
+  },
 };
 </script>
 
@@ -122,6 +143,7 @@ export default {
   background-color: #000;
   height: 100vh;
   width: 100vw;
+  color: #fff;
 }
 
 .test-leave-to,

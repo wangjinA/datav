@@ -2,11 +2,12 @@
  * @Author: 汪锦
  * @Date: 2020-06-19 11:32:06
  * @LastEditors: 汪锦
- * @LastEditTime: 2020-12-29 10:42:45
+ * @LastEditTime: 2021-01-11 15:04:01
  * @Description: 通过原生fetch封装请求
  */
 import { Message } from 'view-design'
 const qs = require('qs')
+let $timer = null
 const requestAPI = (url, options, showInfo = false) => {
   url = window.$baseUrl + url
   if (!(options.body instanceof FormData)) {
@@ -28,8 +29,20 @@ const requestAPI = (url, options, showInfo = false) => {
     credentials: 'include',//为了在当前域名内自动发送 cookie ， 必须提供这个选项
     ...options,
   }
+  _option.headers = _option.headers || {}
+  _option.headers.token = window.sessionStorage.getItem('token')
   return fetch(url, _option).then(response => {
     return response.json().then(res => {
+      if (response.status === 401) {
+        clearTimeout($timer)
+        $timer = setTimeout(() => {
+          Message.warning({
+            content: res.message,
+            duration: 2.2,
+            background: true
+          })
+        }, 200);
+      }
       if (showInfo && res.message) {
         Message[res.status ? 'success' : 'error']({
           content: res.message,

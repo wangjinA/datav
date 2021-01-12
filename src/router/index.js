@@ -22,6 +22,10 @@ const routes = [
     name: 'workspace',
     component: () => import(/* webpackChunkName: "workspace" */ '../views/workspace/Workspace.vue')
   }, {
+    path: '/login',
+    name: 'login',
+    component: () => import(/* webpackChunkName: "login" */ '../views/login/Login.vue')
+  }, {
     path: '/test',
     name: 'test',
     component: () => import(/* webpackChunkName: "test" */ '../views/test.vue')
@@ -31,5 +35,15 @@ const routes = [
 const router = new VueRouter({
   routes
 })
+
+
+
+router.beforeEach((to, from, next) => {
+  if (!to.path.includes("login") && !sessionStorage.getItem('token')) {
+    next('/login')
+  } else {
+    next()
+  }
+});
 
 export default router
