@@ -2,7 +2,7 @@
  * @Author: 汪锦
  * @Date: 2021-01-11 10:42:07
  * @LastEditors: 汪锦
- * @LastEditTime: 2021-01-12 11:49:25
+ * @LastEditTime: 2021-01-12 15:29:38
  * @Description: 登录页
 -->
 
@@ -79,9 +79,11 @@ export default {
         if (val) {
           console.log(val);
           this.$post("/api/login", this.userInfo, true).then((res) => {
-            window.sessionStorage.setItem("token", res.data.token);
-            this.$router.push("/");
-            this.setUserInfo(res.data.userInfo);
+            const { token, userInfo } = res.data;
+            window.sessionStorage.setItem("token", token);
+            this.$router.push("/workspace");
+            this.setUserInfo(userInfo);
+            window.sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
           });
         }
       });

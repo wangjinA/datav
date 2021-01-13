@@ -13,6 +13,11 @@ export default {
   components: {
     ModalList,
   },
+  created() {
+    let userInfo = sessionStorage.getItem("userInfo");
+    userInfo && (userInfo = JSON.parse(userInfo));
+    this.$store.commit("login/setUserInfo", userInfo);
+  },
 };
 </script>
 

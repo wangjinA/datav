@@ -10,10 +10,10 @@
         {{ item.name }}
       </div>
     </nav>
-    <div class="right-menu">
+    <div class="login-box">
       <div class="user-name">
         <Icon type="md-person" />
-        <span> {{ $store.state.login.userInfo.username }}</span>
+        <span>欢迎您, {{ $store.state.login.userInfo.username }}</span>
       </div>
       <div class="login-out" @click="loginOut">退出登录</div>
     </div>
@@ -102,7 +102,7 @@ header {
       }
     }
   }
-  > .right-menu {
+  > .login-box {
     display: flex;
     margin-left: auto;
     margin-right: 20px;

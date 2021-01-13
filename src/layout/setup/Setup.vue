@@ -2,47 +2,49 @@
  * @Author: 汪锦
  * @Date: 2020-12-14 16:22:51
  * @LastEditors: 汪锦
- * @LastEditTime: 2021-01-11 15:53:52
+ * @LastEditTime: 2021-01-13 10:06:52
  * @Description: 设置栏
 -->
 <template>
   <div class="Setup">
     <div class="Setup-title">{{ activeLayer ? "组件设置" : "页面设置" }}</div>
     <!-- 多个Setup-ul是因为target不同 -->
-    <template v-if="activeLayer">
-      <!-- 图层组件名称信息设置 -->
-      <ul class="Setup-ul">
-        <li v-for="(item, index) in layerInfoSetup" :key="index">
-          <SetupForm isUpdateLayers :target="activeLayer" :item="item" />
-        </li>
-      </ul>
-      <!-- 组件设置 props -->
-      <ul class="Setup-ul">
-        <li v-for="(item, index) in componentSetup" :key="index">
-          <SetupForm isUpdateLayers :target="activeLayer.componentOption" :item="item" />
-        </li>
-      </ul>
-      <!-- 组件基本设置 xywh -->
-      <ul class="Setup-ul">
-        <li v-for="(item, index) in componentBaseSetup" :key="index">
-          <SetupForm isUpdateLayers :target="activeLayer.editOption" :item="item" />
-        </li>
-      </ul>
-    </template>
-    <template v-else>
-      <!-- 项目基本信息设置 name 预览图 -->
-      <ul class="Setup-ul" v-if="!activeLayer">
-        <li v-for="(item, index) in pageBaseSetup" :key="index">
-          <SetupForm isUpdateDatavInfo :target="datavInfo" :item="item" />
-        </li>
-      </ul>
-      <!-- 项目风格属性设置 xywh -->
-      <ul class="Setup-ul" v-if="!activeLayer">
-        <li v-for="(item, index) in pageStyleSetup" :key="index">
-          <SetupForm isUpdateDatavInfo :target="datavInfo && datavInfo.style" :item="item" />
-        </li>
-      </ul>
-    </template>
+    <div class="Setup-container">
+      <template v-if="activeLayer">
+        <!-- 图层组件名称信息设置 -->
+        <ul class="Setup-ul">
+          <li v-for="(item, index) in layerInfoSetup" :key="index">
+            <SetupForm isUpdateLayers :target="activeLayer" :item="item" />
+          </li>
+        </ul>
+        <!-- 组件设置 props -->
+        <ul class="Setup-ul">
+          <li v-for="(item, index) in componentSetup" :key="index">
+            <SetupForm isUpdateLayers :target="activeLayer.componentOption" :item="item" />
+          </li>
+        </ul>
+        <!-- 组件基本设置 xywh -->
+        <ul class="Setup-ul">
+          <li v-for="(item, index) in componentBaseSetup" :key="index">
+            <SetupForm isUpdateLayers :target="activeLayer.editOption" :item="item" />
+          </li>
+        </ul>
+      </template>
+      <template v-else>
+        <!-- 项目基本信息设置 name 预览图 -->
+        <ul class="Setup-ul" v-if="!activeLayer">
+          <li v-for="(item, index) in pageBaseSetup" :key="index">
+            <SetupForm isUpdateDatavInfo :target="datavInfo" :item="item" />
+          </li>
+        </ul>
+        <!-- 项目风格属性设置 xywh -->
+        <ul class="Setup-ul" v-if="!activeLayer">
+          <li v-for="(item, index) in pageStyleSetup" :key="index">
+            <SetupForm isUpdateDatavInfo :target="datavInfo && datavInfo.style" :item="item" />
+          </li>
+        </ul>
+      </template>
+    </div>
   </div>
 </template>
 
@@ -209,6 +211,13 @@ export default {
   font-size: 12px;
   color: #fafafa;
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  &-container {
+    flex: 1;
+    overflow: auto;
+    padding-bottom: 30px;
+  }
   &-ul {
     > li {
       /deep/ .SetupForm {
@@ -232,6 +241,7 @@ export default {
     text-align: center;
     background: #2d2f38;
     border-bottom: 1px solid #0d0e10;
+    flex-shrink: 0;
   }
 }
 </style>

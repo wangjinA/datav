@@ -6,7 +6,7 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    redirect: '/workspace'
+    redirect: '/login'
   },
   {
     path: '/datav/:id',
@@ -39,7 +39,10 @@ const router = new VueRouter({
 
 
 router.beforeEach((to, from, next) => {
-  if (!to.path.includes("login") && !sessionStorage.getItem('token')) {
+  const token = sessionStorage.getItem('token')
+  if (to.path.includes("login") && token) {
+    next('/workspace')
+  } else if (!to.path.includes("login") && !token) {
     next('/login')
   } else {
     next()

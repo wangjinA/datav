@@ -2,7 +2,7 @@
  * @Author: 汪锦
  * @Date: 2020-12-31 16:45:37
  * @LastEditors: 汪锦
- * @LastEditTime: 2020-12-31 17:58:06
+ * @LastEditTime: 2021-01-13 15:44:30
  * @Description: 代码生成器
  */
 import store from '@/store'
@@ -44,14 +44,14 @@ function getStyles() {
   const width = style ? style.w : 0;
   const height = style ? style.h : 0;
   resourceLayers.forEach(item => {
-    let num = getStrCount(str, `${item.componentName}Style`)|| ''
+    let num = getStrCount(str, `${item.componentName}Style`) || ''
     const editOption = item.editOption
     str += `
         ${item.componentName}Style${num}: {
           position: 'absolute',
           zIndex: ${editOption.z},
           width: '${getBfb(editOption.w, width)}px',
-          width: '${getBfb(editOption.h, height)}px',
+          height: '${getBfb(editOption.h, height)}px',
           left: '${getInt(editOption.x)}px',
           top: '${getInt(editOption.y)}px',
         },
@@ -66,7 +66,7 @@ function getComponentsAttr() {
   let str = ''
   resourceLayers.forEach(item => {
     const componentOption = item.componentOption
-    let num = getStrCount(str, `${item.componentName}Attr`)|| ''
+    let num = getStrCount(str, `${item.componentName}Attr`) || ''
     str += `
         ${item.componentName}Attr${num}: ${JSON.stringify(componentOption)},
     `

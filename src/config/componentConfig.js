@@ -305,6 +305,47 @@ export const text = [
       w: 200,
       h: 200,
     }
+  }, {
+    id: '滚动列表',
+    name: '滚动列表',
+    componentName: 'ScrollTable',
+    previewImage: require('@/config/images/滚动列表.png'),
+    componentOption: {
+      ...getBaseOption('ScrollTable'),
+      data: [{
+        name: '小汪',
+        age: 18
+      }, {
+        name: '老吴',
+        age: 88
+      }, {
+        name: '小马',
+        age: 68
+      }, {
+        name: '阿宝',
+        age: 99
+      }, {
+        name: '大川',
+        age: 79
+      }],
+      columns: [{
+        key: 'name',
+        title: '名称'
+      }, {
+        key: 'age',
+        title: '年龄'
+      }]
+    },
+    componentSetup: [
+      ...getBaseOption('ScrollTable', true)
+    ],
+    editOption: {
+      ...componentBaseConfig(),
+      w: 240,
+      h: 220,
+      x: 473,
+      y: 187
+    }
   }
 ]
 
