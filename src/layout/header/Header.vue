@@ -10,13 +10,14 @@
         {{ item.name }}
       </div>
     </nav>
-    <div class="login-box">
-      <div class="user-name">
+    <ul class="login-box">
+      <li class="admin-link" @click="$router.push('/admin')">后台管理</li>
+      <li class="user-name">
         <Icon type="md-person" />
         <span>欢迎您, {{ $store.state.login.userInfo.username }}</span>
-      </div>
-      <div class="login-out" @click="loginOut">退出登录</div>
-    </div>
+      </li>
+      <li class="login-out" @click="loginOut">退出登录</li>
+    </ul>
   </header>
 </template>
 
@@ -106,8 +107,15 @@ header {
     display: flex;
     margin-left: auto;
     margin-right: 20px;
-    > div + div {
-      margin-left: 20px;
+    .admin-link {
+      &:hover {
+        color: var(--info-color);
+        cursor: pointer;
+      }
+    }
+    > li {
+      margin-right: 20px;
+      cursor: pointer;
     }
     .user-name {
       color: var(--info-color);
@@ -115,7 +123,6 @@ header {
     .login-out {
       &:hover {
         color: var(--warning-color);
-        cursor: pointer;
       }
     }
   }

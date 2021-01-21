@@ -9,33 +9,16 @@
       <!-- <Line-module></Line-module> -->
       <div class="1123" :is="test">123</div>
     </div>
-    <input type="file" accept="image/*" id="f" />
-    <button @click="upload">上传</button>
-    <draggable tag="h1" v-model="list">
-      <transition-group>
-        <div v-for="item in list" :key="item.name">
-          {{ item.name }}
-        </div>
-      </transition-group>
-    </draggable>
-    <input type="text" v-model="test" />
-    <button>按钮</button>
-
-    <component
-      :is="{
-        render(h) {
-          return h('h1', {}, test);
-        },
-      }"
-    />
+    <div class="niao">我是一只笑笑笑笑鸟</div>
+    <WaterPolo />
+    <div class="border-s"></div>
   </div>
 </template>
 
 <script>
 import Loading from "@/components/loading/Loading";
 import LineModule from "@/components/lineModule";
-
-// import * as qiniu from "qiniu-js";
+import WaterPolo from "@/components/WaterPolo";
 import draggable from "vuedraggable";
 const hhh = {
   template: "<h1>666</h1>",
@@ -46,26 +29,13 @@ export default {
     Loading,
     LineModule,
     draggable,
+    WaterPolo,
   },
   data() {
     return {
       test: "Line-module",
       k: 1,
       code: "",
-      list: [
-        {
-          name: "人口流入",
-          value: 200,
-        },
-        {
-          name: "人口流出",
-          value: 200,
-        },
-        {
-          name: "人口总数",
-          value: 200,
-        },
-      ],
     };
   },
   methods: {
@@ -74,27 +44,6 @@ export default {
       let formData = new FormData();
       formData.append("file", file);
       this.$post("/api/qiniu/upload", formData);
-
-      // let file = document.querySelector("#f").files[0];
-      // let key = "wj-qiniu/" + file.name;
-      // let token =
-      //   "Us3NNIqxq4UI6w6qkm4c9pQY6b78p2R8sI28ZrvB:_D4H-OeWYA4Wq1yc7Wrh50sU9d0=:eyJzY29wZSI6IndqLWRhdGF2IiwiZGVhZGxpbmUiOjE2MDk4MzU3MDR9";
-      // let putExtra = {};
-      // let config = {};
-      // const observable = qiniu.upload(file, key, token, putExtra, config);
-      // const subscription = observable.subscribe({
-      //   next: (...args) => {
-      //     console.log(args);
-      //   },
-      //   error: (error) => {
-      //     console.log(error);
-      //   },
-      //   complete: (...args) => {
-      //     console.log(args);
-      //   },
-      // });
-      // subscription;
-      // subscription.unsubscribe() // 取消上传
     },
     onMounted(editor) {
       /* eslint-disable */
@@ -104,30 +53,11 @@ export default {
     onCodeChange(editor) {
       console.log(this.editor.getValue());
     },
-    debounceClick() {
-      console.log("只触发一次");
-    },
-
     jjlayer() {
       clearTimeout(this.timer);
       this.timer = setTimeout(() => {
         // 原先代码
       }, 1000);
-    },
-  },
-  directives: {
-    debounce: {
-      inserted(el, binding) {
-        let timer;
-        el.addEventListener("click", () => {
-          if (timer) {
-            clearTimeout(timer);
-          }
-          timer = setTimeout(() => {
-            binding.value();
-          }, 1000);
-        });
-      },
     },
   },
   created() {
@@ -139,26 +69,60 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.border-s {
+  --size: 30px;
+  --gap: 5px;
+  border: 1px solid #ccc;
+  width: 200px;
+  height: 100px;
+  position: relative;
+  margin-left: 100px;
+  &:hover {
+    &::after,
+    &::before {
+      width: calc(100% + var(--gap) * 2);
+      height: calc(100% + var(--gap) * 2);
+    }
+  }
+  &::after,
+  &::before {
+    content: "";
+    position: absolute;
+    width: var(--size);
+    height: var(--size);
+    transition: 0.3s;
+  }
+  &::before {
+    left: calc(var(--gap) * -1);
+    top: calc(var(--gap) * -1);
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+  }
+  &::after {
+    right: calc(var(--gap) * -1);
+    bottom: calc(var(--gap) * -1);
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+  }
+}
 #test {
   background-color: #000;
   height: 100vh;
   width: 100vw;
   color: #fff;
 }
-
-.test-leave-to,
-.test-enter {
-  transform: scale(0);
-}
-.test-leave,
-.test-enter-to {
-  transform: scale(1);
-}
-.test-leave-active,
-.test-enter-active {
-  transition: 0.3s;
-}
-.test-move {
-  position: absolute;
+.niao {
+  width: 200px;
+  margin: 20px;
+  background-color: #0990c5;
+  animation: niao 3s;
+  @keyframes niao {
+    0% {
+      clip-path: polygon(0 0, 15% 0, 0% 100%, 0 100%);
+    }
+    100% {
+      clip-path: polygon(0 0, 115% 100%, 0 100%, 0% 100%);
+    }
+  }
 }
 </style>

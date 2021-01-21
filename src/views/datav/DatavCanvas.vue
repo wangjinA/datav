@@ -18,7 +18,6 @@
       <vue-draggable-resizable
         ref="screen-box-wrap"
         :class-name="!activeLayer ? 'screen-box-wrap select-screen' : 'screen-box-wrap'"
-        class-name-draggable="screen-box-wrap-draggable"
         :style="wrapStyle"
         :scaleRatio="scaleValue"
         v-bind="getWrapBaseOption"
@@ -34,7 +33,6 @@
           v-for="item in resourceLayers"
           :key="item.$vueKey"
           class-name="screen-box"
-          class-name-draggable="-wrap"
           :active="item.active"
           :prevent-deactivation="true"
           :scaleRatio="scaleValue"
@@ -50,6 +48,7 @@
           @refLineParams="getRefLineParams"
         >
           <component
+            class="component-main"
             :ref="item.$vueKey"
             :is="item.componentName"
             v-bind="item.componentOption"
@@ -314,6 +313,9 @@ export default {
 
     initDataInfo(isInit) {
       this.$get(`/api/datav/${this.id}`).then((res) => {
+        if (res.message === "数据不存在") {
+          this.$router.replace("/404");
+        }
         // 先渲染基本设置
         {
           let data = deepClone(res.data);
@@ -349,23 +351,34 @@ export default {
   outline: none;
   // 编辑状态下
   &.editor {
-    .select-screen {
-      // background-color: var(--background-1);
-      .outline-style();
-    }
-    .screen-box {
-      &.active {
-        .outline-style();
-      }
-    }
-
-    .screen-box-wrap-draggable {
-      filter: brightness(0.9);
-      cursor: grab;
-      .outline-style();
-    }
+    // 父容器
     .screen-box-wrap {
       &.select-screen {
+        .outline-style();
+      }
+      // 按住空格 - 可拖拽
+      &.draggable {
+        filter: brightness(0.9);
+        cursor: grab;
+        .outline-style();
+        .screen-box {
+          pointer-events: none;
+        }
+      }
+      // 拖拽中
+      // &.dragging {
+      // }
+    }
+    // 子容器
+    .screen-box {
+      &.active.draggable {
+        cursor: move !important;
+        > .component-main {
+          pointer-events: none;
+          user-select: none;
+        }
+      }
+      &.active {
         .outline-style();
       }
     }

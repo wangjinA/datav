@@ -2,7 +2,7 @@
  * @Author: 汪锦
  * @Date: 2021-01-11 10:42:07
  * @LastEditors: 汪锦
- * @LastEditTime: 2021-01-12 15:29:38
+ * @LastEditTime: 2021-01-18 12:03:43
  * @Description: 登录页
 -->
 
@@ -44,8 +44,8 @@ export default {
     return {
       img: require("./images/login2.png"),
       userInfo: {
-        username: "", //用户名
-        password: "", //密码
+        username: "小汪同学", //用户名
+        password: "123", //密码
       },
       ruleUserInfo: {
         username: [{ required: true, message: "用户名不能为空", trigger: "blur" }],

@@ -1,0 +1,1 @@
+export default require('./hy-table.vue').default

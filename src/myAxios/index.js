@@ -2,12 +2,14 @@
  * @Author: 汪锦
  * @Date: 2020-06-19 11:32:06
  * @LastEditors: 汪锦
- * @LastEditTime: 2021-01-13 11:28:09
+ * @LastEditTime: 2021-01-18 12:04:49
  * @Description: 通过原生fetch封装请求
  */
 import { Message } from 'view-design'
 const qs = require('qs')
-// let $timer = null
+import router from "@/router";
+console.log(router);
+let $timer = null
 const requestAPI = (url, options, showInfo = false) => {
   url = window.$baseUrl + url
   if (!(options.body instanceof FormData)) {
@@ -33,16 +35,17 @@ const requestAPI = (url, options, showInfo = false) => {
   _option.headers.token = window.sessionStorage.getItem('token')
   return fetch(url, _option).then(response => {
     return response.json().then(res => {
-      // if (response.status === 401) {
-      //   clearTimeout($timer)
-      //   $timer = setTimeout(() => {
-      //     Message.warning({
-      //       content: res.message,
-      //       duration: 2.2,
-      //       background: true
-      //     })
-      //   }, 200);
-      // }
+      if (response.status === 401) {
+        clearTimeout($timer)
+        $timer = setTimeout(() => {
+          Message.warning({
+            content: res.message,
+            duration: 2.2,
+            background: true
+          })
+          router.app.$store.dispatch('login/loginOut', false)
+        }, 200);
+      }
       if (showInfo && res.message) {
         Message[res.status ? 'success' : 'error']({
           content: res.message,

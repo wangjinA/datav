@@ -7,7 +7,7 @@
       placement="left"
       v-model="showDatavAdd"
     >
-      <div style="padding-top: 6vh;padding-left: 6vw;">
+      <div style="padding-top: 6vh;padding-left: 6vw;" v-if="showDatavAdd">
         <DatavAdd />
       </div>
     </Drawer>
@@ -17,9 +17,15 @@
       placement="right"
       :value="editorShow"
       @on-close="editorClose"
-      
     >
-      <CodeEditor height="100%" :value="code" :codeType="codeType" @input="onChange" :isBeautifier="isBeautifier" />
+      <CodeEditor
+        v-if="editorShow"
+        height="100%"
+        :value="code"
+        :codeType="codeType"
+        @input="onChange"
+        :isBeautifier="isBeautifier"
+      />
     </Drawer>
   </div>
 </template>

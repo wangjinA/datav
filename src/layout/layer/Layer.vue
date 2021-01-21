@@ -2,21 +2,22 @@
   <div class="Layer" @click.self="setActiveLayer(null)">
     <div class="Layer-title">图层</div>
     <!-- <ul class="Layer-ul not-data" ref="layer-ul" > -->
+
+    <div class="Layer-operation">
+      <Icon type="ios-folder" title="新建文件夹" />
+    </div>
+    <!-- <div>
+      <draggable v-model="list" animation="300" group="site">
+        <transition-group tag="div" @contextmenu.stop>
+          <div key="111">123</div>
+          <LayerItem v-for="item in list" :key="item.$vueKey" :item="item"> </LayerItem>
+        </transition-group>
+      </draggable>
+    </div> -->
     <div ref="list-wrap" class="list-wrap">
-      <draggable v-model="draggableList" animation="300">
+      <draggable v-model="draggableList" animation="300" group="site">
         <transition-group tag="ul" class="Layer-ul not-data" @contextmenu.stop>
-          <li
-            v-for="item in resourceLayers"
-            :key="item.$vueKey"
-            :class="{ active: item.active }"
-            @click="selectHandle(item)"
-            @contextmenu.prevent="onContextmenu(item)"
-          >
-            <div class="preview-img-box">
-              <img :src="item.previewImage" />
-            </div>
-            <p class="text-overflow" :title="item.name">{{ item.name }}</p>
-          </li>
+          <LayerItem v-for="item in resourceLayers" :key="item.$vueKey" :item="item"> </LayerItem>
         </transition-group>
       </draggable>
     </div>
@@ -37,16 +38,19 @@ import { mapState, mapMutations, mapActions } from "vuex";
 import { component as VueContextMenu } from "@xunlei/vue-context-menu";
 import RightMenuList from "./rightMenuList";
 import draggable from "vuedraggable";
+import LayerItem from "./layerItem";
 export default {
   name: "Layer",
   components: {
     VueContextMenu,
     RightMenuList,
     draggable,
+    LayerItem,
   },
   data() {
     return {
       contextMenuVisible: false,
+      list: [],
     };
   },
   computed: {
@@ -64,15 +68,8 @@ export default {
     },
   },
   methods: {
-    ...mapMutations("layer", ["removeLayer", "setActiveLayer", "resetLayer"]),
+    ...mapMutations("layer", ["removeLayer", "resetLayer"]),
     ...mapActions("layer", ["updateLayers"]),
-    onContextmenu(item) {
-      this.setActiveLayer(item);
-    },
-
-    selectHandle(item) {
-      this.setActiveLayer(item);
-    },
   },
 };
 </script>
@@ -91,38 +88,22 @@ export default {
   font-size: 14px;
   color: #fafafa;
   flex-shrink: 0;
+  &-operation {
+    padding: 8px 12px;
+    color: #e6e8f4;
+    .ivu-icon {
+      &:hover {
+        cursor: pointer;
+        color: var(--primary-color);
+      }
+    }
+  }
   .list-wrap {
     flex: 1;
     overflow: auto;
   }
   &-ul {
     padding-bottom: 50px;
-    > li {
-      padding: 0 8px;
-      position: relative;
-      cursor: pointer;
-      color: var(--text-base);
-      align-items: center;
-      height: 44px;
-      padding-left: 12px;
-      display: flex;
-      &:hover {
-        background-color: var(--background-hover);
-      }
-      &.active {
-        background-color: var(--primary-color);
-      }
-      .preview-img-box {
-        width: 45px;
-        height: 29px;
-        margin-right: 5px;
-        flex-shrink: 0;
-        > img {
-          width: 100%;
-          height: 100%;
-        }
-      }
-    }
   }
   &-title {
     height: 40px;
