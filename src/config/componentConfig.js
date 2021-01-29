@@ -181,6 +181,22 @@ export const echart = [
       h: 220,
     }
   }, {
+    id: '饼图',
+    name: '饼图',
+    previewImage: require('@/config/images/饼图.png'),
+    componentName: 'EchartTemplate',
+    componentOption: {
+      options: echartList.bingtu
+    },
+    componentSetup: [
+      ...getBaseOption('EchartTemplate', true)
+    ],
+    editOption: {
+      ...componentBaseConfig(),
+      w: 553,
+      h: 228,
+    }
+  }, {
     id: '飞线地图-1',
     name: '飞线地图',
     previewImage: require('@/config/images/飞线地图.png'),

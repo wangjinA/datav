@@ -12,6 +12,7 @@
     <div class="niao">我是一只笑笑笑笑鸟</div>
     <WaterPolo />
     <div class="border-s"></div>
+    <div id="border-iamge"></div>
   </div>
 </template>
 
@@ -69,6 +70,15 @@ export default {
 </script>
 
 <style lang="less" scoped>
+#border-iamge {
+  width: 200px;
+  height: 200px;
+  border: 20px solid;
+  border-image: url("~@/assets/logo.png");
+  border-image-width: 20px;
+  background-color: #fff;
+  border-image-slice: 32;
+}
 .border-s {
   --size: 30px;
   --gap: 5px;
