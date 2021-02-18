@@ -2,7 +2,7 @@
  * @Author: 汪锦
  * @Date: 2020-10-20 17:56:47
  * @LastEditors: 汪锦
- * @LastEditTime: 2020-12-01 16:24:35
+ * @LastEditTime: 2021-02-18 15:52:24
  * @Description: 滚动文字 - 文字跑马灯
 -->
 <template>

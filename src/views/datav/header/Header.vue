@@ -31,7 +31,7 @@
 
 <script>
 import IconBase from "@/layout/icons/IconBase";
-import { echart, text, base } from "@/config/componentConfig";
+import { menuConfig } from "@/config/componentConfig";
 import { deepClone } from "@/lib/utils";
 import { mapMutations, mapState } from "vuex";
 import generator from "@/lib/generator";
@@ -41,24 +41,7 @@ export default {
   },
   data() {
     return {
-      comList: [
-        {
-          name: "图表",
-          iconName: "zzt",
-          list: echart,
-        },
-        {
-          name: "文字",
-          iconName: "wenzi",
-          list: text,
-        },
-        {
-          name: "常规",
-          iconName: "changgui",
-          iconScale: 0.9,
-          list: base,
-        },
-      ],
+      comList: menuConfig,
     };
   },
   computed: {
@@ -123,6 +106,7 @@ header {
   background: var(--background);
   transition: all linear 0.3s;
   flex-shrink: 0;
+  z-index: 10;
   .component-ul {
     display: flex;
     > li {

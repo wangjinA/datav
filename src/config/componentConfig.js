@@ -64,6 +64,7 @@ export const echart = [
   {
     id: 1,
     name: '图表自定义',
+    previewHide: true, // 组件列表隐藏
     previewImage: require('@/config/images/图表自定义.png'),
     componentName: 'EchartTemplate',
     componentOption: {
@@ -397,6 +398,25 @@ export const base = [
   }
 ]
 
+
+export const menuConfig = [
+  {
+    name: "图表",
+    iconName: "zzt",
+    list: echart,
+  },
+  {
+    name: "文字",
+    iconName: "wenzi",
+    list: text,
+  },
+  {
+    name: "常规",
+    iconName: "changgui",
+    iconScale: 0.9,
+    list: base,
+  },
+]
 
 export default [
   ...echart,

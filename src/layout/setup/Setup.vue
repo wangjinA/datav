@@ -2,48 +2,59 @@
  * @Author: 汪锦
  * @Date: 2020-12-14 16:22:51
  * @LastEditors: 汪锦
- * @LastEditTime: 2021-01-13 10:06:52
+ * @LastEditTime: 2021-02-18 17:32:28
  * @Description: 设置栏
 -->
 <template>
-  <div class="Setup">
-    <div class="Setup-title">{{ activeLayer ? "组件设置" : "页面设置" }}</div>
-    <!-- 多个Setup-ul是因为target不同 -->
-    <div class="Setup-container">
-      <template v-if="activeLayer">
-        <!-- 图层组件名称信息设置 -->
-        <ul class="Setup-ul">
-          <li v-for="(item, index) in layerInfoSetup" :key="index">
-            <SetupForm isUpdateLayers :target="activeLayer" :item="item" />
-          </li>
-        </ul>
-        <!-- 组件设置 props -->
-        <ul class="Setup-ul">
-          <li v-for="(item, index) in componentSetup" :key="index">
-            <SetupForm isUpdateLayers :target="activeLayer.componentOption" :item="item" />
-          </li>
-        </ul>
-        <!-- 组件基本设置 xywh -->
-        <ul class="Setup-ul">
-          <li v-for="(item, index) in componentBaseSetup" :key="index">
-            <SetupForm isUpdateLayers :target="activeLayer.editOption" :item="item" />
-          </li>
-        </ul>
-      </template>
-      <template v-else>
-        <!-- 项目基本信息设置 name 预览图 -->
-        <ul class="Setup-ul" v-if="!activeLayer">
-          <li v-for="(item, index) in pageBaseSetup" :key="index">
-            <SetupForm isUpdateDatavInfo :target="datavInfo" :item="item" />
-          </li>
-        </ul>
-        <!-- 项目风格属性设置 xywh -->
-        <ul class="Setup-ul" v-if="!activeLayer">
-          <li v-for="(item, index) in pageStyleSetup" :key="index">
-            <SetupForm isUpdateDatavInfo :target="datavInfo && datavInfo.style" :item="item" />
-          </li>
-        </ul>
-      </template>
+  <div class="Setup" ref="setup" :class="show ? 'show' : 'hide'" @click="clickHandler">
+    <template v-if="show">
+      <div class="Setup-title">
+        <div class="Setup-hide" @click.stop="show = false">
+          <Icon type="md-arrow-round-forward" size="16" />
+          <small>收起</small>
+        </div>
+        <span>{{ setupTitle }}</span>
+      </div>
+      <!-- 多个Setup-ul是因为target不同 -->
+      <div class="Setup-container">
+        <template v-if="activeLayer">
+          <!-- 图层组件名称信息设置 -->
+          <ul class="Setup-ul">
+            <li v-for="(item, index) in layerInfoSetup" :key="index">
+              <SetupForm isUpdateLayers :target="activeLayer" :item="item" />
+            </li>
+          </ul>
+          <!-- 组件设置 props -->
+          <ul class="Setup-ul">
+            <li v-for="(item, index) in componentSetup" :key="index">
+              <SetupForm isUpdateLayers :target="activeLayer.componentOption" :item="item" />
+            </li>
+          </ul>
+          <!-- 组件基本设置 xywh -->
+          <ul class="Setup-ul">
+            <li v-for="(item, index) in componentBaseSetup" :key="index">
+              <SetupForm isUpdateLayers :target="activeLayer.editOption" :item="item" />
+            </li>
+          </ul>
+        </template>
+        <template v-else>
+          <!-- 项目基本信息设置 name 预览图 -->
+          <ul class="Setup-ul" v-if="!activeLayer">
+            <li v-for="(item, index) in pageBaseSetup" :key="index">
+              <SetupForm isUpdateDatavInfo :target="datavInfo" :item="item" />
+            </li>
+          </ul>
+          <!-- 项目风格属性设置 xywh -->
+          <ul class="Setup-ul" v-if="!activeLayer">
+            <li v-for="(item, index) in pageStyleSetup" :key="index">
+              <SetupForm isUpdateDatavInfo :target="datavInfo && datavInfo.style" :item="item" />
+            </li>
+          </ul>
+        </template>
+      </div>
+    </template>
+    <div v-if="!show" class="showBtn" @click="show = true">
+      <Icon type="ios-arrow-back" size="20" />
     </div>
   </div>
 </template>
@@ -139,6 +150,12 @@ const pageStyleSetup = [
 export default {
   name: "Setup",
   components: { SetupForm },
+  props: {
+    isPreviewComponent: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       contextMenuVisible: false,
@@ -146,6 +163,7 @@ export default {
       pageBaseSetup,
       pageStyleSetup,
       layerInfoSetup,
+      show: true,
     };
   },
   computed: {
@@ -159,6 +177,27 @@ export default {
         }
       }
       return [];
+    },
+
+    setupTitle() {
+      if (this.activeLayer || this.isPreviewComponent) {
+        return "组件设置";
+      }
+      return "页面设置";
+    },
+  },
+  watch: {
+    show(value) {
+      this.$nextTick(() => {
+        setTimeout(() => {
+          this.$bus.$emit("componentResize");
+        }, 300);
+      });
+      if (value) {
+        this.$refs.setup.classList.add("hideTag");
+      } else {
+        this.$refs.setup.classList.remove("hideTag");
+      }
     },
   },
   methods: {
@@ -191,9 +230,27 @@ export default {
           });
       });
     },
+    clickHandler() {
+      !this.show && (this.show = true);
+    },
+    onmousemove(e) {
+      if (!this.show) {
+        const { pageX } = e;
+        const windowWidth = document.documentElement.offsetWidth;
+        if (pageX / windowWidth > 0.95) {
+          this.$refs.setup.classList.remove("hideTag");
+        } else {
+          this.$refs.setup.classList.add("hideTag");
+        }
+      }
+    },
   },
   created() {
     this.initImgList();
+    window.addEventListener("mousemove", this.onmousemove);
+  },
+  destroyed() {
+    window.removeEventListener("mousemove", this.onmousemove);
   },
 };
 </script>
@@ -213,6 +270,31 @@ export default {
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
+  transition: 0.3s;
+  transform: scaleX(1);
+  transform-origin: right;
+  opacity: 1;
+  &.hideTag {
+    transform: scaleX(0);
+    opacity: 0;
+    overflow: hidden;
+  }
+  &.hide {
+    min-width: 20px;
+    width: 20px;
+    position: absolute;
+    right: 0;
+    .showBtn {
+      color: #999;
+      margin: auto;
+    }
+    &:hover {
+      cursor: pointer;
+      .showBtn {
+        color: var(--primary-color);
+      }
+    }
+  }
   &-container {
     flex: 1;
     overflow: auto;
@@ -242,6 +324,25 @@ export default {
     background: #2d2f38;
     border-bottom: 1px solid #0d0e10;
     flex-shrink: 0;
+    position: relative;
+    .Setup-hide {
+      position: absolute;
+      color: #999;
+      &:hover {
+        color: var(--primary-color);
+        cursor: pointer;
+      }
+      small {
+        display: none;
+      }
+    }
+    &:hover {
+      .Setup-hide {
+        small {
+          display: inline;
+        }
+      }
+    }
   }
 }
 </style>

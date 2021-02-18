@@ -4,8 +4,8 @@
       <div
         v-for="item in navList"
         :key="item.name"
-        :class="{ active: $store.state.currentTitleName === item.name }"
-        @click="$store.commit('setCurrentTitleName', item.name)"
+        :class="{ active: $store.state.currentWorkSpace.id === item.id }"
+        @click="$store.commit('setCurrentWorkSpace', item)"
       >
         {{ item.name }}
       </div>
@@ -29,10 +29,16 @@ export default {
     return {
       navList: [
         {
+          id: 0,
           name: "数据大屏",
         },
         {
+          id: 1,
           name: "背景管理",
+        },
+        {
+          id: 2,
+          name: "组件列表",
         },
       ],
     };

@@ -2,7 +2,7 @@
  * @Author: 汪锦
  * @Date: 2020-12-29 10:50:20
  * @LastEditors: 汪锦
- * @LastEditTime: 2021-01-05 09:30:12
+ * @LastEditTime: 2021-02-18 11:26:31
  * @Description: 右键菜单操作
 -->
 
@@ -10,9 +10,10 @@
   <div class="rightMenuList" v-if="activeLayer">
     <a href="javascript:;" @click="del">删除</a>
     <a @click="copy">复制组件</a>
-    <a :href="`${$baseUrl}/api/downloadComponent?name=${activeLayer.componentName}`" target="_blank"
+    <a href="javascript:;" @click="downloadCom" target="_blank">下载组件</a>
+    <!-- <a :href="`${$baseUrl}/api/downloadComponent?name=${activeLayer.componentName}`" target="_blank"
       >下载组件</a
-    >
+    > -->
   </div>
 </template>
 
@@ -45,6 +46,10 @@ export default {
       this.$delAPI("确认删除：" + this.activeLayer.name).then(() => {
         this.removeLayer(this.activeLayer);
       });
+    },
+
+    downloadCom() {
+      this.$store.dispatch("downloadCom", this.activeLayer.componentName);
     },
   },
 };

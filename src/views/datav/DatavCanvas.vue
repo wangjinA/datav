@@ -37,7 +37,7 @@
           :prevent-deactivation="true"
           :scaleRatio="scaleValue"
           snap
-          v-bind="getBaseOption(item.editOption)"
+          v-bind="getBaseOption(item)"
           @contextmenu.native="onActivated(item)"
           @activated="onActivated(item)"
           @deactivated="onDeactivated(item)"
@@ -226,7 +226,6 @@ export default {
           item.editOption.w = w;
           item.editOption.h = h;
           let target = this.$refs[item.$vueKey][0];
-          console.log(item);
           target.resize && target.resize();
         } else {
           console.log("调整大小 - 停止");
@@ -239,16 +238,28 @@ export default {
     },
     // 基本配置项
     getBaseOption(item) {
+      const { editOption } = item;
       const style = this.datavInfo && this.datavInfo.style;
       const width = style ? style.w : 0;
       const height = style ? style.h : 0;
+      const w = getBfb(editOption.w, width);
+      const h = getBfb(editOption.h, height);
+
+      // 手动设置宽高激活resize
+      if (editOption.w !== w || editOption.h !== h) {
+        this.$nextTick(() => {
+          let target = this.$refs[item.$vueKey][0];
+          target.resize && target.resize();
+        });
+      }
+
       const option = {
-        ...item,
-        w: getBfb(item.w, width),
-        h: getBfb(item.h, height),
-        x: getInt(item.x),
-        y: getInt(item.y),
-        z: getInt(item.z, 2),
+        ...editOption,
+        w: w,
+        h: h,
+        x: getInt(editOption.x),
+        y: getInt(editOption.y),
+        z: getInt(editOption.z, 2),
       };
       // 只读状态下 || 空格拖动容器状态下
       if (this.readonly || this.screenDraggable) {
@@ -343,7 +354,7 @@ export default {
   outline: 1px dashed var(--primary-color);
 }
 .DatavCanvas {
-  background-color: #313239;
+  background-color: var(--background-2);
   height: 100%;
   width: 100%;
   position: relative;

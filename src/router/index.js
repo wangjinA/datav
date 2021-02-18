@@ -56,6 +56,11 @@ const routes = [
     redirect: '/admin/error-logs',
     component: () => import(/* webpackChunkName: "admin" */ '../views/admin/admin-main.vue'),
     children: adminMenu
+  },
+  {
+    path: '/previewComponent/:id',
+    name: 'previewComponent',
+    component: () => import(/* webpackChunkName: "previewComponent" */ '../views/workspace/previewComponent.vue')
   }
 ]
 

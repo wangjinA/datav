@@ -201,6 +201,9 @@ export default {
       this.setTargetValue_timer = setTimeout(() => {
         this.$set(this.target, this.item.key, deepClone(value));
 
+        if (this.$parent.isPreviewComponent) {
+          return;
+        }
         if (this.isUpdateLayers) {
           this.$store.dispatch("layer/updateLayers", {
             name: "组件设置：" + this.item.name,

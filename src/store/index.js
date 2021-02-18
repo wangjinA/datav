@@ -10,11 +10,14 @@ const store = new Vuex.Store({
     LayerHistoryIndex: 0,
     layerHistoryList: [],
 
-    currentTitleName: '数据大屏',
+    currentWorkSpace: {
+      id: 0,
+      name: '数据大屏'
+    },
   },
   mutations: {
-    setCurrentTitleName(state, value) {
-      state['currentTitleName'] = value
+    setCurrentWorkSpace(state, value) {
+      state['currentWorkSpace'] = value
     },
 
     // 设置图层记录
@@ -31,6 +34,12 @@ const store = new Vuex.Store({
     //     state['LayerHistoryIndex']--
     //   }
     // }
+  },
+  actions: {
+    // 下载组件，传递组件名
+    downloadCom(store, componentName) {
+      window.open(`${window.$baseUrl}/api/downloadComponent?name=${componentName}`);
+    }
   },
   modules: {
     layer,
