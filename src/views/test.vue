@@ -1,18 +1,43 @@
 <template>
   <div id="test">
+    <dv-active-ring-chart
+      :data="[
+        {
+          name: '周口',
+          value: 55,
+        },
+        {
+          name: '南阳',
+          value: 120,
+        },
+        {
+          name: '西峡',
+          value: 78,
+        },
+        {
+          name: '驻马店',
+          value: 66,
+        },
+        {
+          name: '新乡',
+          value: 80,
+        },
+      ]"
+      style="width:300px;height:300px"
+    />
     <div style="position: relation;z-index:1;">
       <Loading />
-      <img width="200" src="@/assets/lizi.png" />
-      <div>测试</div>
+      <span>测试</span>
       <big>测试1</big>
       <small>测试2</small>
       <!-- <Line-module></Line-module> -->
       <div class="1123" :is="test">123</div>
     </div>
     <div class="niao">我是一只笑笑笑笑鸟</div>
-    <WaterPolo />
-    <div class="border-s"></div>
-    <div id="border-iamge"></div>
+    <!-- <WaterPolo /> -->
+    <!-- <div class="border-s"></div> -->
+    <!-- <div id="border-iamge"></div> -->
+    <ParticleAnimate />
   </div>
 </template>
 
@@ -20,6 +45,7 @@
 import Loading from "@/components/loading/Loading";
 import LineModule from "@/components/lineModule";
 import WaterPolo from "@/components/WaterPolo";
+import ParticleAnimate from "@/components/ParticleAnimate.vue";
 import draggable from "vuedraggable";
 const hhh = {
   template: "<h1>666</h1>",
@@ -31,6 +57,7 @@ export default {
     LineModule,
     draggable,
     WaterPolo,
+    ParticleAnimate,
   },
   data() {
     return {
@@ -120,6 +147,7 @@ export default {
   height: 100vh;
   width: 100vw;
   color: #fff;
+  overflow: auto;
 }
 .niao {
   width: 200px;

@@ -28,6 +28,9 @@ import echarts from 'echarts'
 window.echarts = echarts
 Vue.prototype.echarts = echarts
 
+import dataV from '@jiaminghi/data-view'
+Vue.use(dataV)
+
 import store from './store'
 import router from './router'
 

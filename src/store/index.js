@@ -38,7 +38,8 @@ const store = new Vuex.Store({
   actions: {
     // 下载组件，传递组件名
     downloadCom(store, componentName) {
-      window.open(`${window.$baseUrl}/api/downloadComponent?name=${componentName}`);
+      const token = window.sessionStorage.getItem('token')
+      window.open(`${window.$baseUrl}/api/downloadComponent?name=${componentName}&token=${token}`);
     }
   },
   modules: {

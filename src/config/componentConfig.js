@@ -3,13 +3,15 @@ import { componentBaseConfig } from "@/config/modules";
 import * as echartList from "./echartList";
 const bgList = [] // 视频列表
 API.getBgList().then(res => {
-  bgList.splice(0, bgList.length)
-  res.data.filter(i => i.type === 1).map(item => {
-    bgList.push({
-      name: item.name,
-      value: item.src
+  if (res.status) {
+    bgList.splice(0, bgList.length)
+    res.data.filter(i => i.type === 1).map(item => {
+      bgList.push({
+        name: item.name,
+        value: item.src
+      })
     })
-  })
+  }
 })
 
 import C from '@/components/exportCom'
@@ -309,6 +311,20 @@ export const text = [
       h: 100,
     }
   }, {
+    id: '3d卡片',
+    name: '3d卡片',
+    componentName: 'ThreeCards',
+    previewImage: require('@/config/images/3d卡片.png'),
+    componentOption: getBaseOption('ThreeCards'),
+    componentSetup: [
+      ...getBaseOption('ThreeCards', true)
+    ],
+    editOption: {
+      ...componentBaseConfig(),
+      w: 285,
+      h: 385,
+    }
+  }, {
     id: 12,
     name: '图片',
     componentName: 'BaseImage',
@@ -367,7 +383,6 @@ export const text = [
 ]
 
 export const base = [
-
   {
     id: 14,
     name: '视频背景',
@@ -398,6 +413,145 @@ export const base = [
   }
 ]
 
+export const datav = [
+  {
+    id: 'datav-边框',
+    name: '边框',
+    componentName: 'component',
+    previewImage: require('@/config/images/datav-边框.png'),
+    componentOption: {
+      is: 'dv-border-box-1',
+      color: ["#3797BF", "#306F88"],
+      dur: 3,
+    },
+    componentSetup: [
+      {
+        name: '边框风格',
+        type: 'select',
+        key: 'is',
+        data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(item => ({
+          name: 'dv-border-box-' + item,
+          value: 'dv-border-box-' + item
+        })),
+        relation: {
+          'dv-border-box-4': [{
+            name: '方向转换',
+            type: 'switch',
+            key: 'reverse',
+          }],
+          'dv-border-box-5': [{
+            name: '方向转换',
+            type: 'switch',
+            key: 'reverse',
+          }],
+          'dv-border-box-8': [{
+            name: '速度',
+            inputType: 'number',
+            key: 'dur',
+            min: 2,
+          }, {
+            name: '方向转换',
+            type: 'switch',
+            key: 'reverse',
+          }],
+          'dv-border-box-11': [{
+            name: '标题',
+            key: 'title',
+          }, {
+            name: '标题宽度',
+            inputType: 'number',
+            key: 'titleWidth',
+          }]
+        }
+      },
+      {
+        name: '颜色',
+        key: 'color',
+        codeType: 'json',
+      },
+    ],
+    editOption: {
+      ...componentBaseConfig(),
+      w: 600,
+      h: 320,
+      y: 90,
+      x: 690,
+      z: 0,
+    }
+  }, {
+    id: 'datav-装饰',
+    name: '装饰',
+    componentName: 'component',
+    previewImage: require('@/config/images/datav-装饰.png'),
+    componentOption: {
+      is: 'dv-decoration-1',
+      color: ["#3797BF", "#306F88"],
+      dur: 6,
+    },
+    componentSetup: [
+      {
+        name: '装饰风格',
+        type: 'select',
+        key: 'is',
+        data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].map(item => ({
+          name: 'dv-decoration-' + item,
+          value: 'dv-decoration-' + item
+        })),
+        relation: {
+          'dv-decoration-2': [{
+            name: '方向转换',
+            type: 'switch',
+            key: 'reverse',
+          }],
+          'dv-decoration-4': [{
+            name: '方向转换',
+            type: 'switch',
+            key: 'reverse',
+          }],
+          'dv-decoration-8': [{
+            name: '方向转换',
+            type: 'switch',
+            key: 'reverse',
+          }],
+        }
+      },
+      {
+        name: '颜色',
+        key: 'color',
+        codeType: 'json',
+      },
+      {
+        name: '速度',
+        key: 'dur',
+        inputType: 'number'
+      },
+    ],
+    editOption: {
+      ...componentBaseConfig(),
+      w: 200,
+      h: 50,
+      y: 225,
+      x: 875,
+      z: 0,
+    }
+  }, {
+    id: 'datav-动态环图',
+    name: '动态环图',
+    disable: true
+  }, {
+    name: '胶囊柱图',
+    disable: true
+  }, {
+    name: '水位图',
+    disable: true
+  }, {
+    name: '进度池',
+    disable: true
+  }, {
+    name: '排名轮播表',
+    disable: true
+  }
+]
 
 export const menuConfig = [
   {
@@ -416,10 +570,17 @@ export const menuConfig = [
     iconScale: 0.9,
     list: base,
   },
+  {
+    name: "datav组件",
+    iconName: "changgui",
+    iconScale: 0.9,
+    list: datav,
+  },
 ]
 
 export default [
   ...echart,
   ...text,
-  ...base
+  ...base,
+  ...datav
 ]

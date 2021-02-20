@@ -69,10 +69,10 @@ header {
   left: 0;
   top: 0;
   width: 100%;
-
+  z-index: 10;
   > nav {
     display: flex;
-    padding-left: 200px;
+    padding-left: 10vw;
     > div {
       width: 85px;
       height: var(--height);

@@ -227,6 +227,7 @@ export default {
           item.editOption.h = h;
           let target = this.$refs[item.$vueKey][0];
           target.resize && target.resize();
+          target.autoResizeMixinInit && target.autoResizeMixinInit(); // datav组件的重置
         } else {
           console.log("调整大小 - 停止");
           this.updateLayers({ name: "调整大小" });

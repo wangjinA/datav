@@ -9,7 +9,12 @@
         <p>{{ item.name }}</p>
         <div class="com-list-wrap">
           <ul>
-            <li v-for="(com, i) in item.list" :key="i" @click="addHanlde(com)">
+            <li
+              v-for="(com, i) in item.list"
+              :key="i"
+              @click="addHanlde(com)"
+              :class="{ disable: com.disable }"
+            >
               <div class="preview-img-box">
                 <img :src="com.previewImage" />
               </div>
@@ -70,6 +75,10 @@ export default {
       });
     },
     addHanlde(com) {
+      console.log(com);
+      if (com.disable) {
+        return;
+      }
       const cloneCom = deepClone(com);
       cloneCom.active = true;
       this.addLayer(cloneCom);
@@ -158,6 +167,11 @@ header {
               img {
                 height: 100%;
                 width: 100%;
+              }
+            }
+            &.disable {
+              &:hover {
+                cursor: no-drop;
               }
             }
           }

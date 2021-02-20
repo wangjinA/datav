@@ -37,8 +37,8 @@ export default {
   background-color: #f5f9fc;
   height: 100vh;
   padding-top: 68px;
-  padding-right: 30px;
-  padding-left: 200px;
+  padding-right: 1.5vw;
+  padding-left: 10.5vw;
   overflow: auto;
   .workspace-content {
     // height: 100%;

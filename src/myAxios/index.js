@@ -2,7 +2,7 @@
  * @Author: 汪锦
  * @Date: 2020-06-19 11:32:06
  * @LastEditors: 汪锦
- * @LastEditTime: 2021-01-18 12:04:49
+ * @LastEditTime: 2021-02-20 10:56:47
  * @Description: 通过原生fetch封装请求
  */
 import { Message } from 'view-design'
@@ -35,7 +35,9 @@ const requestAPI = (url, options, showInfo = false) => {
   _option.headers.token = window.sessionStorage.getItem('token')
   return fetch(url, _option).then(response => {
     return response.json().then(res => {
+      console.log(response);
       if (response.status === 401) {
+        console.log(1);
         clearTimeout($timer)
         $timer = setTimeout(() => {
           Message.warning({

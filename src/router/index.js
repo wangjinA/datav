@@ -4,6 +4,13 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 export const adminMenu = [{
+  path: 'download-count',
+  name: 'download-count',
+  component: () => import(/* webpackChunkName: "download-count" */ '../views/admin/download-count.vue'),
+  meta: {
+    menuName: '下载统计',
+  },
+}, {
   path: 'error-logs',
   name: 'error-logs',
   component: () => import(/* webpackChunkName: "error-logs" */ '../views/admin/error-logs.vue'),
@@ -53,7 +60,7 @@ const routes = [
   {
     path: '/admin',
     name: 'admin',
-    redirect: '/admin/error-logs',
+    redirect: '/admin/download-count',
     component: () => import(/* webpackChunkName: "admin" */ '../views/admin/admin-main.vue'),
     children: adminMenu
   },
