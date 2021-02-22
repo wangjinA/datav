@@ -134,6 +134,7 @@ header {
         }
       }
       .com-list-wrap {
+        cursor: auto;
         position: absolute;
         left: 0;
         top: 100%;
@@ -157,12 +158,16 @@ header {
           justify-content: space-between;
           padding: 0 10px;
           > li {
+            cursor: pointer;
+            &:hover {
+              color: var(--primary-color);
+            }
             .preview-img-box {
               width: 100px;
               height: 60px;
               border: 1px solid transparent;
               &:hover {
-                border: 1px solid #2491f7;
+                border: 1px solid var(--primary-color);
               }
               img {
                 height: 100%;
